@@ -60,11 +60,28 @@ echo -e "${green}**** Compressing Files into ZIP ****${nocol}"
 cd $PB_WORK_DIR
 zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
-
+echo -e ""
+echo -e "${blue} _______ __________________ _______          ${nocol}  ${red} ______   _        _______  _______  _         ${nocol}"
+echo -e "${blue}(  ____ )\__   __/\__   __/(  ____ \|\     /|${nocol}  ${red}(  ___ \ ( \      (  ___  )(  ____ \| \    /\  ${nocol}"
+echo -e "${blue}| (    )|   ) (      ) (   | (    \/| )   ( |${nocol}  ${red}| (   ) )| (      | (   ) || (    \/|  \  / /  ${nocol}"
+echo -e "${blue}| (____)|   | |      | |   | |      | (___) |${nocol}  ${red}| (__/ / | |      | (___) || |      |  (_/ /   ${nocol}"
+echo -e "${blue}|  _____)   | |      | |   | |      |  ___  |${nocol}  ${red}|  __ (  | |      |  ___  || |      |   _ (    ${nocol}"
+echo -e "${blue}| (         | |      | |   | |      | (   ) |${nocol}  ${red}| (  \ \ | |      | (   ) || |      |  ( \ \   ${nocol}"
+echo -e "${blue}| )      ___) (___   | |   | (____/\| )   ( |${nocol}  ${red}| )___) )| (____/\| )   ( || (____/\|  /  \ \  ${nocol}"
+echo -e "${blue}|/       \_______/   )_(   (_______/|/     \|${nocol}  ${red}|/ \___/ (_______/|/     \|(_______/|_/    \/  ${nocol}"
+echo -e "						 _________          _______  _______                                    "         
+echo -e "${cyan}						 \__   __/|\     /|(  ____ )(  ____ )"
+echo -e "							) (   | )   ( || (    )|| (    )|"
+echo -e "							| |   | | _ | || (____)|| (____)|"
+echo -e "							| |   | |( )| ||     __)|  _____)"
+echo -e "							| |   | || || || (\ (   | ("
+echo -e "							| |   | () () || ) \ \__| )"
+echo -e "							)_(   (_______)|/   \__/|/ ${nocol}"
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
+
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyan*$nocol${red} ${BUILD_RESULT_STRING}$nocol"
 echo -e "$cyan*$nocol$yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
