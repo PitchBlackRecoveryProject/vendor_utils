@@ -26,6 +26,7 @@ white='\e[0;37m'
 VERSION="2.6"
 DATE=$(date -u +%Y%m%d-%H%M)
 PB_VENDOR=vendor/pb
+PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 RECOVERY_IMG=$OUT/recovery.img
@@ -35,6 +36,7 @@ ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
 echo -e "${red}**** Making Zip ****${nocol}"
 if [ -d "$PB_WORK_DIR" ]; then
         rm -rf "$PB_WORK_DIR"
+	rm -rf "$PB_WORK"/*.zip
 fi
 
 if [ ! -d "PB_WORK_DIR" ]; then
@@ -42,12 +44,12 @@ if [ ! -d "PB_WORK_DIR" ]; then
 fi
 
 echo -e "${blue}**** Copying Tools ****${nocol}"
-cp -r "$PB_VENDOR/PBTWRP" "PB_WORK_DIR"
+cp -R "$PB_VENDOR/PBTWRP" "$PB_WORK_DIR"
 
 echo -e "${green}**** Copying Updater Scripts ****${nocol}"
 mkdir -p "$PB_WORK_DIR/META-INF/com/google/android"
-cp -r "$PB_VENDOR/updater" "$PB_WORK_DIR/META-INF/com/google/android"
-mv "$PB_WORK_DIR/META-INF/com/google/android/flash_pb.sh" "$PB_WORK_DIR"
+cp -R "$PB_VENDOR/updater/"* "$PB_WORK_DIR/META-INF/com/google/android/"
+mv "$PB_WORK_DIR/META-INF/com/google/android/flash_pb.sh" "$PB_WORK_DIR/"
 sed -i -- "s/devicename/${PB_DEVICE}/g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 
 echo -e "${cyan}**** Copying Recovery Image ****${nocol}"
@@ -62,10 +64,11 @@ BUILD_RESULT_STRING="BUILD SUCCESSFUL"
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
+mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyan*$nocol${red} ${BUILD_RESULT_STRING}$nocol"
 echo -e "$cyan*$nocol$yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
-echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK_DIR}/${ZIP_NAME}.zip$nocol"
-echo -e "$cyan*$nocol${green} SIZE: $( du -h ${PB_WORK_DIR}/${ZIP_NAME}.zip | awk '{print $1}' )$nocol"
+echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
+echo -e "$cyan*$nocol${green} SIZE: $( du -h ${PB_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )$nocol"
 echo -e "$cyan****************************************************************************************$nocol"
 fi
