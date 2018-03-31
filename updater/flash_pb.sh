@@ -2,7 +2,6 @@
 # set up extracted files and directories
 PB=/tmp/pb/PBTWRP
 IMG=/tmp/pb/TWRP/recovery.img
-RECOVERY=recovery
 ETC=/system/etc/install-recovery.sh
 PB1_PATH=/sdcard/Android/PBTWRP
 PB2_PATH=/sdcard/TWRP/PBTWRP
