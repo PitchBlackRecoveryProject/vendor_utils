@@ -32,7 +32,7 @@ if [ -f /etc/recovery.fstab ]; then
 		
 	done
 	if [ -z "`echo $RECOVERY | grep "recovery"`" ]; then
-	echo "$redFailed to Fined RECOVERY Partition";
+	echo "$red Failed to Find RECOVERY Partition";
 	exit 1;
 	fi
 }
