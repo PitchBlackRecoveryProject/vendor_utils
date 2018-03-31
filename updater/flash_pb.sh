@@ -89,7 +89,7 @@ fi
 #Flashing
 recovery_partition;
 if $DD; then
-dd if=$IMD of="$RECOVERY"
+dd if=$IMG of="$RECOVERY"
 else
 flash_image $RECOVERY $IMG
 fi
