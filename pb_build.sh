@@ -30,7 +30,7 @@ PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 RECOVERY_IMG=$OUT/recovery.img
-PB_DEVICE=$TARGET_VENDOR_DEVICE_NAME
+PB_DEVICE=$TARGET_VENDOR_DEVICE_NAME-$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
 
 echo -e "${red}**** Making Zip ****${nocol}"
@@ -61,14 +61,14 @@ cd $PB_WORK_DIR
 zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
 echo -e ""
-echo -e "${blue} _______ __________________ _______          ${nocol}  ${red} ______   _        _______  _______  _         ${nocol}"
-echo -e "${blue}(  ____ )\__   __/\__   __/(  ____ \|\     /|${nocol}  ${red}(  ___ \ ( \      (  ___  )(  ____ \| \    /\  ${nocol}"
-echo -e "${blue}| (    )|   ) (      ) (   | (    \/| )   ( |${nocol}  ${red}| (   ) )| (      | (   ) || (    \/|  \  / /  ${nocol}"
-echo -e "${blue}| (____)|   | |      | |   | |      | (___) |${nocol}  ${red}| (__/ / | |      | (___) || |      |  (_/ /   ${nocol}"
-echo -e "${blue}|  _____)   | |      | |   | |      |  ___  |${nocol}  ${red}|  __ (  | |      |  ___  || |      |   _ (    ${nocol}"
-echo -e "${blue}| (         | |      | |   | |      | (   ) |${nocol}  ${red}| (  \ \ | |      | (   ) || |      |  ( \ \   ${nocol}"
-echo -e "${blue}| )      ___) (___   | |   | (____/\| )   ( |${nocol}  ${red}| )___) )| (____/\| )   ( || (____/\|  /  \ \  ${nocol}"
-echo -e "${blue}|/       \_______/   )_(   (_______/|/     \|${nocol}  ${red}|/ \___/ (_______/|/     \|(_______/|_/    \/  ${nocol}"
+echo -e "${blue}  _______ __________________ _______          ${nocol}  ${red} ______   _        _______  _______  _         ${nocol}"
+echo -e "${blue} (  ____ )\__   __/\__   __/(  ____ \|\     /|${nocol}  ${red}(  ___ \ ( \      (  ___  )(  ____ \| \    /\  ${nocol}"
+echo -e "${blue} | (    )|   ) (      ) (   | (    \/| )   ( |${nocol}  ${red}| (   ) )| (      | (   ) || (    \/|  \  / /  ${nocol}"
+echo -e "${blue} | (____)|   | |      | |   | |      | (___) |${nocol}  ${red}| (__/ / | |      | (___) || |      |  (_/ /   ${nocol}"
+echo -e "${blue} |  _____)   | |      | |   | |      |  ___  |${nocol}  ${red}|  __ (  | |      |  ___  || |      |   _ (    ${nocol}"
+echo -e "${blue} | (         | |      | |   | |      | (   ) |${nocol}  ${red}| (  \ \ | |      | (   ) || |      |  ( \ \   ${nocol}"
+echo -e "${blue} | )      ___) (___   | |   | (____/\| )   ( |${nocol}  ${red}| )___) )| (____/\| )   ( || (____/\|  /  \ \  ${nocol}"
+echo -e "${blue} |/       \_______/   )_(   (_______/|/     \|${nocol}  ${red}|/ \___/ (_______/|/     \|(_______/|_/    \/  ${nocol}"
 echo -e "${cyan}						     _________          _______  _______                                    "         
 echo -e "					             \__   __/|\     /|(  ____ )(  ____ )"
 echo -e "							) (   | )   ( || (    )|| (    )|"
