@@ -1,4 +1,4 @@
-#
+#!/bin/bash
 # Copyright © 2018, Mohd Faraz <mohd.faraz.abc@gmail.com>
 #
 # Custom build script
@@ -27,34 +27,34 @@ VERSION="2.6"
 DATE=$(date -u +%Y%m%d-%H%M)
 PB_VENDOR=vendor/pb
 PB_WORK_DIR=$OUT/zip
-DEVICE=$TARGET_PRODUCT
+DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 RECOVERY_IMG=$OUT/recovery.img
-PB_DEVICE="$TARGET_VENDOR_DEVICE_NAME-$(cut -d'_' -f2 <<<$TARGET_PRODUCT)"
+PB_DEVICE=$TARGET_VENDOR_DEVICE_NAME
 ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
+
+echo -e "${red}**** Making Zip ****${nocol}"
 if [ -d "$PB_WORK_DIR" ]; then
-	rm -rf "$PB_WORK_DIR"
+        rm -rf "$PB_WORK_DIR"
 fi
 
 if [ ! -d "PB_WORK_DIR" ]; then
-	mkdir "$PB_WORK_DIR"
+        mkdir "$PB_WORK_DIR"
 fi
 
-echo -e "$(red)**** Making Zip ****$(nocol)"
-
-echo -e "${blue}*** Copying Tools ****$(nocol)"
+echo -e "${blue}**** Copying Tools ****${nocol}"
 cp -r "$PB_VENDOR/PBTWRP" "PB_WORK_DIR"
 
-echo -e "$(green)**** Copying Updater Scripts ****$(nocol)"
-mkdir "$PB_WORK_DIR/META-INF/com/google/android"
+echo -e "${green}**** Copying Updater Scripts ****${nocol}"
+mkdir -p "$PB_WORK_DIR/META-INF/com/google/android"
 cp -r "$PB_VENDOR/updater" "$PB_WORK_DIR/META-INF/com/google/android"
 mv "$PB_WORK_DIR/META-INF/com/google/android/flash_pb.sh" "$PB_WORK_DIR"
 sed -i -- "s/devicename/${PB_DEVICE}/g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 
-echo -e "$(cyan)**** Copying Recovery Image ****$(nocol)"
-mkdir "$PB_WORK_DIR/TWRP"
+echo -e "${cyan}**** Copying Recovery Image ****${nocol}"
+mkdir -p "$PB_WORK_DIR/TWRP"
 cp "$RECOVERY_IMG" "$PB_WORK_DIR/TWRP/"
 
-echo -e "$(green)**** Compressing Files into ZIP ****$(nocol)"
+echo -e "${green}**** Compressing Files into ZIP ****${nocol}"
 cd $PB_WORK_DIR
 zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
