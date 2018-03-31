@@ -47,6 +47,7 @@ cp -r "$PB_VENDOR/PBTWRP" "PB_WORK_DIR"
 echo -e "$(green)**** Copying Updater Scripts ****$(nocol)"
 mkdir "$PB_WORK_DIR/META-INF/com/google/android"
 cp -r "$PB_VENDOR/updater" "$PB_WORK_DIR/META-INF/com/google/android"
+mv "$PB_WORK_DIR/META-INF/com/google/android/flash_pb.sh" "$PB_WORK_DIR"
 sed -i -- "s/devicename/${PB_DEVICE}/g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 
 echo -e "$(cyan)**** Copying Recovery Image ****$(nocol)"
