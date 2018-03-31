@@ -23,7 +23,6 @@ red='\033[0;31m'
 nocol='\033[0m'
 purple='\e[0;35m'
 white='\e[0;37m'
-DEVICE=$TARGET_PRODUCT
 VERSION="2.6"
 DATE=$(date -u +%Y%m%d-%H%M)
 PB_VENDOR=vendor/pb
