@@ -8,7 +8,7 @@ PB2_PATH=/sdcard/TWRP/PBTWRP
 UI=/sdcard/TWRP/theme/ui.zip
 RES=/sdcard/TWRP/.twrps
 red='\033[0;31m'
-RECOVERY="/dev/recovery"
+RECOVERY=/dev/recovery
 
 recovery_partition() {
 	chk_syml() {
@@ -30,7 +30,7 @@ recovery_partition() {
 		echo "- Found recovery partition at: $RECOVERY"
 	}
 	# if we already have recovery block set then verify and use it
-	[ "$RECOVERY" ] && chk_syml && return
+	if [-z [ "$RECOVERY" ] && chk_syml && return]; then
 	# otherwise, time to go hunting!
 	if [ -f /etc/recovery.fstab ]; then
 		# recovery fstab v1
@@ -67,6 +67,7 @@ recovery_partition() {
 	if [ -z "`echo $RECOVERY | grep "recovery"`" ]; then
 	echo "$red Failed to Find RECOVERY Partition";
 	exit 1;
+	fi
 	fi
 }
 
