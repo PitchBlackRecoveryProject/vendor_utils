@@ -8,6 +8,7 @@ PB2_PATH=/sdcard/TWRP/PBTWRP
 UI=/sdcard/TWRP/theme/ui.zip
 RES=/sdcard/TWRP/.twrps
 red='\033[0;31m'
+RECOVERY=recovery
 
 recovery_partition() {
 	chk_syml() {
