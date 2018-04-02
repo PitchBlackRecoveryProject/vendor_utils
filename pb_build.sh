@@ -61,12 +61,18 @@ cd $PB_WORK_DIR
 zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
 echo -e ""
-echo -e "${blue} __________  .__    __             .__      __________  .__                       __         ___________  __      __  __________  __________  ${nocol}"
-echo -e "${blue} \______   \ |__| _/  |_    ____   |  |__   \______   \ |  |   _____      ____   |  | __     \__    ___/ /  \    /  \ \______   \ \______   \ ${nocol}"
-echo -e "${blue}  |     ___/ |  | \   __\ _/ ___\  |  |  \   |    |  _/ |  |   \__  \   _/ ___\  |  |/ /       |    |    \   \/\/   /  |       _/  |     ___/ ${nocol}"
-echo -e "${blue}  |    |     |  |  |  |   \  \___  |   Y  \  |    |   \ |  |__  / __ \_ \  \___  |    <        |    |     \        /   |    |   \  |    |     ${nocol}"
-echo -e "${blue}  |____|     |__|  |__|    \___  > |___|  /  |______  / |____/ (____  /  \___  > |__|_ \       |____|      \__/\  /    |____|_  /  |____|     ${nocol}"
-echo -e "${blue}                               \/       \/          \/              \/       \/       \/                        \/            \/              ${nocol}"
+echo -e "${blue} __________   __    __              __     ${purple} __________   __                       __     "
+echo -e "${blue} \______   \ |__| _/  |_    ____   |  |__  ${purple} \______   \ |  |   _____      ____   |  | __ "
+echo -e "${blue}  |     ___/ |  | \   __\ _/ ___\  |  |  \ ${purple}  |    |  _/ |  |   \__  \   _/ ___\  |  |/ / "
+echo -e "${blue}  |    |     |  |  |  |   \  \___  |   Y  \ ${purple} |    |   \ |  |__  / __ \_ \  \___  |    <  "
+echo -e "${blue}  |____|     |__|  |__|    \___  > |___|  /${purple}  |______  / |____/ (____  /  \___  > |__|_ \ "
+echo -e "${blue}                               \/       \/ ${purple}         \/              \/       \/       \/ "
+echo -e "${green} 		___________  __      __  __________  __________"
+echo -e " 		\__    ___/ /  \    /  \ \______   \ \______   \ "
+echo -e " 		  |    |    \   \/\/   /  |       _/  |     ___/ "
+echo -e " 		  |    |     \        /   |    |   \  |    |     "
+echo -e " 		  |____|      \__/\  /    |____|_  /  |____|     "
+echo -e " 		                   \/            \/              ${nocol}"
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
@@ -76,8 +82,8 @@ echo -e "$cyan******************************************************************
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
 echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
 echo -e "$cyan*$nocol${green} RECOVERY LOCATION: ${OUT}/recovery.img$nocol"
-echo -e "$cyan*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | awk '{print $1}' )$nocol"
+echo -e "$purple*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | awk '{print $1}' )$nocol"
 echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
-echo -e "$cyan*$nocol${green} ZIP SIZE: $( du -h ${PB_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )$nocol"
+echo -e "$purple*$nocol${green} ZIP SIZE: $( du -h ${PB_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )$nocol"
 echo -e "$cyan****************************************************************************************$nocol"
 fi
