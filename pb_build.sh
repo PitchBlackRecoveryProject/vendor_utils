@@ -33,6 +33,20 @@ RECOVERY_IMG=$OUT/recovery.img
 PB_DEVICE=$TARGET_VENDOR_DEVICE_NAME-$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
 
+if [ "$PBTWRP_BUILD_TYPE" ]; then
+   CURRENT_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
+   LIST=pb.devices
+   FOUND_DEVICE=$(grep -Fx "$CURRENT_DEVICE" "$LIST")
+    if [ "$FOUND_DEVICE" == "$CURRENT_DEVICE" ]; then
+      IS_OFFICIAL=true
+      PBTWRP_BUILD_TYPE=OFFICIAL
+    fi
+    if [ ! "$IS_OFFICIAL" == "true" ]; then
+       PBTWRP_BUILD_TYPE=UNOFFICIAL
+       echo "Error Device is not OFFICIAL"
+    fi
+fi
+
 echo -e "${red}**** Making Zip ****${nocol}"
 if [ -d "$PB_WORK_DIR" ]; then
         rm -rf "$PB_WORK_DIR"
@@ -77,7 +91,12 @@ BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
-
+if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
+	 rsync -v --rsh="ssh -l pitchblack" pb.devices pitchblack@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$CURRENT_DEVICE/
+echo -e "$cyan****************************************************************************************$nocol"
+echo -e "$green BUILD UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
+echo -e "$cyan****************************************************************************************$nocol"
+fi
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
 echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
