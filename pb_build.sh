@@ -47,6 +47,12 @@ if [ "$PBTWRP_BUILD_TYPE" ]; then
     fi
 fi
 
+if "$PBTWRP_BUILD_TYPE" = "OFFICIAL" ]; then
+	ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE-OFFICIAL
+else
+	ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE-UNOFFICIAL
+fi
+
 echo -e "${red}**** Making Zip ****${nocol}"
 if [ -d "$PB_WORK_DIR" ]; then
         rm -rf "$PB_WORK_DIR"
