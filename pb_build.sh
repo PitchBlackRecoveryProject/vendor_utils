@@ -92,7 +92,7 @@ DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
-	 rsync -v --rsh="ssh -l pitchblack" pb.devices pitchblack@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$CURRENT_DEVICE/
+	 rsync -v --rsh="ssh -l pitchblack" ${PB_WORK}/${ZIP_NAME}.zip pitchblack@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$CURRENT_DEVICE/
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$green BUILD UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
 echo -e "$cyan****************************************************************************************$nocol"
