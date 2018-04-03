@@ -33,9 +33,11 @@ RECOVERY_IMG=$OUT/recovery.img
 PB_DEVICE=$TARGET_VENDOR_DEVICE_NAME-$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
 
+PBTWRP_BUILD_TYPE=UNOFFICIAL
+
 if [ "$PBTWRP_BUILD_TYPE" ]; then
    CURRENT_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
-   LIST=pb.devices
+   LIST=$(curl -s https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices)
    FOUND_DEVICE=$(grep -Fx "$CURRENT_DEVICE" "$LIST")
     if [ "$FOUND_DEVICE" == "$CURRENT_DEVICE" ]; then
       IS_OFFICIAL=true
@@ -69,8 +71,6 @@ cp -R "$PB_VENDOR/PBTWRP" "$PB_WORK_DIR"
 echo -e "${green}**** Copying Updater Scripts ****${nocol}"
 mkdir -p "$PB_WORK_DIR/META-INF/com/google/android"
 cp -R "$PB_VENDOR/updater/"* "$PB_WORK_DIR/META-INF/com/google/android/"
-mv "$PB_WORK_DIR/META-INF/com/google/android/flash_pb.sh" "$PB_WORK_DIR/"
-sed -i -- "s/devicename/${PB_DEVICE}/g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 
 echo -e "${cyan}**** Copying Recovery Image ****${nocol}"
 mkdir -p "$PB_WORK_DIR/TWRP"
