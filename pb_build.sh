@@ -33,7 +33,7 @@ RECOVERY_IMG=$OUT/recovery.img
 PB_DEVICE=$TARGET_VENDOR_DEVICE_NAME-$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
 PBTWRP_BUILD_TYPE=UNOFFICIAL
-wget https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices
+wget -O https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices
 
 if [ "$PBTWRP_BUILD_TYPE" ]; then
    CURRENT_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
