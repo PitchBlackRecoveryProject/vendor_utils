@@ -49,7 +49,7 @@ if [ "$PBTWRP_BUILD_TYPE" ]; then
     fi
 fi
 
-if "$PBTWRP_BUILD_TYPE" = "OFFICIAL" ]; then
+if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
 	ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE-OFFICIAL
 else
 	ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE-UNOFFICIAL
