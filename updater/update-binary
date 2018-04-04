@@ -59,8 +59,6 @@ elif [[ ! -f "$(readlink -f "$RECOVERY")" ] || [ -f "$RECOVERY" ]]; then
 	DD=false
 	break
 else
-{
-
 recovery_partition() {
 	chk_syml() {
 		RECOVERY=$(readlink -f "$RECOVERY")
@@ -119,7 +117,6 @@ recovery_partition() {
 	
 }
 fi
-}
 
 #Deletion
 if [ -f $ETC ]; then
