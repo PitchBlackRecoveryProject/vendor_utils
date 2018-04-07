@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright © 2018, Mohd Faraz <mohd.faraz.abc@gmail.com>
 #
 # Custom build script
@@ -28,7 +28,6 @@ DATE=$(date -u +%Y%m%d-%H%M)
 PB_VENDOR=vendor/pb
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
-#DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 RECOVERY_IMG=$OUT/recovery.img
 PB_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
@@ -42,23 +41,21 @@ fi
 function search() {
 for d in $(curl -s https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices); do
 if [ "$d" == "$PB_DEVICE" ]; then
-echo "$PB_DEVICE";
+echo "$d";
 break;
 fi
 done
 }
 
 if [ "$PBTWRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
-	LIST=$(curl -s https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices)
-	F="$(search)";
- if [ "$F" ]; then
-echo $F
-      PBTWRP_BUILD_TYPE=OFFICIAL
-    else
-       PBTWRP_BUILD_TYPE=UNOFFICIAL
-       echo "${red}Error Device is not OFFICIAL"
-	exit
-    fi
+	F=$(search);
+	if [[ "${F}" ]]; then
+		PBTWRP_BUILD_TYPE=OFFICIAL
+	else
+		PBTWRP_BUILD_TYPE=UNOFFICIAL
+		echo -e "${red}Error Device is not OFFICIAL${nocol}"
+		exit 1;
+	fi
 fi
 
 ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE-$PBTWRP_BUILD_TYPE
@@ -106,7 +103,9 @@ DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
-	 rsync -v --rsh="ssh -l pitchblack" ${PB_WORK}/${ZIP_NAME}.zip pitchblack@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$CURRENT_DEVICE/
+	 read -s -p "$cyan Enter SourceForge Server Password: " sf_psd
+echo "exit" | sshpass -p "$sf_psd" ssh -tto StrictHostKeyChecking=no pitchblack@shell.sourceforge.net create
+rsync -v --rsh="sshpass -p $sf_psd ssh -l pitchblack" ${PB_WORK}/${ZIP_NAME}.zip pitchblack@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$PB_DEVICE/
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$green BUILD UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
 echo -e "$cyan****************************************************************************************$nocol"
