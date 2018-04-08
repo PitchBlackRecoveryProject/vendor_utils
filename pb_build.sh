@@ -97,16 +97,7 @@ BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
-if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
 echo -e "$cyan****************************************************************************************$nocol"
-if ./pb_upload.sh
-then
-echo -e "$green BUILD UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
-else
-echo -e "$red FAILED TO UPLOAD BUILD TO SOURCEFORGE$nocol"
-fi
-echo -e "$cyan****************************************************************************************$nocol"
-fi
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
 echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
 echo -e "$cyan*$nocol${green} RECOVERY LOCATION: ${OUT}/recovery.img$nocol"
