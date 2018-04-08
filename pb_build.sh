@@ -99,7 +99,7 @@ echo -e " 		  |    |     \        /   |    |   \  |    |     "
 echo -e " 		  |____|      \__/\  /    |____|_  /  |____|     "
 echo -e " 		                   \/            \/              ${nocol}"
 BUILD_END=$(date +"%s")
-DIFF=$(($BUILD_END - $BUILD_START))
+DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
