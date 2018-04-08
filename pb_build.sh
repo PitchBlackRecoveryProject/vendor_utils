@@ -98,14 +98,15 @@ DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
-read -s -p "Enter SourceForge Server Password: " sf_psd
-echo "exit" | sshpass -p "$sf_psd" ssh -tto StrictHostKeyChecking=no pitchblack@shell.sourceforge.net create
-rsync -v --rsh="sshpass -p $sf_psd ssh -l pitchblack" ${PB_WORK}/${ZIP_NAME}.zip pitchblack@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$CURRENT_DEVICE/
 echo -e "$cyan****************************************************************************************$nocol"
+if ./pb_upload.sh
+then
 echo -e "$green BUILD UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
-echo -e "$cyan****************************************************************************************$nocol"
+else
+echo -e "$red FAILED TO UPLOAD BUILD TO SOURCEFORGE$nocol"
 fi
 echo -e "$cyan****************************************************************************************$nocol"
+fi
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
 echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
 echo -e "$cyan*$nocol${green} RECOVERY LOCATION: ${OUT}/recovery.img$nocol"
