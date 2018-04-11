@@ -1,5 +1,6 @@
 #!/bin/bash
-# Copyright © 2018, Mohd Faraz <mohd.faraz.abc@gmail.com>
+# Copyright (C) 2018, Mohd Faraz <mohd.faraz.abc@gmail.com>
+# Copyright (C) 2018 ATG Droid  
 #
 # Custom build script
 #
