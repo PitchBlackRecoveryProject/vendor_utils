@@ -175,7 +175,7 @@ if [-f "/sdcard/PBTWRP/tools" ]; then
 rm -rf /sdcard/PBTWRP/tools
 fi
 if [ -f "rm -rf /sdcard/PBTWRP/themes" ]; then
-rm -rfrm -rf /sdcard/PBTWRP/themes
+rm -rf /sdcard/PBTWRP/themes
 fi
 cp -r $PB/tools/* /sdcard/PBTWRP/tools/
 cp -r $PB/themes/* /sdcard/PBTWRP/themes/
