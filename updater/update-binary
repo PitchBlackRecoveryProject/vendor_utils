@@ -171,7 +171,8 @@ else
 fi
 
 #Copy Specific Files
-cp -r $PB/* /sdcard/PBTWRP/tools/
+cp -r $PB/tools/* /sdcard/PBTWRP/tools/
+cp -r $PB/themes/* /sdcard/PBTWRP/themes/
 
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
