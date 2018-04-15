@@ -30,32 +30,38 @@ DATE=$(date -u +%Y%m%d-%H%M)
 PB_VENDOR=vendor/pb
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
-DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 RECOVERY_IMG=$OUT/recovery.img
-PB_DEVICE=$TARGET_VENDOR_DEVICE_NAME-$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
-ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE
+PB_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
+ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
 PBTWRP_BUILD_TYPE=UNOFFICIAL
-wget https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices -O pb.devices
 
-if [ "$PBTWRP_BUILD_TYPE" ]; then
-   CURRENT_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
-   LIST=pb.devices
-   FOUND_DEVICE=$(grep -Fx "$CURRENT_DEVICE" "$LIST")
-    if [ "$FOUND_DEVICE" == "$CURRENT_DEVICE" ]; then
-      IS_OFFICIAL=true
-      PBTWRP_BUILD_TYPE=OFFICIAL
-    fi
-    if [ ! "$IS_OFFICIAL" == "true" ]; then
-       PBTWRP_BUILD_TYPE=UNOFFICIAL
-       echo "Error Device is not OFFICIAL"
-    fi
-fi
-
-if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
-	ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE-OFFICIAL
+if [ "$PB_OFFICIAL_CH" != "true" ]; then
+	PBTWRP_BUILD_TYPE=UNOFFICIAL
 else
-	ZIP_NAME=PitchBlack-$DEVICE-$VERSION-$DATE-UNOFFICIAL
+	PBTWRP_BUILD_TYPE=OFFICIAL
 fi
+
+function search() {
+for d in $(curl -s https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices); do
+if [ "$d" == "$PB_DEVICE" ]; then
+echo "$d";
+break;
+fi
+done
+}
+
+if [ "$PBTWRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
+	F=$(search);
+	if [[ "${F}" ]]; then
+		PBTWRP_BUILD_TYPE=OFFICIAL
+	else
+		PBTWRP_BUILD_TYPE=UNOFFICIAL
+		echo -e "${red}Error Device is not OFFICIAL${nocol}"
+		exit 1;
+	fi
+fi
+
+ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE-$PBTWRP_BUILD_TYPE
 
 echo -e "${red}**** Making Zip ****${nocol}"
 if [ -d "$PB_WORK_DIR" ]; then
@@ -96,7 +102,7 @@ echo -e " 		  |    |     \        /   |    |   \  |    |     "
 echo -e " 		  |____|      \__/\  /    |____|_  /  |____|     "
 echo -e " 		                   \/            \/              ${nocol}"
 BUILD_END=$(date +"%s")
-DIFF=$(($BUILD_END - $BUILD_START))
+DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "$cyan****************************************************************************************$nocol"
