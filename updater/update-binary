@@ -61,9 +61,9 @@ PB=/tmp/pb/PBTWRP
 IMG=/tmp/pb/TWRP/recovery.img
 ETC=/system/etc/install-recovery.sh
 PB1_PATH=/sdcard/Android/PBTWRP
-PB2_PATH=/sdcard/TWRP/PBTWRP
-UI=/sdcard/TWRP/theme/ui.zip
-RES=/sdcard/TWRP/.twrps
+PB2_PATH=/sdcard/PBTWRP
+UI=/sdcard/PBTWRP/theme/ui.zip
+RES=/sdcard/PBTWRP/.twrps
 red='\033[0;31m'
 RECOVERY=/dev/recovery
 
