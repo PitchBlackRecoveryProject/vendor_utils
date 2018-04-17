@@ -39,6 +39,10 @@ file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
 getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
 abort() { ui_print "$*"; exit 1; }
 
+if [ -f "/tmp/pb" ]; then
+rm -rf "/tmp/pb"
+fi
+
 mkdir -p /tmp/pb;
 cd /tmp/pb;
 unzip -o "$ZIP";
@@ -61,9 +65,11 @@ PB=/tmp/pb/PBTWRP
 IMG=/tmp/pb/TWRP/recovery.img
 ETC=/system/etc/install-recovery.sh
 PB1_PATH=/sdcard/Android/PBTWRP
-PB2_PATH=/sdcard/PBTWRP
+PB2_PATH=/sdcard/PBTWRP/tools
+PB3_PATH=/sdcard/PBTWRP/themes
 UI=/sdcard/PBTWRP/theme/ui.zip
 RES=/sdcard/PBTWRP/.twrps
+OLD=/sdcard/TWRP/PBTWRP
 red='\033[0;31m'
 RECOVERY=/dev/recovery
 
@@ -134,21 +140,13 @@ recovery_partition() {
 fi
 
 #Deletion
-if [ -f $ETC ]; then
 	rm $ETC
-fi
-if [ -f $PB1_PATH ]; then
 	rm -rf $PB1_PATH
-fi
-if [ -f $PB2_PATH ]; then
 	rm -rf $PB2_PATH
-fi
-if [ -f $UI ]; then
+    rm -rf $PB3_PATH
 	rm $UI
-fi
-if [ -f $RES ]; then
 	rm -rf $RES
-fi
+	rm -rf $OLD
 
 #Flashing
 if [ "$DD" ]; then
@@ -171,14 +169,26 @@ else
 fi
 
 #Copy Specific Files
-if [-f "/sdcard/PBTWRP/tools" ]; then 
-rm -rf /sdcard/PBTWRP/tools
+if [ -f "/sdcard/PBTWRP" ]; then
+cp -r $PB/tools /sdcard/PBTWRP/
+cp -r $PB/themes /sdcard/PBTWRP/
+else
+mkdir -p /sdcard/PBTWRP
+cp -r $PB/tools /sdcard/PBTWRP/
+cp -r $PB/themes /sdcard/PBTWRP/
 fi
-if [ -f "rm -rf /sdcard/PBTWRP/themes" ]; then
-rm -rf /sdcard/PBTWRP/themes
+
+#Copy Backup from TWRP
+if [ -f "/sdcard/TWRP/BACKUPS" ]; then
+ui_print "Previous TWRP Backup found";
+if [ -f "/sdcard/PBTWRP/BACKUPS" ]; then
+cp -r /sdcard/TWRP/BACKUPS/* /sdcard/PBTWRP/BACKUPS/
+else 
+cp -r /sdcard/TWRP/BACKUPS /sdcard/PBTWRP/
 fi
-cp -r $PB/tools/* /sdcard/PBTWRP/tools/
-cp -r $PB/themes/* /sdcard/PBTWRP/themes/
+fi
+
+rm -rf /sdcard/TWRP
 
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
@@ -191,4 +201,4 @@ sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------Installation finished!-----------|";
 /sbin/unmount /system;
-reboot recovery
+reboot recovery;
