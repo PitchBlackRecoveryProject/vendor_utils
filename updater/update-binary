@@ -50,7 +50,7 @@ show_progress 0.1000000, 0;
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------PitchBlack TWRP---------------|";
-ui_print "|-------------------v2.7.1--------------------|";
+ui_print "|-------------------v2.7.2--------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|--------------Brought To You By--------------|";
@@ -61,15 +61,15 @@ ui_print "|---------------------------------------------|";
 ui_print "|            Based on TWRP v3.2.1-x           |";
 ui_print "|---------------------------------------------|";
 /sbin/busybox mount /system;
-PB=/tmp/pb/PBTWRP
+PB=/tmp/pb/PBRP
 IMG=/tmp/pb/TWRP/recovery.img
 ETC=/system/etc/install-recovery.sh
-PB1_PATH=/sdcard/Android/PBTWRP
-PB2_PATH=/sdcard/PBTWRP/tools
-PB3_PATH=/sdcard/PBTWRP/themes
-UI=/sdcard/PBTWRP/theme/ui.zip
-RES=/sdcard/PBTWRP/.twrps
-OLD=/sdcard/TWRP/PBTWRP
+PB1_PATH=/sdcard/PBTWRP
+PB2_PATH=/sdcard/PBRP/tools
+PB3_PATH=/sdcard/PBRP/themes
+UI=/sdcard/PBRP/theme/ui.zip
+RES=/sdcard/PBRP/.twrps
+OLD=/sdcard/TWRP/PBRP
 red='\033[0;31m'
 RECOVERY=/dev/recovery
 
@@ -169,22 +169,22 @@ else
 fi
 
 #Copy Specific Files
-if [ -f "/sdcard/PBTWRP" ]; then
-cp -r $PB/tools /sdcard/PBTWRP/
-cp -r $PB/themes /sdcard/PBTWRP/
+if [ -f "/sdcard/PBRP" ]; then
+cp -r $PB/tools /sdcard/PBRP/
+cp -r $PB/themes /sdcard/PBRP/
 else
-mkdir -p /sdcard/PBTWRP
-cp -r $PB/tools /sdcard/PBTWRP/
-cp -r $PB/themes /sdcard/PBTWRP/
+mkdir -p /sdcard/PBRP
+cp -r $PB/tools /sdcard/PBRP/
+cp -r $PB/themes /sdcard/PBRP/
 fi
 
 #Copy Backup from TWRP
 if [ -f "/sdcard/TWRP/BACKUPS" ]; then
 ui_print "Previous TWRP Backup found";
-if [ -f "/sdcard/PBTWRP/BACKUPS" ]; then
-cp -r /sdcard/TWRP/BACKUPS/* /sdcard/PBTWRP/BACKUPS/
+if [ -f "/sdcard/PBRP/BACKUPS" ]; then
+cp -r /sdcard/TWRP/BACKUPS/* /sdcard/PBRP/BACKUPS/
 else 
-cp -r /sdcard/TWRP/BACKUPS /sdcard/PBTWRP/
+cp -r /sdcard/TWRP/BACKUPS /sdcard/PBRP/
 fi
 fi
 

@@ -16,7 +16,7 @@
 # Please maintain this if you use this script or any part of it
 #
 
-if [ "$PBTWRP_BUILD_TYPE" == "OFFICIAL" ]; then
+if [ "$PBRP_BUILD_TYPE" == "OFFICIAL" ]; then
 env -i read -s -p "Enter SourceForge Server Password:" sf_psd
 echo "exit" | sshpass -p "$sf_psd" ssh -tto StrictHostKeyChecking=no pitchblack@shell.sourceforge.net create
 echo -e "$cyan****************************************************************************************$nocol"

@@ -25,7 +25,7 @@ red='\033[0;31m'
 nocol='\033[0m'
 purple='\e[0;35m'
 white='\e[0;37m'
-VERSION="2.7.1"
+VERSION="2.7.2"
 DATE=$(date -u +%Y%m%d-%H%M)
 PB_VENDOR=vendor/pb
 PB_WORK=$OUT
@@ -33,12 +33,12 @@ PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
 PB_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
 ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
-PBTWRP_BUILD_TYPE=UNOFFICIAL
+PBRP_BUILD_TYPE=UNOFFICIAL
 
 if [ "$PB_OFFICIAL_CH" != "true" ]; then
-	PBTWRP_BUILD_TYPE=UNOFFICIAL
+	PBRP_BUILD_TYPE=UNOFFICIAL
 else
-	PBTWRP_BUILD_TYPE=OFFICIAL
+	PBRP_BUILD_TYPE=OFFICIAL
 fi
 
 function search() {
@@ -50,18 +50,18 @@ fi
 done
 }
 
-if [ "$PBTWRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
+if [ "$PBRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
 	F=$(search);
 	if [[ "${F}" ]]; then
-		PBTWRP_BUILD_TYPE=OFFICIAL
+		PBRP_BUILD_TYPE=OFFICIAL
 	else
-		PBTWRP_BUILD_TYPE=UNOFFICIAL
+		PBRP_BUILD_TYPE=UNOFFICIAL
 		echo -e "${red}Error Device is not OFFICIAL${nocol}"
 		exit 1;
 	fi
 fi
 
-ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE-$PBTWRP_BUILD_TYPE
+ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
 
 echo -e "${red}**** Making Zip ****${nocol}"
 if [ -d "$PB_WORK_DIR" ]; then
@@ -74,7 +74,7 @@ if [ ! -d "PB_WORK_DIR" ]; then
 fi
 
 echo -e "${blue}**** Copying Tools ****${nocol}"
-cp -R "$PB_VENDOR/PBTWRP" "$PB_WORK_DIR"
+cp -R "$PB_VENDOR/PBRP" "$PB_WORK_DIR"
 
 echo -e "${green}**** Copying Updater Scripts ****${nocol}"
 mkdir -p "$PB_WORK_DIR/META-INF/com/google/android"
