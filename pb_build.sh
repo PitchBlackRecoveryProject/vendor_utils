@@ -31,7 +31,7 @@ PB_VENDOR=vendor/pb
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
-PB_DEVICE=$(cut -d'_' -f2 <<<$TARGET_PRODUCT)
+PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
 PBRP_BUILD_TYPE=UNOFFICIAL
 
@@ -42,7 +42,7 @@ else
 fi
 
 function search() {
-for d in $(curl -s https://raw.githubusercontent.com/PitchBlackTWRP/vendor_pb/pb/pb.devices); do
+for d in $(curl -s https://raw.githubusercontent.com/PitchBlack-recovery/vendor_pb/pb/pb.devices); do
 if [ "$d" == "$PB_DEVICE" ]; then
 echo "$d";
 break;
