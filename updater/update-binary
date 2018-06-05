@@ -1,6 +1,6 @@
 #!/sbin/sh
 # Copyright (C) 2018 ATG Droid 
-# Copyright (C) 2018 PitchBlackTWRP <pitchblacktwrp@gmail.com>
+# Copyright (C) 2018 PitchBlack Recovery <pitchblackrecovery@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ unzip -o "$ZIP";
 show_progress 0.1000000, 0;
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
-ui_print "|---------------PitchBlack TWRP---------------|";
+ui_print "|---------PitchBlack Recovery Project---------|";
 ui_print "|-------------------v2.7.2--------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
