@@ -195,7 +195,7 @@ ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  Thank You                  |";
-ui_print "|       Rebooting into PitchBlack TWRP        |";
+ui_print "|     Rebooting into PitchBlack Recovery      |";
 ui_print "|---------------------------------------------|";
 sleep 5s
 show_progress 0.1000000, 90 ;
