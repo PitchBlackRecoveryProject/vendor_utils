@@ -79,7 +79,7 @@ cp -R "$PB_VENDOR/PBRP" "$PB_WORK_DIR"
 echo -e "${green}**** Copying Updater Scripts ****${nocol}"
 mkdir -p "$PB_WORK_DIR/META-INF/com/google/android"
 cp -R "$PB_VENDOR/updater/update-script" "$PB_WORK_DIR/META-INF/com/google/android/"
-if ["$PB_FORCE_DD_FLASH" == "true"]; then
+if [[ "$PB_FORCE_DD_FLASH" = "true" ]]; then
 	cp -R "$PB_VENDOR/updater/update-binary-dd" "$PB_WORK_DIR/META-INF/com/google/android/"
 else
 	cp -R "$PB_VENDOR/updater/update-binary" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
