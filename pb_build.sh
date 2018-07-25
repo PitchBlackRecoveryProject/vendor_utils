@@ -32,7 +32,11 @@ PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
 PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
-ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
+if [ "$PB_GO" != "true" ]; then
+	ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
+else
+	ZIP_NAME=PitchBlack-Go-$PB_DEVICE-$VERSION-$DATE
+fi
 PBRP_BUILD_TYPE=UNOFFICIAL
 
 if [ "$PB_OFFICIAL_CH" != "true" ]; then
