@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright (C) 2018, Mohd Faraz <mohd.faraz.abc@gmail.com>
-# Copyright (C) 2018, PitchBlackTWRP <pitchblacktwrp@gmail.com>
+# Copyright (C) 2018, PitchBlack-Recovery <pitchblackrecovery@gmail.com>
 # Copyright (C) 2018 ATG Droid  
 #
 # Custom build script
@@ -46,7 +46,7 @@ else
 fi
 
 function search() {
-for d in $(curl -s https://raw.githubusercontent.com/PitchBlack-recovery/vendor_pb/pb/pb.devices); do
+for d in $(curl -s https://raw.githubusercontent.com/PitchBlack-Recovery/vendor_pb/pb/pb.devices); do
 if [ "$d" == "$PB_DEVICE" ]; then
 echo "$d";
 break;
@@ -116,7 +116,7 @@ if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
-echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
+echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF % 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
 echo -e "$cyan*$nocol${green} RECOVERY LOCATION: ${OUT}/recovery.img$nocol"
 echo -e "$purple*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | awk '{print $1}' )$nocol"
 echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
