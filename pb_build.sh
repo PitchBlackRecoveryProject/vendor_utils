@@ -104,12 +104,14 @@ echo -e "${blue}  |     ___/ |  | \   __\ _/ ___\  |  |  \ ${purple}  |    |  _/
 echo -e "${blue}  |    |     |  |  |  |   \  \___  |   Y  \ ${purple} |    |   \ |  |__  / __ \_ \  \___  |    <  "
 echo -e "${blue}  |____|     |__|  |__|    \___  > |___|  /${purple}  |______  / |____/ (____  /  \___  > |__|_ \ "
 echo -e "${blue}                               \/       \/ ${purple}         \/              \/       \/       \/ "
-echo -e "${green} 		___________  __      __  __________  __________"
-echo -e " 		\__    ___/ /  \    /  \ \______   \ \______   \ "
-echo -e " 		  |    |    \   \/\/   /  |       _/  |     ___/ "
-echo -e " 		  |    |     \        /   |    |   \  |    |     "
-echo -e " 		  |____|      \__/\  /    |____|_  /  |____|     "
-echo -e " 		                   \/            \/              ${nocol}"
+echo -e "  ${green}                                _____                                    "
+echo -e "                                 |  __ \                                    "
+echo -e "                                 | |__) |___  ___ _____   _____ _ __ _   _  "
+echo -e "                                 |  _  // _ \/ __/ _ \ \ / / _ \ '__| | | | "
+echo -e "                                 | | \ \  __/ (_| (_) \ V /  __/ |  | |_| | "
+echo -e "                                 |_|  \_\___|\___\___/ \_/ \___|_|   \__, | "
+echo -e "                                                                      __/ | "
+echo -e "                                                                     |___/  ${nocol}"
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
