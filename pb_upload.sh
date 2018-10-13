@@ -16,15 +16,16 @@
 # Please maintain this if you use this script or any part of it
 #
 
-if [ "$PBRP_BUILD_TYPE" == "OFFICIAL" ]; then
+env -i read -s -p "Enter File Location to upload:" sf_file
+env -i read -s -p "Enter Location where to push the file" sf_dir
+env -i read -s -p "Enter SourceForge Server Username:" sf_usr
 env -i read -s -p "Enter SourceForge Server Password:" sf_psd
-echo "exit" | sshpass -p "$sf_psd" ssh -tto StrictHostKeyChecking=no pitchblack@shell.sourceforge.net create
+echo "exit" | sshpass -p "$sf_psd" ssh -tto StrictHostKeyChecking=no sf_usr@shell.sourceforge.net create
 echo -e "$cyan****************************************************************************************$nocol"
-if rsync -v --rsh="sshpass -p $sf_psd ssh -l pitchblack" ${PB_WORK}/${ZIP_NAME}.zip pitchblack@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$CURRENT_DEVICE/
+if rsync -v --rsh="sshpass -p $sf_psd ssh -l sf_usr" sf_file sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/sf_dir/
 then
-echo -e "$green BUILD UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
+echo -e "$green UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
 else
-echo -e "$red FAILED TO UPLOAD BUILD TO SOURCEFORGE$nocol"
+echo -e "$red FAILED TO UPLOAD TO SOURCEFORGE$nocol"
 fi
 echo -e "$cyan****************************************************************************************$nocol"
-fi
