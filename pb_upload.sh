@@ -16,10 +16,10 @@
 # Please maintain this if you use this script or any part of it
 #
 
-env -i read -s -p "Enter File Location to upload:" sf_file
-env -i read -s -p "Enter Location where to push the file" sf_dir
-env -i read -s -p "Enter SourceForge Server Username:" sf_usr
-env -i read -s -p "Enter SourceForge Server Password:" sf_psd
+read -s -p "Enter File Location to upload:" sf_file
+read -s -p "Enter Location where to push the file" sf_dir
+read -s -p "Enter SourceForge Server Username:" sf_usr
+read -s -p "Enter SourceForge Server Password:" sf_psd
 echo "exit" | sshpass -p "$sf_psd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
 echo -e "$cyan****************************************************************************************$nocol"
 if rsync -v --rsh="sshpass -p $sf_psd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$sf_dir/
