@@ -46,7 +46,7 @@ else
 fi
 
 function search() {
-for d in $(curl -s https://raw.githubusercontent.com/PitchBlack-Recovery/vendor_pb/pb/pb.devices); do
+for d in $(curl -s https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_pb/pb/pb.devices); do
 if [ "$d" == "$PB_DEVICE" ]; then
 echo "$d";
 break;
@@ -104,14 +104,12 @@ echo -e "${blue}  |     ___/ |  | \   __\ _/ ___\  |  |  \ ${purple}  |    |  _/
 echo -e "${blue}  |    |     |  |  |  |   \  \___  |   Y  \ ${purple} |    |   \ |  |__  / __ \_ \  \___  |    <  "
 echo -e "${blue}  |____|     |__|  |__|    \___  > |___|  /${purple}  |______  / |____/ (____  /  \___  > |__|_ \ "
 echo -e "${blue}                               \/       \/ ${purple}         \/              \/       \/       \/ "
-echo -e "  ${green}                                _____                                    "
-echo -e "                                 |  __ \                                    "
-echo -e "                                 | |__) |___  ___ _____   _____ _ __ _   _  "
-echo -e "                                 |  _  // _ \/ __/ _ \ \ / / _ \ '__| | | | "
-echo -e "                                 | | \ \  __/ (_| (_) \ V /  __/ |  | |_| | "
-echo -e "                                 |_|  \_\___|\___\___/ \_/ \___|_|   \__, | "
-echo -e "                                                                      __/ | "
-echo -e "                                                                     |___/  ${nocol}"
+echo -e "${green}                     __________    "
+echo -e "                     \______   \ ____   ____  _______  __ ___________ ___.__.            "
+echo -e "                      |       _// __ \_/ ___\/  _ \  \/ // __ \_  __ <   |  |            "
+echo -e "                      |    |   \  ___/\  \__(  <_> )   /\  ___/|  | \/\___  |            "
+echo -e "                      |____|_  /\___  >\___  >____/ \_/  \___  >__|   / ____|            "
+echo -e "                             \/     \/     \/                \/       \/                 ${nocol}"
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
