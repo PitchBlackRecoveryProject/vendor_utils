@@ -25,7 +25,6 @@ purple='\e[0;35m'
 white='\e[0;37m'
 
 # Install sshpass if not installed
-if /usr/bin/sshpass
 grep -R ID= /etc/os-release
 if ID=arch; then
 sudo pacman -S sshpass --noconfirm
