@@ -25,7 +25,7 @@ purple='\e[0;35m'
 white='\e[0;37m'
 
 # Install sshpass if not installed
-sudo apt-get install sshpass -y
+sudo apt-get install sshpass -y >nul 2>nul
 
 read -p "Enter build device codename:" codename
 read -p "Enter build date(YYYYMMDD):" build
