@@ -25,13 +25,21 @@ purple='\e[0;35m'
 white='\e[0;37m'
 
 # Install sshpass if not installed
-grep -R ID= /etc/os-release
-if ID=arch; then
-sudo pacman -S sshpass --noconfirm
-elif ID=ubuntu; then
-sudo apt-get install sshpass -y
+chksspb=$(which sshpass 2>/dev/null)
+if [[ "$chksspb" != "/usr/bin/sshpass" ]]; then
+    echo
+    printf "Sshpass is required but not installed!\n\nInstalling sspass...\n"
+    echo
+    grep -R ID_LIKE= /etc/os-release
+    echo
+        if ID_LIKE=arch; then
+            sudo pacman -S sshpass --noconfirm
+        elif ID_LIKE=debian; then
+            sudo apt-get install sshpass -y
+        fi
+else true;
 fi
-
+echo
 read -p "Enter build device codename:" codename
 read -p "Enter build date(YYYYMMDD):" build
 read -p "Enter location of the build to upload:" sf_file
