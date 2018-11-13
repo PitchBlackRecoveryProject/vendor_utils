@@ -26,7 +26,7 @@ nocol='\033[0m'
 purple='\e[0;35m'
 white='\e[0;37m'
 VERSION="2.9.0"
-DATE=$(date -u +%Y%m%d-%H%M)
+DATE=$(date +%Y%m%d-%H%M)
 PB_VENDOR=vendor/pb
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
@@ -111,12 +111,12 @@ echo -e "                      |    |   \  ___/\  \__(  <_> )   /\  ___/|  | \/\
 echo -e "                      |____|_  /\___  >\___  >____/ \_/  \___  >__|   / ____|            "
 echo -e "                             \/     \/     \/                \/       \/                 ${nocol}"
 BUILD_END=$(date +"%s")
-DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
+DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
-echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF % 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
+echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
 echo -e "$cyan*$nocol${green} RECOVERY LOCATION: ${OUT}/recovery.img$nocol"
 echo -e "$purple*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | awk '{print $1}' )$nocol"
 echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
