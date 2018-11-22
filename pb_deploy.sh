@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright (C) 2018, Manjot Sidhu <manjot.gni@gmail.com>
-# Copyright (C) 2018, PitchBlackTWRP <pitchblacktwrp@gmail.com>  
+# Copyright (C) 2018, PitchBlack Recovery Project <pitchblacktwrp@gmail.com>
 #
 # Custom Deploy Script for PBRP
 #
@@ -39,22 +39,51 @@ if [[ "$chksspb" != "/usr/bin/sshpass" ]]; then
         fi
 else true;
 fi
-echo
-read -p "Enter build device codename:" codename
-read -p "Enter build date(YYYYMMDD):" build
-read -p "Enter location of the build to upload:" sf_file
 
+echo
+
+read -p "Enter device codename : " codename
+
+sf_file=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null)
+zipcounter=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null | wc -l)
+
+if [[ "$zipcounter" > "0" ]]; then
+
+  if [[ "$zipcounter" > "1" ]]; then
+    echo
+    printf "${red}More than one zips dected! Remove old build...\n${nocol}"
+    echo
+
+else
+
+pbv=$(echo "$sf_file" | awk -F'[-]' '{print $3}')
+build=$(echo "$sf_file" | awk -F'[-]' '{print $4}')
+
+echo
+echo "Build detected for :" $codename
+echo "PitchBlack version :" $pbv
+echo "Build date :" $build
+echo "Build location :" $sf_file
+echo
+printf "${green}Build successfully detected!\n${nocol}"
+echo
 read -p "Enter SourceForge Server Username:" sf_usr
 read -s -p "Enter SourceForge Server Password:" sf_pwd
 echo "Please Wait"
 echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
 if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
 then
-echo -e "$green UPLOADED TO SOURCEFORGE SUCCESSFULLY$nocol"
+echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 java -jar Release.jar $codename $build
 git add pb.releases
 git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 git push origin pb
 else
-echo -e "$red FAILED TO UPLOAD TO SOURCEFORGE$nocol"
+echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
+fi
+fi
+else
+    echo
+    printf "${red}No build found\n${nocol}"
+    echo
 fi
