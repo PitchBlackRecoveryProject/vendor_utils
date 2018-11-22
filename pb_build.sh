@@ -124,4 +124,10 @@ echo -e "$purple*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | aw
 echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
 echo -e "$purple*$nocol${green} ZIP SIZE: $( du -h ${PB_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )$nocol"
 echo -e "$cyan****************************************************************************************$nocol"
+if ["$PBRP_BUILD_TYPE" == "OFFICIAL"]; then
+echo -e "$cyan****************************************************************************************$nocol"
+echo -e "$cyanDEPLOYING..."
+	bash pb_deploy.sh
+echo -e "$cyan****************************************************************************************$nocol"
+fi
 fi
