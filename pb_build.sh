@@ -97,21 +97,21 @@ echo -e "${green}**** Compressing Files into ZIP ****${nocol}"
 cd $PB_WORK_DIR
 zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
-echo -e ""
+echo
 echo -e "${red} ██████╗ ██╗████████╗ ██████╗██╗  ██╗ ${white} ██████╗ ██╗      █████╗  ██████╗██╗  ██╗ "
 echo -e "${red} ██╔══██╗██║╚══██╔══╝██╔════╝██║  ██║ ${white} ██╔══██╗██║     ██╔══██╗██╔════╝██║ ██╔╝ "
 echo -e "${red} ██████╔╝██║   ██║   ██║     ███████║ ${white} ██████╔╝██║     ███████║██║     █████╔╝  "
 echo -e "${red} ██╔═══╝ ██║   ██║   ██║     ██╔══██║ ${white} ██╔══██╗██║     ██╔══██║██║     ██╔═██╗  "
 echo -e "${red} ██║     ██║   ██║   ╚██████╗██║  ██║ ${white} ██████╔╝███████╗██║  ██║╚██████╗██║  ██╗ "
 echo -e "${red} ╚═╝     ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝ ${white} ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ "
-echo -e ""                                                                                
+echo                                                                               
 echo -e "${cyan}     ██████╗ ███████╗ ██████╗ ██████╗ ██╗   ██╗███████╗██████╗ ██╗   ██╗      "        
 echo -e "${cyan}     ██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝      "       
 echo -e "${cyan}     ██████╔╝█████╗  ██║     ██║   ██║██║   ██║█████╗  ██████╔╝ ╚████╔╝       "       
 echo -e "${cyan}     ██╔══██╗██╔══╝  ██║     ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗  ╚██╔╝        "        
 echo -e "${cyan}     ██║  ██║███████╗╚██████╗╚██████╔╝ ╚████╔╝ ███████╗██║  ██║   ██║         "        
 echo -e "${cyan}     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝ ${nocol}"
-echo -e ""
+echo
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
@@ -124,7 +124,7 @@ echo -e "$purple*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | aw
 echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
 echo -e "$purple*$nocol${green} ZIP SIZE: $( du -h ${PB_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )$nocol"
 echo -e "$cyan****************************************************************************************$nocol"
-if ["$PBRP_BUILD_TYPE" == "OFFICIAL"]; then
+if [ "$PBRP_BUILD_TYPE" = "OFFICIAL" ]; then
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyanDEPLOYING..."
 	bash pb_deploy.sh
