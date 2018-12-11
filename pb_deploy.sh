@@ -74,10 +74,11 @@ echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@she
 if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
 then
 echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
+cd $(pwd)/vendor/pb;
 java -jar Release.jar $codename $build
 git add pb.releases
 git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
-git push origin pb
+git push PitchBlackTWRP HEAD:pb
 else
 echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
 fi
@@ -87,3 +88,4 @@ else
     printf "${red}No build found\n${nocol}"
     echo
 fi
+cd ../../
