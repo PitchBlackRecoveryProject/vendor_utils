@@ -30,11 +30,11 @@ if [[ "$chksspb" != "/usr/bin/sshpass" ]]; then
     echo
     printf "Sshpass is required but not installed!\n\nInstalling sspass...\n"
     echo
-    grep -R ID_LIKE= /etc/os-release
+    ID_LIKE="$(cut -d'=' -f2 <<<$(grep ID_LIKE= /etc/os-release))"
     echo
-        if ID_LIKE=arch; then
+        if [ "$ID_LIKE" == "arch" ]; then
             sudo pacman -S sshpass --noconfirm
-        elif ID_LIKE=debian; then
+        elif [ "$ID_LIKE" = "debian" ]; then
             sudo apt-get install sshpass -y
         fi
 else true;
