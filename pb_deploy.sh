@@ -42,7 +42,11 @@ fi
 
 echo
 
+if [ -n "$PB_DEVICE" ]; then
+codename=$PB_DEVICE;
+else
 read -p "Enter device codename : " codename
+fi
 
 sf_file=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null)
 zipcounter=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null | wc -l)

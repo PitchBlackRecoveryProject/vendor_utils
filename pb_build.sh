@@ -31,7 +31,7 @@ PB_VENDOR=vendor/pb
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
-PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
+export PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 if [ "$PB_GO" != "true" ]; then
 	ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
 else
