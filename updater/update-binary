@@ -15,6 +15,7 @@
 # limitations under the License.
 
 
+AB_DEVICE = false;
 OUTFD=/proc/self/fd/$2;
 ZIP="$3";
 DIR=`dirname "$ZIP"`;
@@ -63,6 +64,7 @@ ui_print "|---------------------------------------------|";
 /sbin/busybox mount /system;
 PB=/tmp/pb/PBRP
 IMG=/tmp/pb/TWRP/recovery.img
+RAM=/tmp/pb/TWRP/ramdisk-recovery.cpio
 ETC=/system/etc/install-recovery.sh
 PB1_PATH=/sdcard/PBTWRP
 PB2_PATH=/sdcard/PBRP/tools
@@ -72,6 +74,9 @@ RES=/sdcard/PBRP/.twrps
 OLD=/sdcard/TWRP/PBRP
 red='\033[0;31m'
 RECOVERY=/dev/recovery
+
+#AB Checking
+if [[ "$AB_DEVICE" = "false" ]]; then
 
 if [ -f "$(readlink -f "$RECOVERY")" ]; then
 	DD=true
@@ -138,6 +143,7 @@ recovery_partition() {
 	
 }
 fi
+fi
 
 #Deletion
 	rm $ETC
@@ -148,6 +154,28 @@ fi
 	rm -rf $RES
 	rm -rf $OLD
 
+#COMMAND=""
+
+AB_D() {
+ ui_print "Doing Work on slot $1"
+ #Dump & unpack & Cp
+ tool="/tmp/pb/magiskboot"
+ # dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/boot.img"
+ mkdir /tmp/unpack
+ dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack/boot.img"
+ cd /tmp/unpack
+ "$tool" --unpack boot.img
+ cp -f $RAM ramdisk.cpio
+ "$tool" --repack boot.img
+ dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
+ [ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
+ cd /tmp/pb
+ rm -rf /tmp/unpack
+
+ #[ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
+
+}
+
 #Flashing
 if [ "$DD" ]; then
 	if [ "$DD" == "true" ]; then
@@ -156,15 +184,20 @@ if [ "$DD" ]; then
 		flash_image $RECOVERY $IMG
 	fi
 else
-	recovery_partition;
-	if [ $? = 0 ]; then
-		if $DD; then
-			dd if=$IMG of="$RECOVERY"
+	if [[ "$AB_DEVICE" = "false" ]]; then
+		recovery_partition;
+		if [ $? = 0 ]; then
+			if $DD; then
+				dd if=$IMG of="$RECOVERY"
+			else
+				flash_image $RECOVERY $IMG
+			fi
 		else
-			flash_image $RECOVERY $IMG
+			abort "Failed to write recovery image!" 43;
 		fi
 	else
-		abort "Failed to write recovery image!" 43;
+		AB_D boot_a;
+		AB_D boot_b;
 	fi
 fi
 
@@ -195,10 +228,16 @@ ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  Thank You                  |";
+if [[ "$AB_DEVICE" = "false" ]]; then
 ui_print "|     Rebooting into PitchBlack Recovery      |";
+else
+ui_print "|   Reboot to PitchBlack Recovery Manually    |";
+fi
 ui_print "|---------------------------------------------|";
 sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------Installation finished!-----------|";
 /sbin/unmount /system;
+if [[ "$AB_DEVICE" = "false" ]]; then
 reboot recovery;
+fi

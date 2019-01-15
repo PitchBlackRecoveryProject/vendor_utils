@@ -31,6 +31,7 @@ PB_VENDOR=vendor/pb
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
+RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
 export PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 if [ "$PB_GO" != "true" ]; then
 	ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
@@ -89,9 +90,20 @@ else
 	cp -R "$PB_VENDOR/updater/update-binary" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
 
+if [[ "$AB_OTA_UPDATER" = "true" ]]; then
+	sed -i "s|AB_DEVICE = false|AB_DEVICE = true|g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
+fi
+
+
 echo -e "${cyan}**** Copying Recovery Image ****${nocol}"
 mkdir -p "$PB_WORK_DIR/TWRP"
-cp "$RECOVERY_IMG" "$PB_WORK_DIR/TWRP/"
+
+if [[ "$AB_OTA_UPDATER" = "true" ]]; then
+	cp "$RECOVERY_RAM" "$PB_WORK_DIR/TWRP/"
+	cp "$PB_VENDOR/updater/magiskboot" "$PB_WORK_DIR"
+else
+	cp "$RECOVERY_IMG" "$PB_WORK_DIR/TWRP/"
+fi
 
 echo -e "${green}**** Compressing Files into ZIP ****${nocol}"
 cd $PB_WORK_DIR
@@ -113,12 +125,11 @@ echo -e "${cyan}     ██║  ██║███████╗╚████
 echo -e "${cyan}     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝ ${nocol}"
 echo
 BUILD_END=$(date +"%s")
-DIFF=$(($BUILD_END - $BUILD_START))
+#DIFF=$(($BUILD_END - $BUILD_START + ( ($HOURS * 60) + ($MINS * 60) + $SECS)))
 if [[ "${BUILD_RESULT_STRING}" = "BUILD SUCCESSFUL" ]]; then
 mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
-echo -e "$cyan*$nocol${yellow} Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
 echo -e "$cyan*$nocol${green} RECOVERY LOCATION: ${OUT}/recovery.img$nocol"
 echo -e "$purple*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | awk '{print $1}' )$nocol"
 echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
