@@ -15,7 +15,7 @@
 # limitations under the License.
 
 
-AB_DEVICE = false;
+AB_DEVICE=false;
 OUTFD=/proc/self/fd/$2;
 ZIP="$3";
 DIR=`dirname "$ZIP"`;

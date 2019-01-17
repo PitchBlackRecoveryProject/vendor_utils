@@ -32,7 +32,9 @@ PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
 RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
-AB_OTA_UPDATER=$AB_OTA_UPDATER
+AB_OTA="false"
+AB_OTA=$AB_OTA_UPDATER
+unset AB_OTA_UPDATER
 export PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 if [ "$PB_GO" != "true" ]; then
 	ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
@@ -91,15 +93,15 @@ else
 	cp -R "$PB_VENDOR/updater/update-binary" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
 
-if [[ "$AB_OTA_UPDATER" = "true" ]]; then
-	sed -i "s|AB_DEVICE = false|AB_DEVICE = true|g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
+if [[ "$AB_OTA" = "true" ]]; then
+	sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
 
 
 echo -e "${cyan}**** Copying Recovery Image ****${nocol}"
 mkdir -p "$PB_WORK_DIR/TWRP"
 
-if [[ "$AB_OTA_UPDATER" = "true" ]]; then
+if [[ "$AB_OTA" = "true" ]]; then
 	cp "$RECOVERY_RAM" "$PB_WORK_DIR/TWRP/"
 	cp "$PB_VENDOR/updater/magiskboot" "$PB_WORK_DIR"
 else
