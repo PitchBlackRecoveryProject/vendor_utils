@@ -72,11 +72,10 @@ RES=/sdcard/PBRP/.twrps
 OLD=/sdcard/TWRP/PBRP
 red='\033[0;31m'
 RECOVERY=/dev/recovery
+cp META-INF/awk /sbin/awk
+chmod 0755 /sbin/awk
 
-if [ -f "$(readlink -f "$RECOVERY")" ]; then
-	DD=true
-	break
-elif [[ ! -f "$(readlink -f "$RECOVERY")" ] || [ -f "$RECOVERY" ]]; then
+if [ -f "$RECOVERY" ]; then
 	DD=false
 	break
 else
