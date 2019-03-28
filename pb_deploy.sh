@@ -48,6 +48,8 @@ else
 read -p "Enter device codename : " codename
 fi
 
+export NAME=$codename
+
 sf_file=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null)
 zipcounter=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null | wc -l)
 
@@ -92,4 +94,7 @@ else
     printf "${red}No build found\n${nocol}"
     echo
 fi
+
+bash telegram.sh
+
 cd ../../
