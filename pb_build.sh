@@ -37,7 +37,7 @@ AB_OTA=$AB_OTA_UPDATER
 unset AB_OTA_UPDATER
 export PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 if [ "$PB_GO" != "true" ]; then
-	export ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
+	ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
 else
 	ZIP_NAME=PitchBlack-Go-$PB_DEVICE-$VERSION-$DATE
 fi

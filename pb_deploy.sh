@@ -50,8 +50,8 @@ fi
 
 export NAME=$codename
 
-sf_file=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null)
-zipcounter=$(find `dirname $0`/../../out/target/product/$codename/PitchBlack*.zip 2>/dev/null | wc -l)
+sf_file=$(find $(pwd)/out/target/product/$codename/PitchBlack*.zip 2>/dev/null)
+zipcounter=$(find $(pwd)/out/target/product/$codename/PitchBlack*.zip 2>/dev/null | wc -l)
 
 if [[ "$zipcounter" > "0" ]]; then
 
@@ -61,6 +61,8 @@ if [[ "$zipcounter" > "0" ]]; then
     echo
 
 else
+
+export ZIP_NAME=$sf_file;
 
 pbv=$(echo "$sf_file" | awk -F'[-]' '{print $3}')
 build=$(echo "$sf_file" | awk -F'[-]' '{print $4}')
@@ -85,6 +87,9 @@ java -jar Release.jar $codename $build
 git add pb.releases
 git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 git push PitchBlackTWRP HEAD:pb
+chmod +x $(pwd)/telegram.sh
+bash $(pwd)/telegram.sh
+cd ../../
 else
 echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
 fi
@@ -94,7 +99,3 @@ else
     printf "${red}No build found\n${nocol}"
     echo
 fi
-
-bash telegram.sh
-
-cd ../../
