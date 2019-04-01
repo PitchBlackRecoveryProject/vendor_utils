@@ -75,23 +75,32 @@ echo "Build location :" $sf_file
 echo
 printf "${green}Build successfully detected!\n${nocol}"
 echo
-read -p "Enter SourceForge Server Username:" sf_usr
-read -s -p "Enter SourceForge Server Password:" sf_pwd
-echo "Please Wait"
-echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
-if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
-then
-echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
-cd $(pwd)/vendor/pb;
-java -jar Release.jar $codename $build
-git add pb.releases
-git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
-git push PitchBlackTWRP HEAD:pb
-chmod +x $(pwd)/telegram.sh
-bash $(pwd)/telegram.sh
-cd ../../
+read -p "Want to upload Build (y/n) : " choice
+
+if [[ "$choice" = "y" ]]; then
+	read -p "Enter SourceForge Server Username:" sf_usr
+	read -s -p "Enter SourceForge Server Password:" sf_pwd
+	echo "Please Wait"
+	echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
+	if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
+	then
+		echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
+		cd $(pwd)/vendor/pb;
+		java -jar Release.jar $codename $build
+		git add pb.releases
+		git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
+		git push PitchBlackTWRP HEAD:pb
+		chmod +x $(pwd)/telegram.sh
+		bash $(pwd)/telegram.sh
+		cd ../../
+	else
+		echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
+	fi
 else
-echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
+	cd $(pwd)/vendor/pb;
+	chmod +x $(pwd)/telegram.sh
+	bash $(pwd)/telegram.sh
+	cd ../../
 fi
 fi
 else
