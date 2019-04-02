@@ -75,9 +75,22 @@ echo "Build location :" $sf_file
 echo
 printf "${green}Build successfully detected!\n${nocol}"
 echo
-read -p "Want to upload Build (y/n) : " choice
+read -p "Is Build uploaded to S/F (y/n) : " choice
+read -p "Want To include Changelog (y/n) : " cl;
 
-if [[ "$choice" = "y" ]]; then
+if [[ "$cl" = "y" ]]; then
+       echo "Changelog must be in following Format:";
+       echo ""
+echo "Changelog: \\
+ - abc \\
+ - def \\
+ - etc"
+
+echo "Enter Changelog";
+read  log
+fi
+
+if [[ "$choice" = "n" ]]; then
 	read -p "Enter SourceForge Server Username:" sf_usr
 	read -s -p "Enter SourceForge Server Password:" sf_pwd
 	echo "Please Wait"
@@ -90,16 +103,24 @@ if [[ "$choice" = "y" ]]; then
 		git add pb.releases
 		git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 		git push PitchBlackTWRP HEAD:pb
-		chmod +x $(pwd)/telegram.sh
-		bash $(pwd)/telegram.sh
+		chmod +x $(pwd)/pb
+		if [[ "$cl" = "y" ]]; then
+			./pb $log
+		else
+			./pb
+		fi
 		cd ../../
 	else
 		echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
 	fi
 else
 	cd $(pwd)/vendor/pb;
-	chmod +x $(pwd)/telegram.sh
-	bash $(pwd)/telegram.sh
+	chmod +x $(pwd)/pb
+	if [[ "$cl" = "y" ]]; then
+		./pb $log
+	else
+		./pb
+	fi
 	cd ../../
 fi
 fi
