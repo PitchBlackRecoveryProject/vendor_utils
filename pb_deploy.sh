@@ -66,6 +66,7 @@ export ZIP_NAME=$sf_file;
 
 pbv=$(echo "$sf_file" | awk -F'[-]' '{print $3}')
 build=$(echo "$sf_file" | awk -F'[-]' '{print $4}')
+build_with_time="$(echo "$sf_file" | awk -F'[-]' '{print $4}')-$(echo "$sf_file" | awk -F'[-]' '{print $5}')"
 
 echo
 echo "Build detected for :" $codename
@@ -99,7 +100,7 @@ if [[ "$choice" = "n" ]]; then
 	then
 		echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 		cd $(pwd)/vendor/pb;
-		java -jar Release.jar $codename $build
+		java -jar Release.jar $codename $build_with_extra
 		git add pb.releases
 		git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 		git push PitchBlackTWRP HEAD:pb
