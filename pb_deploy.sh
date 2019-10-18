@@ -75,8 +75,10 @@ echo "Build location :" $sf_file
 echo
 printf "${green}Build successfully detected!\n${nocol}"
 echo
-read -p "Is Build uploaded to S/F (y/n) : " choice
-read -p "Want To include Changelog (y/n) : " cl;
+# read -p "Is Build uploaded to S/F (y/n) : " choice
+choice="n"
+#read -p "Want To include Changelog (y/n) : " cl;
+cl="n"
 
 if [[ "$cl" = "y" ]]; then
        echo "Changelog must be in following Format:";
