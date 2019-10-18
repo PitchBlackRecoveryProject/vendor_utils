@@ -15,6 +15,11 @@
 #
 # Please maintain this if you use this script or any part of it
 #
+
+codename=$1
+sf_usr=$2
+sf_pwd=$3
+
 blue='\033[0;34m'
 cyan='\033[0;36m'
 green='\e[0;32m'
@@ -41,12 +46,6 @@ else true;
 fi
 
 echo
-
-if [ -n "$PB_DEVICE" ]; then
-codename=$PB_DEVICE;
-else
-read -p "Enter device codename : " codename
-fi
 
 export NAME=$codename
 
@@ -92,8 +91,6 @@ read  log
 fi
 
 if [[ "$choice" = "n" ]]; then
-	read -p "Enter SourceForge Server Username:" sf_usr
-	read -s -p "Enter SourceForge Server Password:" sf_pwd
 	echo "Please Wait"
 	echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
 	if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
