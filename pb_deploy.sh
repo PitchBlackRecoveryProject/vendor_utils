@@ -19,7 +19,7 @@
 codename=$1
 sf_usr=$2
 sf_pwd=$3
-github_token=$5
+github_token=$4
 
 blue='\033[0;34m'
 cyan='\033[0;36m'
