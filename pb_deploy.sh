@@ -99,10 +99,10 @@ if [[ "$choice" = "n" ]]; then
 	then
 		echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 		cd $(pwd)/vendor/pb;
-		java -jar Release.jar $codename $build_with_extra
+		java -jar Release.jar $codename $build_with_time
 		git add pb.releases
 		git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
-		git push PitchBlackTWRP HEAD:pb
+		git push origin HEAD:pb
 		chmod +x $(pwd)/pb
 		if [[ "$cl" = "y" ]]; then
 			./pb $log
