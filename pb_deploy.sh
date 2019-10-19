@@ -19,6 +19,8 @@
 codename=$1
 sf_usr=$2
 sf_pwd=$3
+repo=$4
+github_token=$5
 
 blue='\033[0;34m'
 cyan='\033[0;36m'
@@ -102,7 +104,7 @@ if [[ "$choice" = "n" ]]; then
 		java -jar Release.jar $codename $build_with_time
 		git add pb.releases
 		git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
-		git push origin HEAD:pb
+		git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/$4 pb
 		chmod +x $(pwd)/pb
 		if [[ "$cl" = "y" ]]; then
 			./pb $log
