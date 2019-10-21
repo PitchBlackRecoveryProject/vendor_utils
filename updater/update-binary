@@ -220,6 +220,11 @@ cp -r /sdcard/TWRP/BACKUPS /sdcard/PBRP/
 fi
 fi
 
+
+if [[ "$AB_DEVICE" = "true" ]]; then
+cp $RAM /sdcard/PBRP/ramdisk.cpio;
+if
+
 rm -rf /sdcard/TWRP
 
 ui_print "|---------------------------------------------|";
