@@ -223,7 +223,7 @@ fi
 
 if [[ "$AB_DEVICE" = "true" ]]; then
 cp $RAM /sdcard/PBRP/ramdisk.cpio;
-if
+fi
 
 rm -rf /sdcard/TWRP
 
