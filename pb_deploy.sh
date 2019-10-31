@@ -50,8 +50,8 @@ echo
 
 export NAME=$codename
 
-sf_file=$(find $(pwd)/out/target/product/$codename/PitchBlack*.zip 2>/dev/null)
-zipcounter=$(find $(pwd)/out/target/product/$codename/PitchBlack*.zip 2>/dev/null | wc -l)
+sf_file=$(find $(pwd)/out/target/product/$codename/PitchBlack*-OFFICIAL.zip 2>/dev/null)
+zipcounter=$(find $(pwd)/out/target/product/$codename/PitchBlack*-OFFICIAL.zip 2>/dev/null | wc -l)
 
 if [[ "$zipcounter" > "0" ]]; then
 
