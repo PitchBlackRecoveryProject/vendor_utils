@@ -1,3 +1,7 @@
+SFUserName=$1
+SFPassword=$2
+GITHUB_TOKEN=$3
+
 PATH=~/bin:$PATH
 curl --create-dirs -L -o ~/bin/repo -O -L https://github.com/akhilnarang/repo/raw/master/repo
 chmod a+x ~/bin/repo
