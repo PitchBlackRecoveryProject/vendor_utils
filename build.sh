@@ -21,10 +21,10 @@ repo init --depth=1 -q -u git://github.com/PitchBlackRecoveryProject/manifest_pb
 time repo sync -c -f -q --force-sync --no-clone-bundle --no-tags -j32
 
 echo "Get the Device Tree on place"
-git clone https://PitchBlackRecoveryProect:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} device/${VENDOR}/${CODENAME}
+git clone https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} device/${VENDOR}/${CODENAME}
 
 # Sync again, as Device has Dependencies
-repo sync -c -f -q --force-sync --no-clone-bundle --no-tags -j32
+time repo sync -c -f -q --force-sync --no-clone-bundle --no-tags -j32
 
 # Keep the whole .repo/manifests folder
 cp -a .repo/manifests $(pwd)/ && ls manifests/
