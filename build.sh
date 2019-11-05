@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 SFUserName=$1
 SFPassword=$2
@@ -10,13 +10,12 @@ which ghr && which repo
 echo "Initialize & Sync PBRP repo"
 echo $(pwd)
 repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1
-time repo sync -c -f -q --force-sync --no-clone-bundle --no-tags -j32
+time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j32
 
 echo "Get the Device Tree on place"
 git clone https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} device/${VENDOR}/${CODENAME}
 
-# Sync again, as Device may have Dependencies
-time repo sync -c -f -q --force-sync --no-clone-bundle --no-tags -j32
+# If any omni.dependencies is placed, roomservice will clone them. No need to repo sync again
 
 # Keep the whole .repo/manifests folder
 cp -a .repo/manifests $(pwd)/ && ls manifests/
