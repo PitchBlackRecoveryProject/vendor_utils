@@ -5,6 +5,8 @@ GITHUB_TOKEN=$3
 echo -en "The Whole PATH ENV is - " && echo $PATH
 which ghr && which repo
 
+mkdir $(pwd)/work && cd work
+
 echo "Initialize & Sync PBRP repo"
 echo $(pwd)
 repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1
