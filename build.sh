@@ -11,7 +11,7 @@ repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b 
 time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j32
 
 echo "Get the Device Tree on place"
-git clone https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b {CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
+git clone https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 
 # If any omni.dependencies is placed, roomservice will clone them. No need to repo sync again
 
