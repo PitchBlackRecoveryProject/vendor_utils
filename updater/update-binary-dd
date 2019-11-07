@@ -183,5 +183,5 @@ ui_print "|---------------------------------------------|";
 sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------Installation finished!-----------|";
-/sbin/unmount /system;
+/sbin/umount /system;
 reboot recovery;
