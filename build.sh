@@ -23,6 +23,15 @@ echo "Clean up the .repo, no use of it now"
 rm -rf .repo
 mkdir -p .repo && mv manifests .repo/ && ls -la .repo/*
 
+# Local manifests hack. Some builds fail if the file path does not exist.
+# A dummy would nothing but help in that case.
+mkdir -p .repo/local_manifests && cat <<EOF > .repo/local_manifests/roomservice.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+<!-- dummy -->
+</manifest>
+EOF
+
 rm -rf bootable/recovery && git clone https://github.com/PitchBlackRecoveryProject/android_bootable_recovery -b ${PBRP_BRANCH} --single-branch bootable/recovery
 rm -rf vendor/pb && git clone https://github.com/PitchBlackRecoveryProject/vendor_pb -b pb vendor/pb
 
