@@ -15,16 +15,14 @@ time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j32
 echo "Get the Device Tree on place"
 git clone https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 
-# If any omni.dependencies is placed, roomservice will clone them. No need to repo sync again
-
 # Keep the whole .repo/manifests folder
-cp -a .repo/manifests $(pwd)/ && ls manifests/
+cp -a .repo/manifests $(pwd)/
 echo "Clean up the .repo, no use of it now"
 rm -rf .repo
-mkdir -p .repo && mv manifests .repo/ && ls -la .repo/*
+mkdir -p .repo && mv manifests .repo/ && ln -s .repo/manifests/default.xml .repo/manifest.xml
 
 rm -rf bootable/recovery && git clone https://github.com/PitchBlackRecoveryProject/android_bootable_recovery -b ${PBRP_BRANCH} --single-branch bootable/recovery
-rm -rf vendor/pb && git clone https://github.com/PitchBlackRecoveryProject/vendor_pb -b pb vendor/pb
+rm -rf vendor/pb && git clone https://github.com/PitchBlackRecoveryProject/vendor_pb -b pb --depth 1 vendor/pb
 
 echo "Start the Build Process"
 export ALLOW_MISSING_DEPENDENCIES=true
