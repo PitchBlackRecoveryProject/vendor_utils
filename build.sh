@@ -15,8 +15,9 @@ time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j32
 echo "Get the Device Tree on place"
 git clone https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 
+if [[ -n ${PBRP_BRANCH} ]]; then
 rm -rf bootable/recovery && git clone https://github.com/PitchBlackRecoveryProject/android_bootable_recovery -b ${PBRP_BRANCH} --single-branch bootable/recovery
-rm -rf vendor/pb && git clone https://github.com/PitchBlackRecoveryProject/vendor_pb -b pb --depth 1 vendor/pb
+fi
 
 echo "Start the Build Process"
 export ALLOW_MISSING_DEPENDENCIES=true
