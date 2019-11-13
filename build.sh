@@ -1,10 +1,3 @@
-if [[ $TEST_BUILD != 'true' ]]
-then
-SFUserName=$1
-SFPassword=$2
-fi
-GITHUB_TOKEN=$3
-
 echo -en "The Whole PATH ENV is - " && echo $PATH
 which ghr && which repo
 
