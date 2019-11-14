@@ -26,7 +26,7 @@ echo "Clean up the .repo, no use of it now"
 rm -rf .repo
 mkdir -p .repo && mv manifests .repo/ && ln -s .repo/manifests/default.xml .repo/manifest.xml
 
-make -j16 recoveryimage
+make -j32 recoveryimage
 
 echo "Deploying"
 export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PitchBlack*-UNOFFICIAL.zip 2>/dev/null)
