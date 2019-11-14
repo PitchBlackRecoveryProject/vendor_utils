@@ -18,6 +18,10 @@ fi
 echo "Start the Build Process"
 export ALLOW_MISSING_DEPENDENCIES=true
 source build/envsetup.sh
+if [[ -n $EXTRA_CMD ]];
+then
+$EXTRA_CMD
+fi
 lunch ${BUILD_LUNCH}
 
 # Keep the whole .repo/manifests folder
