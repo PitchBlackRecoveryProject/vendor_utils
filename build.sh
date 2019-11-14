@@ -15,13 +15,14 @@ if [[ -n ${PBRP_BRANCH} ]]; then
 rm -rf bootable/recovery && git clone https://github.com/PitchBlackRecoveryProject/android_bootable_recovery -b ${PBRP_BRANCH} --single-branch bootable/recovery
 fi
 
-echo "Start the Build Process"
-export ALLOW_MISSING_DEPENDENCIES=true
-source build/envsetup.sh
 if [[ -n $EXTRA_CMD ]];
 then
 $EXTRA_CMD
 fi
+
+echo "Start the Build Process"
+export ALLOW_MISSING_DEPENDENCIES=true
+source build/envsetup.sh
 lunch ${BUILD_LUNCH}
 
 # Keep the whole .repo/manifests folder
