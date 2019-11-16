@@ -72,8 +72,10 @@ RES=/sdcard/PBRP/.twrps
 OLD=/sdcard/TWRP/PBRP
 red='\033[0;31m'
 RECOVERY=/dev/recovery
+if [[ ! -f "/sbin/awk" ]]; then
 cp META-INF/awk /sbin/awk
 chmod 0755 /sbin/awk
+fi
 
 if [ -f "$RECOVERY" ]; then
 	DD=false
