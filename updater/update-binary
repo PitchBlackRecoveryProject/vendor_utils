@@ -179,7 +179,7 @@ AB_D() {
 
 #Flashing
 if [ "$DD" ]; then
-	if [ "$DD" == "true" ]; then
+	if [ "$DD" = "true" ]; then
 		dd if=$IMG of="$RECOVERY"
 	else
 		flash_image $RECOVERY $IMG
