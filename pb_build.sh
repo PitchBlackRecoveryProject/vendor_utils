@@ -36,11 +36,7 @@ AB_OTA="false"
 AB_OTA=$AB_OTA_UPDATER
 unset AB_OTA_UPDATER
 export PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
-if [ "$PB_GO" != "true" ]; then
-	ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE
-else
-	ZIP_NAME=PitchBlack-Go-$PB_DEVICE-$VERSION-$DATE
-fi
+
 PBRP_BUILD_TYPE=UNOFFICIAL
 
 if [ "$PB_OFFICIAL_CH" != "true" ]; then
@@ -69,7 +65,11 @@ if [ "$PBRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
 	fi
 fi
 
-ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
+if [ "$PB_GO" != "true" ]; then
+    ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
+else
+    ZIP_NAME=PitchBlack-Go-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
+fi
 
 echo -e "${red}**** Making Zip ****${nocol}"
 if [ -d "$PB_WORK_DIR" ]; then
