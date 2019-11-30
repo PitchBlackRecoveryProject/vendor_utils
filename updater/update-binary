@@ -244,6 +244,3 @@ sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------Installation finished!-----------|";
 /sbin/umount /system;
-if [[ "$AB_DEVICE" = "false" ]]; then
-reboot recovery;
-fi
