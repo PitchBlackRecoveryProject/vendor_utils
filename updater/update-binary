@@ -242,7 +242,7 @@ ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  Thank You                  |";
 if [[ "$AB_DEVICE" = "false" ]]; then
-ui_print "|     Rebooting into PitchBlack Recovery      |";
+ui_print "|     Reboot into PitchBlack Recovery      |";
 else
 ui_print "|   Reboot to PitchBlack Recovery Manually    |";
 fi
