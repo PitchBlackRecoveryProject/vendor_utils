@@ -62,10 +62,15 @@ ui_print "|---------------------------------------------|";
 ui_print "|            Based on TWRP v3.3.1-x           |";
 ui_print "|---------------------------------------------|";
 /sbin/mount /system;
+if [[ "$?" != 0 ]]; then
+/sbin/mount /system_root;
+fi
 PB=/tmp/pb/PBRP
 IMG=/tmp/pb/TWRP/recovery.img
 RAM=/tmp/pb/TWRP/ramdisk-recovery.cpio
 ETC=/system/etc/install-recovery.sh
+ETC_=/system_root/$ETC;
+ETC__=/system/$ETC;
 PB1_PATH=/sdcard/PBTWRP
 PB2_PATH=/sdcard/PBRP/tools
 PB3_PATH=/sdcard/PBRP/themes
@@ -148,6 +153,8 @@ fi
 
 #Deletion
 	rm $ETC
+	rm $ETC_
+	rm $ETC__
 	rm -rf $PB1_PATH
 	rm -rf $PB2_PATH
     rm -rf $PB3_PATH
