@@ -62,9 +62,7 @@ ui_print "|---------------------------------------------|";
 ui_print "|            Based on TWRP v3.3.1-x           |";
 ui_print "|---------------------------------------------|";
 /sbin/mount /system;
-if [[ "$?" != 0 ]]; then
 /sbin/mount /system_root;
-fi
 PB=/tmp/pb/PBRP
 IMG=/tmp/pb/TWRP/recovery.img
 RAM=/tmp/pb/TWRP/ramdisk-recovery.cpio
@@ -251,3 +249,4 @@ sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------Installation finished!-----------|";
 /sbin/umount /system;
+/sbin/umount /system_root
