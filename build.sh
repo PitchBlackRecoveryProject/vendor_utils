@@ -17,7 +17,7 @@ fi
 
 if [[ -n $EXTRA_CMD ]];
 then
-$EXTRA_CMD
+eval $EXTRA_CMD
 fi
 
 echo "Start the Build Process"
