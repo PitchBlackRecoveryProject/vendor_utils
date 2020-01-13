@@ -249,4 +249,4 @@ sleep 5s
 show_progress 0.1000000, 90 ;
 ui_print "|------------Installation finished!-----------|";
 /sbin/umount /system;
-/sbin/umount /system_root
+/sbin/umount /system_root 2>/dev/null;
