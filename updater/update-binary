@@ -84,69 +84,16 @@ fi
 
 #AB Checking
 if [[ "$AB_DEVICE" = "false" ]]; then
-
-if [ -f "$RECOVERY" ]; then
-	DD=false
-	break
-else
-recovery_partition() {
-	chk_syml() {
-		RECOVERY=$(readlink -f "$RECOVERY")
-		# symlink
-		if [ -f "$RECOVERY" ]; then
-			DD=true
-		elif [ -b "$RECOVERY" ]; then
-			case "$RECOVERY" in
-				/dev/block/bml*|/dev/block/mtd*|/dev/block/mmc*)
-					DD=false ;;
-				*)
-					DD=true ;;
-			esac
-		# otherwise we have to keep trying other locations
-		else
-			return 1
-		fi
-		ui_print "- Found recovery partition at: $RECOVERY"
-	}
-	# if we already have recovery block set then verify and use it
-	[ "$RECOVERY" ] && chk_syml && return
-	# otherwise, time to go hunting!
-	if [ -f /etc/recovery.fstab ]; then
-		# recovery fstab v1
-		RECOVERY=$(awk '$1 == "/recovery" {print $3}' /etc/recovery.fstab)
-		[ "$RECOVERY" ] && chk_syml && return
-		# recovery fstab v2
-		RECOVERY=$(awk '$2 == "/recovery" {print $1}' /etc/recovery.fstab)
-		[ "$RECOVERY" ] && chk_syml && return
-	fi
-	for fstab in /fstab.*; do
-		[ -f "$fstab" ] || continue
-		# device fstab v2
-		RECOVERY=$(awk '$2 == "/recovery" {print $1}' "$fstab")
-		[ "$RECOVERY" ] && chk_syml && return
-		# device fstab v1
-		RECOVERY=$(awk '$1 == "/recovery" {print $3}' "$fstab")
-		[ "$RECOVERY" ] && chk_syml && return
-	done
-	if [ -f /proc/emmc ]; then
-		# emmc layout
-		RECOVERY=$(awk '$4 == "\"recovery\"" {print $1}' /proc/emmc)
-		[ "$RECOVERY" ] && RECOVERY=/dev/block/$(echo "$RECOVERY" | cut -f1 -d:) && chk_syml && return
-	fi
-	if [ -f /proc/mtd ]; then
-		# mtd layout
-		RECOVERY=$(awk '$4 == "\"recovery\"" {print $1}' /proc/mtd)
-		[ "$RECOVERY" ] && RECOVERY=/dev/block/$(echo "$RECOVERY" | cut -f1 -d:) && chk_syml && return
-	fi
-	if [ -f /proc/dumchar_info ]; then
-		# mtk layout
-		RECOVERY=$(awk '$1 == "/recovery" {print $5}' /proc/dumchar_info)
-		[ "$RECOVERY" ] && chk_syml && return
-	fi
-	abort "Failed to Find RECOVERY Partition";
-	
-}
+for PARTITION in android_recovery ANDROID_RECOVERY RECOVERY recovery; do
+  RECOVERY=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || \
+              readlink /dev/block/platform/*/*/by-name/$PARTITION || readlink /dev/$PARTITION);
+done;
 fi
+
+if [[ "$RECOVERY" == "/dev/recovery" ]]; then
+	DD=true;
+else
+	DD=false;
 fi
 
 #Deletion
@@ -155,7 +102,7 @@ fi
 	rm $ETC__
 	rm -rf $PB1_PATH
 	rm -rf $PB2_PATH
-    rm -rf $PB3_PATH
+	rm -rf $PB3_PATH
 	rm $UI
 	rm -rf $RES
 	rm -rf $OLD
