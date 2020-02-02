@@ -48,6 +48,8 @@ ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAM
 elif [[ $TEST_BUILD == 'true' ]] && [[ -n $TEST_BUILDFILE ]]
 then
 cp $TEST_BUILDFILE $UPLOAD_PATH
+BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
+cp $BUILDFILE_TAR $UPLOAD_PATH
 export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
 cp $TEST_BUILDFILE $UPLOAD_PATH
 ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Test Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION}-test ${UPLOAD_PATH}
