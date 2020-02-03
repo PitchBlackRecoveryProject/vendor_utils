@@ -36,10 +36,15 @@ make -j$(nproc --all) recoveryimage
 echo "Deploying"
 export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PitchBlack*-UNOFFICIAL.zip 2>/dev/null)
 export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PitchBlack*-OFFICIAL.zip 2>/dev/null)
+export BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
 export UPLOAD_PATH=$(pwd)/out/target/product/${CODENAME}/upload/
+if [[ -n ${BUILD_FILE_TAR} ]]; then
+echo "Samsung's Odin Tar available: $BUILD_FILE_TAR"
+fi
 mkdir ${UPLOAD_PATH}
 if [[ -n $BUILDFILE ]]
 then
+echo "Got the Official Build: $BUILDFILE"
 sudo chmod a+x vendor/pb/pb_deploy.sh && ./vendor/pb/pb_deploy.sh ${CODENAME} ${SFUserName} ${SFPassword} ${GITHUB_TOKEN}
 cp $BUILDFILE $UPLOAD_PATH
 export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
@@ -47,10 +52,10 @@ cp $BUILDFILE $UPLOAD_PATH
 ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Latest Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION} ${UPLOAD_PATH}
 elif [[ $TEST_BUILD == 'true' ]] && [[ -n $TEST_BUILDFILE ]]
 then
+echo "Got the Unofficial Build: $TEST_BUILDFILE"
 cp $TEST_BUILDFILE $UPLOAD_PATH
-BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
-if [[ -n $BUILD_FILE_TAR ]]; then
-cp $BUILD_FILE_TAR $UPLOAD_PATH
+if [[ -n ${BUILD_FILE_TAR} ]]; then
+cp ${BUILD_FILE_TAR} ${UPLOAD_PATH}
 fi
 export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
 cp $TEST_BUILDFILE $UPLOAD_PATH
