@@ -90,7 +90,7 @@ for PARTITION in android_recovery ANDROID_RECOVERY RECOVERY recovery; do
 done;
 fi
 
-if [[ "$RECOVERY" == "/dev/recovery" ]]; then
+if [[ "$RECOVERY" == "/dev/recovery" && "$AB_DEVICE" = "false" ]]; then
 	DD=true;
 else
 	DD=false;
@@ -117,9 +117,10 @@ AB_D() {
  mkdir /tmp/unpack
  dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack/boot.img"
  cd /tmp/unpack
- "$tool" --unpack boot.img
+ "$tool" unpack boot.img
+ "$tool" hexpatch kernel 736B69705F696E697472616D667300 77616E745F696E697472616D667300
  cp -f $RAM ramdisk.cpio
- "$tool" --repack boot.img
+ "$tool" repack boot.img
  dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
  [ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
  cd /tmp/pb
@@ -130,28 +131,19 @@ AB_D() {
 }
 
 #Flashing
-if [ "$DD" ]; then
-	if "$DD"; then
-		dd if=$IMG of="$RECOVERY"
-	else
-		flash_image $RECOVERY $IMG
-	fi
+if [[ "$DD" = "true" ]]; then
+	dd if=$IMG of="$RECOVERY"
 else
 	if [[ "$AB_DEVICE" = "false" ]]; then
-		recovery_partition;
-		if [ $? = 0 ]; then
-			if $DD; then
-				dd if=$IMG of="$RECOVERY"
-			else
-				flash_image $RECOVERY $IMG
-			fi
-		else
-			abort "Failed to write recovery image!" 43;
-		fi
+		flash_image $RECOVERY $IMG
 	else
 		AB_D boot_a;
 		AB_D boot_b;
 	fi
+fi
+
+if [[ "$?" != "0" ]]; then
+	abort "Failed to write recovery image!" 43;
 fi
 
 #Copy Specific Files
