@@ -77,6 +77,8 @@ RES=/sdcard/PBRP/.twrps
 OLD=/sdcard/TWRP/PBRP
 red='\033[0;31m'
 RECOVERY=/dev/recovery
+tool="/tmp/pb/magiskboot"
+chmod 0755 $tool
 if [[ ! -f "/sbin/awk" ]]; then
 cp META-INF/awk /sbin/awk
 chmod 0755 /sbin/awk
@@ -112,7 +114,6 @@ fi
 AB_D() {
  ui_print "Doing Work on slot $1"
  #Dump & unpack & Cp
- tool="/tmp/pb/magiskboot"
  # dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/boot.img"
  mkdir /tmp/unpack
  dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack/boot.img"
