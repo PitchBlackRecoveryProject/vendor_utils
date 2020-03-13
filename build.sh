@@ -42,7 +42,7 @@ fi
 
 if [[ -n $EXTRA_CMD ]]; then
     eval $EXTRA_CMD | tee -a /tmp/CI.log
-    cd $DIR
+    cd $DIR/work
 fi
 
 echo -e "\nPreparing Delicious Lunch..."
