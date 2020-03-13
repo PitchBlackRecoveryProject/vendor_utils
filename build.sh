@@ -29,26 +29,26 @@ mkdir $(pwd)/work && cd work
 
 echo -e "\nInitializing PBRP repo sync..."
 echo $(pwd)
-repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1 | tee -a /tmp/CI.log
-time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all) | tee -a /tmp/CI.log
+repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1
+time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
 
 echo -e "\nGetting the Device Tree on place"
-git clone --quiet --progress https://github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME} | tee -a /tmp/CI.log
+git clone --quiet --progress https://github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 
 if [[ -n ${PBRP_BRANCH} ]]; then
     rm -rf bootable/recovery
-    git clone --quiet --progress https://github.com/PitchBlackRecoveryProject/android_bootable_recovery -b ${PBRP_BRANCH} --single-branch bootable/recovery | tee -a /tmp/CI.log
+    git clone --quiet --progress https://github.com/PitchBlackRecoveryProject/android_bootable_recovery -b ${PBRP_BRANCH} --single-branch bootable/recovery
 fi
 
 if [[ -n $EXTRA_CMD ]]; then
-    eval $EXTRA_CMD | tee -a /tmp/CI.log
+    eval $EXTRA_CMD
     cd $DIR/work
 fi
 
 echo -e "\nPreparing Delicious Lunch..."
 export ALLOW_MISSING_DEPENDENCIES=true
 source build/envsetup.sh
-lunch ${BUILD_LUNCH} | tee -a /tmp/CI.log
+lunch ${BUILD_LUNCH}
 
 # Keep the whole .repo/manifests folder
 cp -a .repo/manifests $(pwd)/
@@ -56,11 +56,8 @@ echo "Cleaning up the .repo, no use of it now"
 rm -rf .repo
 mkdir -p .repo && mv manifests .repo/ && ln -s .repo/manifests/default.xml .repo/manifest.xml
 
-make -j$(nproc --all) recoveryimage | tee -a /tmp/CI.log
+make -j$(nproc --all) recoveryimage
 echo -e "\nYummy Recovery is Served.\n"
-
-# Upload the CI log, fallback if server is broken
-curl --upload-file --silent --progress-bar /tmp/CI.log https://transfer.sh/PBRP_${CODENAME}_${CIRCLE_BUILD_NUM}_CI.log && echo "" || true
 
 echo "Ready to Deploy"
 export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PitchBlack*-UNOFFICIAL.zip 2>/dev/null)
