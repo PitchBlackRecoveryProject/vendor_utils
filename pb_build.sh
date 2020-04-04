@@ -26,6 +26,7 @@ nocol='\033[0m'
 purple='\e[0;35m'
 white='\e[0;37m'
 DATE=$(date +%Y%m%d-%H%M)
+VERSION=${VERSION:-2.9.1}
 PB_VENDOR=vendor/pb
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
