@@ -119,7 +119,6 @@ AB_D() {
  dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack/boot.img"
  cd /tmp/unpack
  "$tool" unpack boot.img
- "$tool" hexpatch kernel 736B69705F696E697472616D667300 77616E745F696E697472616D667300
  cp -f $RAM ramdisk.cpio
  "$tool" repack boot.img
  dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
