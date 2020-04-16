@@ -26,7 +26,6 @@ echo -e "Starting the CI Build Process...\n"
 
 DIR=$(pwd)
 mkdir $(pwd)/work && cd work
-ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 echo -e "\nInitializing PBRP repo sync..."
 echo $(pwd)
