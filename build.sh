@@ -33,7 +33,7 @@ repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b 
 time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
 
 echo -e "\nGetting the Device Tree on place"
-git clone --quiet --progress https://github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
+git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 
 if [[ -n ${PBRP_BRANCH} ]]; then
     rm -rf bootable/recovery
