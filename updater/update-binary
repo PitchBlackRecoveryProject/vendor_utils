@@ -118,7 +118,7 @@ AB_D() {
  mkdir /tmp/unpack
  dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack/boot.img"
  cd /tmp/unpack
- "$tool" unpack boot.img
+ "$tool" unpack -n boot.img
  cp -f $RAM ramdisk.cpio
  "$tool" repack boot.img
  dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
