@@ -112,19 +112,28 @@ fi
 #COMMAND=""
 
 AB_D() {
+ BOOT="/tmp/unpack-boot"
+ REC="/tmp/unpack-rec"
  ui_print "Doing Work on slot $1"
  #Dump & unpack & Cp
  # dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/boot.img"
- mkdir /tmp/unpack
- dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack/boot.img"
- cd /tmp/unpack
- "$tool" unpack -n boot.img
- cp -f $RAM ramdisk.cpio
+ mkdir $BOOT
+ mkdir $REC
+ dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack-boot/boot.img"
+ cd $BOOT
+ "$tool" unpack boot.img
+ "$tool" hexpatch kernel 77616E745F696E697472616D667300 736B69705F696E697472616D667300
+ rm -rf ramdisk.cpio
+ cd $REC
+ "$tool" unpack -n $IMG
+ cp ramdisk.cpio $BOOT/ramdisk.cpio
+ cd $BOOT
+ rm -rf $REC
  "$tool" repack boot.img
  dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
  [ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
  cd /tmp/pb
- rm -rf /tmp/unpack
+ rm -rf $BOOT
 
  #[ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
 

@@ -102,12 +102,8 @@ fi
 echo -e "${cyan}**** Copying Recovery Image ****${nocol}"
 mkdir -p "$PB_WORK_DIR/TWRP"
 
-if [[ "$AB_OTA" = "true" ]]; then
-	cp "$RECOVERY_RAM" "$PB_WORK_DIR/TWRP/"
-	cp "$PB_VENDOR/updater/magiskboot" "$PB_WORK_DIR"
-else
-	cp "$RECOVERY_IMG" "$PB_WORK_DIR/TWRP/"
-fi
+cp "$PB_VENDOR/updater/magiskboot" "$PB_WORK_DIR"
+cp "$RECOVERY_IMG" "$PB_WORK_DIR/TWRP/"
 
 echo -e "${green}**** Compressing Files into ZIP ****${nocol}"
 cd $PB_WORK_DIR
