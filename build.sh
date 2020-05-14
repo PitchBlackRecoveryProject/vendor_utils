@@ -76,7 +76,7 @@ fi
 
 if [[ -n $BUILDFILE ]]; then
     echo "Got the Official Build: $BUILDFILE"
-    sudo chmod a+x vendor/pb/pb_deploy.sh && ./vendor/pb/pb_deploy.sh ${CODENAME} ${SFUserName} ${SFPassword} ${GITHUB_TOKEN}
+    sudo chmod a+x vendor/pb/pb_deploy.sh && ./vendor/pb/pb_deploy.sh ${CODENAME} ${SFUserName} ${SFPassword} ${GITHUB_TOKEN} ${VERSION} ${MAINTAINER}
     cp $BUILDFILE $UPLOAD_PATH
     export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
     cp $BUILDFILE $UPLOAD_PATH

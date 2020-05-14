@@ -20,6 +20,8 @@ codename=$1
 sf_usr=$2
 sf_pwd=$3
 github_token=$4
+version=$5
+maintainer=$6
 
 blue='\033[0;34m'
 cyan='\033[0;36m'
@@ -106,9 +108,9 @@ if [[ "$choice" = "n" ]]; then
 		git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
 		chmod +x $(pwd)/pb
 		if [[ "$cl" = "y" ]]; then
-			./pb $log
+			./pb $version $maintainer $log
 		else
-			./pb
+			./pb $version $maintainer
 		fi
 		cd ../../
 	else
