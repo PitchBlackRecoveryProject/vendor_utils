@@ -31,6 +31,8 @@ echo -e "\nInitializing PBRP repo sync..."
 echo $(pwd)
 repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1
 time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+rm -rf vendor/pb
+git clone https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/vendor_pb -b pb vendor/pb --depth=1
 
 echo -e "\nGetting the Device Tree on place"
 git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
