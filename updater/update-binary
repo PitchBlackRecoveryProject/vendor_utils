@@ -1,5 +1,4 @@
 #!/sbin/sh
-# Copyright (C) 2018 ATG Droid 
 # Copyright (C) 2018-2020 PitchBlack Recovery <pitchblackrecovery@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,9 +85,14 @@ fi
 
 #AB Checking
 if [[ "$AB_DEVICE" = "false" ]]; then
-for PARTITION in android_recovery ANDROID_RECOVERY RECOVERY recovery; do
+
+# Find Recovery Partition
+for PARTITION in android_recovery ANDROID_RECOVERY RECOVERY recovery FOTAKernel ; do
   RECOVERY=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || \
               readlink /dev/block/platform/*/*/by-name/$PARTITION || readlink /dev/$PARTITION);
+  if [[ -n $RECOVERY ]]; then
+    break;
+  fi
 done;
 fi
 
