@@ -161,7 +161,12 @@ AB_D() {
  $tool hexpatch kernel 77616E745F696E697472616D6673 736B69705F696E697472616D6673;
  # kernel string trip_initramfs -> skip_initramfs (SuperSU)
  $tool hexpatch kernel 747269705F696E697472616D6673 736B69705F696E697472616D6673;
-
+ $tool cpio ramdisk.cpio test
+ if [[ "$?" = "1" ]]; then
+   echo "$1=1" >> /tmp/pb/installed
+ else
+   echo "$1=0" >> /tmp/pb/installed
+ fi
  # boot.img header cmdline remove skip_override (flar2 patch)
  sed -i "s|$(grep '^cmdline=' header | cut -d= -f2-)|$(grep '^cmdline=' header | cut -d= -f2- | sed -e 's/skip_override//' -e 's/  */ /g' -e 's/[ \t]*$//')|" header;
  rm -rf ramdisk.cpio
@@ -172,20 +177,23 @@ AB_D() {
  rm -rf $REC
  "$tool" repack boot.img
  dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
- [ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
+ [ $? = 0 ] && echo "installed=1" >> /tmp/pb/installed|| abort "Failed to flash $1 Image Please Restore the Boot.img"
  cd /tmp/pb
  rm -rf $BOOT
-
- #[ $? = 0 ] || abort "Failed to flash $1 Image Please Restore the Boot.img"
-
 }
 
 #Flashing
 if [[ "$DD" = "true" ]]; then
 	dd if=$IMG of="$RECOVERY"
+	if [[ "$?" = "0" ]]; then
+		echo "installed=1" >> /tmp/pb/installed
+	fi
 else
 	if [[ "$AB_DEVICE" = "false" ]]; then
 		flash_image $RECOVERY $IMG
+		if [[ "$?" = "0" ]]; then
+			echo "installed=1" >> /tmp/pb/installed
+		fi
 	else
 		AB_D boot_a;
 		AB_D boot_b;
