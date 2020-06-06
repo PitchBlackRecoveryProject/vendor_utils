@@ -32,12 +32,21 @@ echo $(pwd)
 repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1
 time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
 rm -rf vendor/pb
-git clone https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/vendor_pb -b pb vendor/pb --depth=1
+git clone https://github.com/PitchBlackRecoveryProject/vendor_pb -b pb vendor/pb --depth=1
 
 echo -e "\nGetting the Device Tree on place"
 git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 
-if [[ -n ${PBRP_BRANCH} ]]; then
+if [[ -n ${USE_SECRET_BOOTABLE} ]]; then
+    if [[ -n ${PBRP_BRANCH} ]]; then
+        unset PBRP_BRANCH
+    fi
+    if [[ -z ${SECRET_BR} ]]; then
+        SECRET_BR="android-9.0"
+    fi
+    rm -rf bootable/recovery
+    git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/pbrp_recovery_secrets -b ${SECRET_BR} --single-branch bootable/recovery
+elif [[ -n ${PBRP_BRANCH} ]]; then
     rm -rf bootable/recovery
     git clone --quiet --progress https://github.com/PitchBlackRecoveryProject/android_bootable_recovery -b ${PBRP_BRANCH} --single-branch bootable/recovery
 fi
