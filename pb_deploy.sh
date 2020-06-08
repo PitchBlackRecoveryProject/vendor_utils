@@ -98,8 +98,8 @@ then
 	if [[ ! -z $CHANGELOG ]]; then
 		FORMAT=${FORMAT}"\n*Changelog*:\n"${CHANGELOG}"\n"
 	fi
-	FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n\n*Download*: [Link]($link)\n\nChannel: @pbtwrp\nchat: @pbrpcom"
-	python3 telegram.py -c @pbtwrp -M "$FORMAT"
+	FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n\nChannel: @pbtwrp\nchat: @pbrpcom"
+	python3 telegram.py -c @pbtwrp -M "$FORMAT" -D "Download|$link"
 	python3 telegram.py -c @pbtwrp -S "$pb_sticker"
 	cd ../../
 else

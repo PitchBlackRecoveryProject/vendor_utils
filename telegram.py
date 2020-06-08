@@ -1,10 +1,11 @@
 from argparse import ArgumentParser
 
 from requests import post
-import os
+from os import environ
+import json
 
 def arg_parse():
-    global token, chat, message, mode, preview, caption, silent, photo, gif, video, note, audio, voice, file, send, out, sticker
+    global token, chat, message, mode, preview, caption, silent, photo, gif, video, note, audio, voice, file, send, out, sticker, button, a
     switches = ArgumentParser()
     group = switches.add_mutually_exclusive_group(required=True)
     group.add_argument("-M", "--message", help="Text message")
@@ -16,6 +17,7 @@ def arg_parse():
     group.add_argument("-O", "--voice", help="Voice path")
     group.add_argument("-F", "--file", help="File path")
     group.add_argument("-S", "--sticker", help="Sticker id")
+    switches.add_argument("-D", "--button", help="Text parse as a Inline button")
     switches.add_argument("-c", "--chat", required=True, help="Chat to use as recipient")
     switches.add_argument("-m", "--mode", help="Text parse mode - HTML/Markdown", default="Markdown")
     switches.add_argument("-p", "--preview", help="Disable URL preview - yes/no", default="yes")
@@ -24,7 +26,8 @@ def arg_parse():
     switches.add_argument("-C", "--caption", help="Media/Document caption")
 
     args = vars(switches.parse_args())
-    token = os.getenv("BOT_API")
+    token = environ['BOT_API']
+    print(f"yes")
     chat = args["chat"]
     message = args["message"]
     photo = args["photo"]
@@ -40,6 +43,10 @@ def arg_parse():
     out = args["output"]
     caption = args["caption"]
     sticker = args["sticker"]
+    button = args["button"]
+    if button is not None:
+        button = button.split('|')
+        a = {"inline_keyboard": [[{"text":button[0], "url": button[1]}]]}
 
     if message is not None:
         send = "text"
@@ -60,19 +67,28 @@ def arg_parse():
     elif sticker is not None:
         send = "sticker"
 
-
 def send_message():
     global r, status, response
     if send == "text":
-        params = (
-            ('chat_id', chat),
-            ('text', message.replace(r'\n', '\n')),
-            ('parse_mode', mode),
-            ('disable_notification', silent),
-            ('disable_web_page_preview', preview)
-        )
-        url = "https://api.telegram.org/bot" + token + "/sendMessage"
-        r = post(url, params=params)
+       if button is not None:
+            params = {
+                ('chat_id', chat),
+                ('text', message.replace(r'\n', '\n')),
+                ('parse_mode', mode),
+                ('disable_notification', silent),
+                ('reply_markup', json.dumps(a))
+            }
+            url = "https://api.telegram.org/bot" + token + "/sendMessage"
+            r = post(url, params=params)
+       else:
+            params = {
+                ('chat_id', chat),
+                ('text', message.replace(r'\n', '\n')),
+                ('parse_mode', mode),
+                ('disable_notification', silent),
+            }
+            url = "https://api.telegram.org/bot" + token + "/sendMessage"
+            r = post(url, params=params)
     elif send == "photo":
         files = {
             'chat_id': (None, chat),
