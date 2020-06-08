@@ -31,7 +31,8 @@ red='\033[0;31m'
 nocol='\033[0m'
 purple='\e[0;35m'
 white='\e[0;37m'
-
+pb_sticker="CAACAgUAAx0CTgmBKwACAyde3OvBCdhSaw92OKfd-pl-LxNM3wACAQADRAdYGB8AAUtGlOKw8RoE"
+TWRP_V=$(cat $(pwd)/bootable/recovery/variables.h | grep TW_MAIN_VERSION_STR | awk '{print $3}' | head -1)
 # Install sshpass if not installed
 chksspb=$(which sshpass 2>/dev/null)
 if [[ "$chksspb" != "/usr/bin/sshpass" ]]; then
@@ -78,53 +79,31 @@ echo "Build location :" $sf_file
 echo
 printf "${green}Build successfully detected!\n${nocol}"
 echo
-# read -p "Is Build uploaded to S/F (y/n) : " choice
-choice="n"
-#read -p "Want To include Changelog (y/n) : " cl;
-cl="n"
-
-if [[ "$cl" = "y" ]]; then
-       echo "Changelog must be in following Format:";
-       echo ""
-echo "Changelog: \\
- - abc \\
- - def \\
- - etc"
-
-echo "Enter Changelog";
-read  log
-fi
-
-if [[ "$choice" = "n" ]]; then
-	echo "Please Wait"
-	echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
-	if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
-	then
-		echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
-		cd $(pwd)/vendor/pb;
-		java -jar Release.jar $codename $build_with_time
-		git add pb.releases
-		git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
-		git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
-		chmod +x $(pwd)/pb
-		if [[ "$cl" = "y" ]]; then
-			./pb $version $maintainer $log
-		else
-			./pb $version $maintainer
-		fi
-		cd ../../
-	else
-		echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
-	fi
-else
+MD5=$(md5sum $sf_file | awk '{print $1}')
+echo "Please Wait"
+echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
+if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
+then
+	echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 	cd $(pwd)/vendor/pb;
-	chmod +x $(pwd)/pb
-	if [[ "$cl" = "y" ]]; then
-		./pb $log
-	else
-		./pb
+	java -jar Release.jar $codename $build_with_time
+	git add pb.releases
+	git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
+	git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
+	link="https://sourceforge.net/projects/pitchblack-twrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
+	FORMAT="PitchBlack Recovery for $TARGET_VENDOR $TARGET_DEVICE (\`${NAME}\`)\n\nInfo\n\n"
+	FORMAT=${FORMAT}"PitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n"
+	FORMAT=${FORMAT}"*Build Date*: \`${build:0:4}/${build:4:2}/${build:6}\`\n\n"
+	FORMAT=${FORMAT}"*Maintainer*: ${maintainer}\n"
+	if [[ ! -z $CHANGELOG ]]; then
+		FORMAT=${FORMAT}"\n*Changelog*:\n"${CHANGELOG}"\n"
 	fi
+	FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n\n*Download*: [Link]($link)\n\nChannel: @pbtwrp\nchat: @pbrpcom"
+	python3 telegram.py -c @pbtwrp -M "$FORMAT"
+	python3 telegram.py -c @pbtwrp -S "$pb_sticker"
 	cd ../../
+else
+	echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
 fi
 fi
 else
