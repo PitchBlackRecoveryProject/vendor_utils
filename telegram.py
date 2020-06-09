@@ -27,7 +27,6 @@ def arg_parse():
 
     args = vars(switches.parse_args())
     token = environ['BOT_API']
-    print(f"yes")
     chat = args["chat"]
     message = args["message"]
     photo = args["photo"]
