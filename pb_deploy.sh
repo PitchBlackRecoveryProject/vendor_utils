@@ -90,15 +90,16 @@ then
 	git add pb.releases
 	git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 	git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
+
 	link="https://sourceforge.net/projects/pitchblack-twrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
 	FORMAT="PitchBlack Recovery for \`$TARGET_VENDOR\` \`$TARGET_DEVICE\` (\`${NAME}\`)\n\nInfo\n\n"
 	FORMAT=${FORMAT}"PitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n"
 	FORMAT=${FORMAT}"*Build Date*: \`${build:0:4}/${build:4:2}/${build:6}\`\n\n"
-	FORMAT=${FORMAT}"*Maintainer*: ${maintainer}\n"
+	FORMAT=${FORMAT}"*Maintainer*: ${maintainer}\n\n"
 	if [[ ! -z $CHANGELOG ]]; then
 		FORMAT=${FORMAT}"\n*Changelog*:\n"${CHANGELOG}"\n"
 	fi
-	FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n\nChannel: @pbtwrp\nchat: @pbrpcom"
+	FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n"
 	python3 telegram.py -c @pbtwrp -M "$FORMAT" -D "Download|$link"
 	python3 telegram.py -c @pbtwrp -S "$pb_sticker"
 	cd ../../
