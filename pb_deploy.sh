@@ -86,7 +86,7 @@ if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sou
 then
 	echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 	cd $(pwd)/vendor/pb;
-	java -jar Release.jar $codename $build_with_time
+	python3 release.py $codename $build_with_time
 	git add pb.releases
 	git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 	git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
