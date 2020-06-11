@@ -1,9 +1,50 @@
 {
+  "LYF": {
+    "mobee01a": {
+      "name": "LYF Water 8",
+      "maintainer": "Mohd Faraz",
+      "latest_release": "20191113-1425"
+    }
+  },
+  "asus": {
+    "X00P": {
+      "name": "ASUS ZenFone Max M1",
+      "maintainer": "R乇Zﾑ",
+      "latest_release": "20200609-0528"
+    },
+    "X00T": {
+      "name": "ASUS ZenFone Max Pro M1",
+      "maintainer": "Akshat",
+      "latest_release": "20200609-0536"
+    },
+    "X01AD": {
+      "name": "ASUS ZenFone Max M2",
+      "maintainer": "Ashu Sharma",
+      "latest_release": "20190605-1123"
+    },
+    "X01BD": {
+      "name": "ASUS ZenFone Max Pro M2",
+      "maintainer": "lɐ̶͠gn̵̓cy₀₇",
+      "latest_release": "20200421-0621"
+    },
+    "Z010D": {
+      "name": "ASUS ZenFone Max",
+      "maintainer": "Sakil Mondal",
+      "latest_release": "20190501-0739"
+    }
+  },
   "coolpad": {
     "C106": {
       "name": "CoolPad C1 Dual",
       "maintainer": "Mr.Anonymous",
       "latest_release": "20200411-1012"
+    }
+  },
+  "huawei": {
+    "kiwi": {
+      "name": "Huawei Honor 5X",
+      "maintainer": "Travis Holt",
+      "latest_release": "20181128-0129"
     }
   },
   "lenovo": {
@@ -26,6 +67,56 @@
       "name": "Lenovo ZUK Z2 Plus",
       "maintainer": "PBRP Team",
       "latest_release": "20180725-0244"
+    }
+  },
+  "lge": {
+    "lv517": {
+      "name": "LG K20 Plus",
+      "maintainer": "PBRP Team",
+      "latest_release": "20190207-1755"
+    }
+  },
+  "motorola": {
+    "hannah": {
+      "name": "Motorola E5 Plus",
+      "maintainer": "Barry Allen",
+      "latest_release": "20190623-0846"
+    }
+  },
+  "oneplus": {
+    "enchilada": {
+      "name": "OnePlus 6",
+      "maintainer": "PBRP Team",
+      "latest_release": "20190623-0846"
+    }
+  },
+  "realme": {
+    "rmx1821": {
+      "name": "Realme 3",
+      "maintainer": "PBRP Team",
+      "latest_release": "20190715-1330"
+    },
+    "RMX1851": {
+      "name": "Realme 3 Pro",
+      "maintainer": "Ahmed Moselhi",
+      "latest_release": "20200607-1845"
+    },
+    "RMX1811": {
+      "name": "Realme C1",
+      "maintainer": "PBRP Team",
+      "latest_release": "20200206-1752"
+    },
+    "x2": {
+      "name": "Realme X2",
+      "maintainer": "[.shovon] // 🇧🇩",
+      "latest_release": "20200609-1021"
+    }
+  },
+  "tenor": {
+    "e": {
+      "name": "Tenor E",
+      "maintainer": "PBRP Team",
+      "latest_release": "20181226-1153"
     }
   },
   "xiaomi": {
@@ -158,97 +249,6 @@
       "name": "Xiaomi Redmi 5A",
       "maintainer": "Erwin Abu Bakar Sidik",
       "latest_release": "20200606-1358"
-    }
-  },
-  "tenor": {
-    "e": {
-      "name": "Tenor E",
-      "maintainer": "PBRP Team",
-      "latest_release": "20181226-1153"
-    }
-  },
-  "oneplus": {
-    "enchilada": {
-      "name": "OnePlus 6",
-      "maintainer": "PBRP Team",
-      "latest_release": "20190623-0846"
-    }
-  },
-  "motorola": {
-    "hannah": {
-      "name": "Motorola E5 Plus",
-      "maintainer": "Barry Allen",
-      "latest_release": "20190623-0846"
-    }
-  },
-  "huawei": {
-    "kiwi": {
-      "name": "Huawei Honor 5X",
-      "maintainer": "Travis Holt",
-      "latest_release": "20181128-0129"
-    }
-  },
-  "lge": {
-    "lv517": {
-      "name": "LG K20 Plus",
-      "maintainer": "PBRP Team",
-      "latest_release": "20190207-1755"
-    }
-  },
-  "LYF": {
-    "mobee01a": {
-      "name": "LYF Water 8",
-      "maintainer": "Mohd Faraz",
-      "latest_release": "20191113-1425"
-    }
-  },
-  "realme": {
-    "rmx1821": {
-      "name": "Realme 3",
-      "maintainer": "PBRP Team",
-      "latest_release": "20190715-1330"
-    },
-    "RMX1851": {
-      "name": "Realme 3 Pro",
-      "maintainer": "Ahmed Moselhi",
-      "latest_release": "20200607-1845"
-    },
-    "RMX1811": {
-      "name": "Realme C1",
-      "maintainer": "PBRP Team",
-      "latest_release": "20200206-1752"
-    },
-    "x2": {
-      "name": "Realme X2",
-      "maintainer": "[.shovon] // 🇧🇩",
-      "latest_release": "20200609-1021"
-    }
-  },
-  "asus": {
-    "X00P": {
-      "name": "ASUS ZenFone Max M1",
-      "maintainer": "R乇Zﾑ",
-      "latest_release": "20200609-0528"
-    },
-    "X00T": {
-      "name": "ASUS ZenFone Max Pro M1",
-      "maintainer": "Akshat",
-      "latest_release": "20200609-0536"
-    },
-    "X01AD": {
-      "name": "ASUS ZenFone Max M2",
-      "maintainer": "Ashu Sharma",
-      "latest_release": "20190605-1123"
-    },
-    "X01BD": {
-      "name": "ASUS ZenFone Max Pro M2",
-      "maintainer": "lɐ̶͠gn̵̓cy₀₇",
-      "latest_release": "20200421-0621"
-    },
-    "Z010D": {
-      "name": "ASUS ZenFone Max",
-      "maintainer": "Sakil Mondal",
-      "latest_release": "20190501-0739"
     }
   }
 }
