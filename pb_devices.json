@@ -223,5 +223,32 @@
       "maintainer": "[.shovon] // 🇧🇩",
       "latest_release": "20200609-1021"
     }
+  },
+  "asus": {
+    "X00P": {
+      "name": "ASUS ZenFone Max M1",
+      "maintainer": "R乇Zﾑ",
+      "latest_release": "20200609-0528"
+    },
+    "X00T": {
+      "name": "ASUS ZenFone Max Pro M1",
+      "maintainer": "Akshat",
+      "latest_release": "20200609-0536"
+    },
+    "X01AD": {
+      "name": "ASUS ZenFone Max M2",
+      "maintainer": "Ashu Sharma",
+      "latest_release": "20190605-1123"
+    },
+    "X01BD": {
+      "name": "ASUS ZenFone Max Pro M2",
+      "maintainer": "lɐ̶͠gn̵̓cy₀₇",
+      "latest_release": "20200421-0621"
+    },
+    "Z010D": {
+      "name": "ASUS ZenFone Max",
+      "maintainer": "Sakil Mondal",
+      "latest_release": "20190501-0739"
+    }
   }
 }
