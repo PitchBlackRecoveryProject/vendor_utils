@@ -9,7 +9,7 @@
   "asus": {
     "X00P": {
       "name": "ASUS ZenFone Max M1",
-      "maintainer": "R乇Zﾑ",
+      "maintainer": "Raza",
       "latest_release": "20200609-0528"
     },
     "X00T": {
@@ -24,7 +24,7 @@
     },
     "X01BD": {
       "name": "ASUS ZenFone Max Pro M2",
-      "maintainer": "lɐ̶͠gn̵̓cy₀₇",
+      "maintainer": "legancy",
       "latest_release": "20200421-0621"
     },
     "Z010D": {
@@ -108,7 +108,7 @@
     },
     "x2": {
       "name": "Realme X2",
-      "maintainer": "[.shovon] // 🇧🇩",
+      "maintainer": "[.shovon]",
       "latest_release": "20200609-1021"
     }
   },
@@ -197,7 +197,7 @@
     },
     "rosy": {
       "name": "Xiaomi Redmi 5",
-      "maintainer": "ZHANtech™ - BATIK HOLIC",
+      "maintainer": "ZHANtech\u00e2\u201e\u00a2 - BATIK HOLIC",
       "latest_release": "20190219-0813"
     },
     "santoni": {
