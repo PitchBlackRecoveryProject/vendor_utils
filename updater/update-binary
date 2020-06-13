@@ -74,7 +74,7 @@ OLD=/sdcard/TWRP/PBRP
 red='\033[0;31m'
 SYSTEM=
 mount_sys=
-RECOVERY=
+RECOVERY=/dev/recovery
 tool="/tmp/pb/magiskboot"
 chmod 0755 $tool
 if [[ ! -f "/sbin/awk" ]]; then
@@ -90,17 +90,18 @@ if [[ "$AB_DEVICE" = "false" ]]; then
      SYSTEM=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || \
                readlink /dev/block/platform/*/*/by-name/$PARTITION || readlink /dev/$PARTITION);
    else
-     RECOVERY=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || \
+     REC=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || \
                readlink /dev/block/platform/*/*/by-name/$PARTITION || readlink /dev/$PARTITION);
    fi
 
-   if [[ ! -z $RECOVERY ]]; then
+   if [[ ! -z $REC ]]; then
+     RECOVERY=$REC
      break;
    fi
  done;
 fi
 
-if [[ -n $SYSTEM ]]; then
+if [[ ! -z $SYSTEM ]]; then
 mkdir /s
 mount -t ext4 $SYSTEM /s
 else
