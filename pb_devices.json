@@ -4,6 +4,11 @@
       "name": "LYF Water 8",
       "maintainer": "Mohd Faraz",
       "latest_release": "20191113-1425"
+    },
+    "zx55q05": {
+      "name": "LYF Water 7",
+      "maintainer": "Gautum Maini",
+      "latest_release": "20190705-0502"
     }
   },
   "asus": {
@@ -40,6 +45,13 @@
       "latest_release": "20200411-1012"
     }
   },
+  "htc": {
+    "ime": {
+      "name": "HTC U12+",
+      "maintainer": "Jean F. Rivera Ramos",
+      "latest_release": "2020521-1342"
+    }
+  },
   "huawei": {
     "kiwi": {
       "name": "Huawei Honor 5X",
@@ -48,11 +60,6 @@
     }
   },
   "lenovo": {
-    "a6000": {
-      "name": "Lenovo A6000",
-      "maintainer": "PBRP Team",
-      "latest_release": "20181119-1229"
-    },
     "kuntao": {
       "name": "Lenovo P2",
       "maintainer": "PBRP Team",
@@ -74,13 +81,6 @@
       "name": "LG K20 Plus",
       "maintainer": "PBRP Team",
       "latest_release": "20190207-1755"
-    }
-  },
-  "motorola": {
-    "hannah": {
-      "name": "Motorola E5 Plus",
-      "maintainer": "Barry Allen",
-      "latest_release": "20190623-0846"
     }
   },
   "oneplus": {
@@ -122,6 +122,18 @@
       "name": "Tenor E",
       "maintainer": "PBRP Team",
       "latest_release": "20181226-1153"
+    }
+  },
+  "sony": {
+    "dora": {
+      "name": "Sony F8131",
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "latest_release": "20200608-1720"
+    },
+    "kagura": {
+      "name": "Sony F8331",
+      "maintainer": "Erwin Abu Bakar Sidik",
+      "latest_release": "20200608-1808"
     }
   },
   "xiaomi": {
