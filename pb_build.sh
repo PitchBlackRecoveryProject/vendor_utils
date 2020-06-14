@@ -81,6 +81,9 @@ mkdir -p "$PB_WORK_DIR/META-INF/com/google/android"
 cp -R "$PB_VENDOR/updater/update-script" "$PB_WORK_DIR/META-INF/com/google/android/"
 cp -R "$PB_VENDOR/updater/update-binary" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 cp -R "$PB_VENDOR/updater/awk" "$PB_WORK_DIR/META-INF/"
+if [[ -f "$PB_WORK/recovery/root/sbin/keycheck" ]]; then
+	cp "$PB_WORK/recovery/root/sbin/keycheck" "$PB_WORK_DIR/META-INF/"
+fi
 
 if [[ "$AB_OTA" = "true" ]]; then
 	sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"

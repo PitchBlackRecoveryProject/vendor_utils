@@ -77,6 +77,7 @@ SYSTEM=
 mount_sys=
 RECOVERY=/dev/recovery
 tool="/tmp/pb/magiskboot"
+keycheck="$PB/../META-INF/keycheck"
 chmod 0755 $tool
 if [[ ! -f "/sbin/awk" ]]; then
 cp META-INF/awk /sbin/awk
@@ -228,9 +229,11 @@ ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|                  Thank You                  |";
-ui_print "|   Reboot to PitchBlack Recovery Manually    |";
+if [[ ! -f "/sbin/keycheck" ]]; then
+  ui_print "|   Reboot to PitchBlack Recovery Manually    |";
+fi
 ui_print "|---------------------------------------------|";
-sleep 5s
+sleep 0.2s
 show_progress 0.1000000, 90 ;
 ui_print "|------------Installation finished!-----------|";
 if [ "$SUPER" != "0" ]; then
@@ -241,4 +244,16 @@ if [ "$SUPER" != "0" ]; then
 		umount /s
 		rm -rf /s
 	fi
+fi
+
+if [[ ! -f "/sbin/keycheck" ]]; then
+  ui_print "* New PBRP Flashed, press Volume Down to Reboot to Recovery."
+  ui-print "*"
+  ui_print "* Volume up to Finish."
+  chmod +x $keycheck
+  $keycheck
+  if [[ "$?" == "41" ]]; then
+    sleep 3s
+    reboot recovery
+  fi
 fi
