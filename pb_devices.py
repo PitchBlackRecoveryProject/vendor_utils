@@ -52,6 +52,8 @@ if len(arguments) < 4:
 	invalid_arguments()
 
 cmd = arguments[1]
+print("PB_DEVICES: Detected Codename: ", codename)
+print("PB_DEVICES: Detected Vendor: ", vendor)
 
 if cmd == 'verify':
 	exit(verify_device(arguments[2], arguments[3]))
