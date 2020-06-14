@@ -81,7 +81,7 @@ if [[ "$zipcounter" > "0" ]]; then
 			then
 				echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 				python3 pb_devices.py release $TARGET_VENDOR $codename $build_with_time
-				git add pb.releases
+				git add pb_devices.json
 				git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 				git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
 				link="https://sourceforge.net/projects/pitchblack-twrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
