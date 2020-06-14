@@ -57,58 +57,54 @@ sf_file=$(find $(pwd)/out/target/product/$codename/PitchBlack*-OFFICIAL.zip 2>/d
 zipcounter=$(find $(pwd)/out/target/product/$codename/PitchBlack*-OFFICIAL.zip 2>/dev/null | wc -l)
 
 if [[ "$zipcounter" > "0" ]]; then
-
-  if [[ "$zipcounter" > "1" ]]; then
-    echo
-    printf "${red}More than one zips dected! Remove old build...\n${nocol}"
-    echo
-
-else
-
-export ZIP_NAME=$sf_file;
-
-pbv=$(echo "$sf_file" | awk -F'[-]' '{print $3}')
-build=$(echo "$sf_file" | awk -F'[-]' '{print $4}')
-build_with_time="$(echo "$sf_file" | awk -F'[-]' '{print $4}')-$(echo "$sf_file" | awk -F'[-]' '{print $5}')"
-
-echo
-echo "Build detected for :" $codename
-echo "PitchBlack version :" $pbv
-echo "Build date :" $build
-echo "Build location :" $sf_file
-echo
-printf "${green}Build successfully detected!\n${nocol}"
-echo
-MD5=$(md5sum $sf_file | awk '{print $1}')
-echo "Please Wait"
-echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
-if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
-then
-	echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
-	cd $(pwd)/vendor/pb;
-	java -jar Release.jar $codename $build_with_time
-	git add pb.releases
-	git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
-	git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
-
-	link="https://sourceforge.net/projects/pitchblack-twrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
-	FORMAT="PitchBlack Recovery for \`$TARGET_VENDOR\` \`$TARGET_DEVICE\` (\`${NAME}\`)\n\nInfo\n\n"
-	FORMAT=${FORMAT}"PitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n"
-	FORMAT=${FORMAT}"*Build Date*: \`${build:0:4}/${build:4:2}/${build:6}\`\n\n"
-	FORMAT=${FORMAT}"*Maintainer*: ${maintainer}\n\n"
-	if [[ ! -z $CHANGELOG ]]; then
-		FORMAT=${FORMAT}"\n*Changelog*:\n"${CHANGELOG}"\n"
+	if [[ "$zipcounter" > "1" ]]; then
+		printf "${red}More than one zips dected! Remove old build...\n${nocol}"
+	else
+		pbv=$(echo "$sf_file" | awk -F'[-]' '{print $3}')
+		build=$(echo "$sf_file" | awk -F'[-]' '{print $4}')
+		build_with_time="$(echo "$sf_file" | awk -F'[-]' '{print $4}')-$(echo "$sf_file" | awk -F'[-]' '{print $5}')"
+		echo
+		echo "Build detected for :" $codename
+		echo "PitchBlack version :" $pbv
+		echo "Build date :" $build
+		echo "Build location :" $sf_file
+		echo
+		printf "${green}Build successfully detected!\n${nocol}"
+		echo
+		MD5=$(md5sum $sf_file | awk '{print $1}')
+		echo "Please Wait"
+		cd $(pwd)/vendor/pb;
+		python3 pb_devices.py verify "$TARGET_VENDOR" "$codename"
+		if [[ "$?" == "0" ]]; then
+			echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
+			if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
+			then
+				echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
+				python3 pb_devices.py release $TARGET_VENDOR $codename $build_with_time
+				git add pb_devices.json
+				git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
+				git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
+				link="https://sourceforge.net/projects/pitchblack-twrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
+				FORMAT="PitchBlack Recovery for \`$TARGET_VENDOR\` \`$TARGET_DEVICE\` (\`${NAME}\`)\n\nInfo\n\n"
+				FORMAT=${FORMAT}"PitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n"
+				FORMAT=${FORMAT}"*Build Date*: \`${build:0:4}/${build:4:2}/${build:6}\`\n\n"
+				FORMAT=${FORMAT}"*Maintainer*: ${maintainer}\n\n"
+				if [[ ! -z $CHANGELOG ]]; then
+					FORMAT=${FORMAT}"\n*Changelog*:\n"${CHANGELOG}"\n"
+				fi
+				FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n"
+				python3 telegram.py -c @pbtwrp -M "$FORMAT" -D "Download|$link"
+				python3 telegram.py -c @pbtwrp -S "$pb_sticker"
+			else
+				echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
+			fi
+		else
+			echo -e "${red} Device is not Official\n${nocol}"
+		fi
+		cd ../../
 	fi
-	FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n"
-	python3 telegram.py -c @pbtwrp -M "$FORMAT" -D "Download|$link"
-	python3 telegram.py -c @pbtwrp -S "$pb_sticker"
-	cd ../../
 else
-	echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
-fi
-fi
-else
-    echo
-    printf "${red}No build found\n${nocol}"
-    echo
+	echo
+	printf "${red}No build found\n${nocol}"
+	echo
 fi
