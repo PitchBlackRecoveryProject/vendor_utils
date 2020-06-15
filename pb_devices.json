@@ -117,6 +117,13 @@
       "latest_release": "20200609-1021"
     }
   },
+  "redmi": {
+    "begonia": {
+      "name": "Xiaomi Redmi Note 8 Pro",
+      "maintainer": "Flamefusion",
+      "latest_release": "20200615-1127"
+    },
+  },
   "tenor": {
     "e": {
       "name": "Tenor E",
