@@ -93,9 +93,14 @@ if [[ -n $BUILDFILE ]]; then
 elif [[ $TEST_BUILD == 'true' ]] && [[ -n $TEST_BUILDFILE ]]; then
     echo "Got the Unofficial Build: $TEST_BUILDFILE"
     cp $TEST_BUILDFILE $UPLOAD_PATH
-    export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
-    cp $TEST_BUILDFILE $UPLOAD_PATH
+    export TEST_BUILDIMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
+    cp $TEST_BUILDIMG $UPLOAD_PATH
     ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Test Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION}-test ${UPLOAD_PATH}
+    echo -e "\nSending the Test build info in Maintainer Group\n"
+    TEST_LINK="https://github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME}/releases/download/${VERSION}/$(echo $TEST_BUILDFILE | awk -F'[/]' '{print $NF}')"
+    MAINTAINER_MSG="PitchBlack Recovery for ${VENDOR} ${CODENAME} is available Only For Testing Purpose\n\n"
+    MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
+    cd vendor/pb; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG"; cd -
 fi
 
 echo -e "\n\nAll Done Gracefully\n\n"
