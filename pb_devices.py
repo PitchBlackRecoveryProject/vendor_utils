@@ -24,24 +24,39 @@ def verify_device(vendor, codename):
 
 	data = json.loads(response.read().decode('utf-8'))
 	ven = data.keys()
-	for i in ven:
-		if i.casefold() == vendor.casefold():
-			ven = i
-			break
-	if not ven:
-		return 1
+	if vendor != "all":
+		for i in ven:
+			if i.casefold() == vendor.casefold():
+				ven = i
+				break
+		if not ven:
+			return 1
 
-	cod = data[ven]
+		cod = data[ven]
 
-	for i in cod:
-		if i.casefold() == codename.casefold():
-			cod = i
-			break
-	if not cod:
-		return 1
+		for i in cod:
+			if i.casefold() == codename.casefold():
+				cod = i
+				break
+		if not cod or isinstance(cod, str) is False:
+			return 1
 
-	if codename.casefold() == cod.casefold():
-		return 0
+		if codename.casefold() == cod.casefold():
+			return 0
+	else:
+		cod = ""
+		for i in ven:
+			cod = json.loads(json.dumps(data[i])).keys()
+
+			for j in cod:
+				if j.casefold() == codename.casefold():
+					cod = j
+					break
+			if not cod:
+				return 1
+
+			if codename.casefold() == j.casefold():
+				return 0
 	return 1
 
 def release(vendor, codename, build_date_time):
@@ -64,7 +79,7 @@ def release(vendor, codename, build_date_time):
 		if i.casefold() == codename.casefold():
 			cod = i
 			break
-	if not cod:
+	if not cod or isinstance(cod, str) is False:
 		return 1
 
 	if codename.casefold() == cod.casefold():
@@ -95,5 +110,3 @@ elif cmd == 'release':
 	release(arguments[2], arguments[3], arguments[4])
 else:
 	invalid_arguments()
-
-

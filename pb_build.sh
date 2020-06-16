@@ -45,18 +45,10 @@ else
 	PBRP_BUILD_TYPE=OFFICIAL
 fi
 
-function search() {
-for d in $(curl -s https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_pb/pb/pb.devices); do
-if [ "$d" == "$PB_DEVICE" ]; then
-echo "$d";
-break;
-fi
-done
-}
-
 if [ "$PBRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
-	F=$(search);
-	if [[ "${F}" ]]; then
+	python3 $PB_VENDOR/pb_devices.py all $PB_DEVICE
+
+	if [[ "$?" == "0" ]]; then
 		PBRP_BUILD_TYPE=OFFICIAL
 	else
 		PBRP_BUILD_TYPE=UNOFFICIAL
