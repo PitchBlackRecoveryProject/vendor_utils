@@ -1,276 +1,276 @@
 {
   "LYF": {
     "mobee01a": {
-      "name": "LYF Water 8",
+      "name": "Water 8",
       "maintainer": "Mohd Faraz",
       "latest_release": "20191113-1425"
     },
     "zx55q05": {
-      "name": "LYF Water 7",
+      "name": "Water 7",
       "maintainer": "Gautum Maini",
       "latest_release": "20190705-0502"
     }
   },
   "asus": {
     "X00P": {
-      "name": "ASUS ZenFone Max M1",
+      "name": "ZenFone Max M1",
       "maintainer": "Raza",
       "latest_release": "20200609-0528"
     },
     "X00T": {
-      "name": "ASUS ZenFone Max Pro M1",
+      "name": "ZenFone Max Pro M1",
       "maintainer": "Akshat",
       "latest_release": "20200609-0536"
     },
     "X01AD": {
-      "name": "ASUS ZenFone Max M2",
+      "name": "ZenFone Max M2",
       "maintainer": "Ashu Sharma",
       "latest_release": "20190605-1123"
     },
     "X01BD": {
-      "name": "ASUS ZenFone Max Pro M2",
+      "name": "ZenFone Max Pro M2",
       "maintainer": "legancy",
       "latest_release": "20200421-0621"
     },
     "Z010D": {
-      "name": "ASUS ZenFone Max",
+      "name": "ZenFone Max",
       "maintainer": "Sakil Mondal",
       "latest_release": "20190501-0739"
     }
   },
   "coolpad": {
     "C106": {
-      "name": "CoolPad C1 Dual",
+      "name": "C1 Dual",
       "maintainer": "Mr.Anonymous",
       "latest_release": "20200411-1012"
     }
   },
   "htc": {
     "ime": {
-      "name": "HTC U12+",
+      "name": "U12+",
       "maintainer": "Jean F. Rivera Ramos",
       "latest_release": "2020521-1342"
     }
   },
   "huawei": {
     "kiwi": {
-      "name": "Huawei Honor 5X",
+      "name": "Honor 5X",
       "maintainer": "Travis Holt",
       "latest_release": "20181128-0129"
     }
   },
   "lenovo": {
     "kuntao": {
-      "name": "Lenovo P2",
+      "name": "P2",
       "maintainer": "PBRP Team",
       "latest_release": "20190601-1406"
     },
     "P1m": {
-      "name": "Lenovo Vibe P1m",
+      "name": "Vibe P1m",
       "maintainer": "PBRP Team",
       "latest_release": "20180403-1345"
     },
     "z2_plus": {
-      "name": "Lenovo ZUK Z2 Plus",
+      "name": "ZUK Z2 Plus",
       "maintainer": "PBRP Team",
       "latest_release": "20180725-0244"
     }
   },
   "lge": {
     "lv517": {
-      "name": "LG K20 Plus",
+      "name": "K20 Plus",
       "maintainer": "PBRP Team",
       "latest_release": "20190207-1755"
     }
   },
   "oneplus": {
     "enchilada": {
-      "name": "OnePlus 6",
+      "name": "6",
       "maintainer": "PBRP Team",
       "latest_release": "20190623-0846"
     }
   },
   "realme": {
     "rmx1821": {
-      "name": "Realme 3",
+      "name": "3",
       "maintainer": "PBRP Team",
       "latest_release": "20190715-1330"
     },
     "RMX1851": {
-      "name": "Realme 3 Pro",
+      "name": "3 Pro",
       "maintainer": "Ahmed Moselhi",
       "latest_release": "20200615-1220"
     },
     "RMX1811": {
-      "name": "Realme C1",
+      "name": "C1",
       "maintainer": "PBRP Team",
       "latest_release": "20200206-1752"
     },
     "RMX1921": {
-      "name": "Realme XT",
-      "maintainer": "Reza Adi Pangestu as Advaith Bhat",
+      "name": "XT",
+      "maintainer": "Advaith Bhat",
       "latest_release": "20200610-1320"
     },
     "x2": {
-      "name": "Realme X2",
+      "name": "X2",
       "maintainer": "[.shovon]",
       "latest_release": "20200609-1021"
     }
   },
   "redmi": {
     "begonia": {
-      "name": "Xiaomi Redmi Note 8 Pro",
+      "name": "Note 8 Pro",
       "maintainer": "Flamefusion",
       "latest_release": "20200616-0736"
     }
   },
   "tenor": {
     "e": {
-      "name": "Tenor E",
+      "name": "E",
       "maintainer": "PBRP Team",
       "latest_release": "20181226-1153"
     }
   },
   "sony": {
     "dora": {
-      "name": "Sony F8131",
+      "name": "F8131",
       "maintainer": "Erwin Abu Bakar Sidik",
       "latest_release": "20200608-1720"
     },
     "kagura": {
-      "name": "Sony F8331",
+      "name": "F8331",
       "maintainer": "Erwin Abu Bakar Sidik",
       "latest_release": "20200608-1808"
     }
   },
   "Xiaomi": {
     "beryllium": {
-      "name": "Xiaomi Pocophone F1",
+      "name": "Pocophone F1",
       "maintainer": "Mohd Faraz",
       "latest_release": "20200610-1452"
     },
     "daisy": {
-      "name": "Xiaomi Mi A2 Lite",
+      "name": "Mi A2 Lite",
       "maintainer": "PBRP Team",
       "latest_release": "20190212-1857"
     },
     "dipper": {
-      "name": "Xiaomi Mi 8",
+      "name": "Mi 8",
       "maintainer": "PBRP Team",
       "latest_release": "20200528-1823"
     },
     "ginkgo": {
-      "name": "Xiaomi Redmi Note 8/8T",
+      "name": "Redmi Note 8/8T",
       "maintainer": "PBRP Team",
       "latest_release": "20200415-2047"
     },
     "ido": {
-      "name": "Xiaomi Redmi 3",
+      "name": "Redmi 3",
       "maintainer": "Firewolf",
       "latest_release": "20200609-0250"
     },
     "jasmine_sprout": {
-      "name": "Xiaomi Mi A2",
+      "name": "Mi A2",
       "maintainer": "PBRP Team",
       "latest_release": "20190624-0913"
     },
     "kenzo": {
-      "name": "Xiaomi Redmi Note 3 Pro/SD",
+      "name": "Redmi Note 3 Pro/SD",
       "maintainer": "PBRP Team",
       "latest_release": "20200614-1327"
     },
     "land": {
-      "name": "Xiaomi Redmi 3S/3X/Prime",
+      "name": "Redmi 3S/3X/Prime",
       "maintainer": "PBRP Team",
       "latest_release": "20200407-0959"
     },
     "lavender": {
-      "name": "Xiaomi Redmi Note 7",
+      "name": "Redmi Note 7",
       "maintainer": "PBRP Team",
       "latest_release": "20200418-1424"
     },
     "mido": {
-      "name": "Xiaomi Redmi Note 4X/SD",
+      "name": "Redmi Note 4X/SD",
       "maintainer": "PBRP Team",
       "latest_release": "20200610-0606"
     },
     "olive": {
-      "name": "Xiaomi Redmi 8",
+      "name": "Redmi 8",
       "maintainer": "Afiqqo",
       "latest_release": "20200413-1603"
     },
     "onclite": {
-      "name": "Xiaomi Redmi 7",
+      "name": "Redmi 7",
       "maintainer": "PBRP Team",
       "latest_release": "20190624-0606"
     },
     "platina": {
-      "name": "Xiaomi MI 8 Lite",
+      "name": "MI 8 Lite",
       "maintainer": "Reza Adi Pangestu",
       "latest_release": "20190513-0023"
     },
     "raphael": {
-      "name": "Xiaomi Redmi K20 Pro",
+      "name": "Redmi K20 Pro",
       "maintainer": "PBRP Team",
       "latest_release": "20200606-0847-OFFICIAL"
     },
     "rolex": {
-      "name": "Xiaomi Redmi 4a",
+      "name": "Redmi 4a",
       "maintainer": "Mohd Faraz",
       "latest_release": "20200614-0632"
     },
     "rosy": {
-      "name": "Xiaomi Redmi 5",
+      "name": "Redmi 5",
       "maintainer": "ZHANtech\u00e2\u201e\u00a2 - BATIK HOLIC",
       "latest_release": "20190219-0813"
     },
     "santoni": {
-      "name": "Xiaomi Redmi 4X",
+      "name": "Redmi 4X",
       "maintainer": "PBRP Team",
       "latest_release": "20200609-0147"
     },
     "tulip": {
-      "name": "Xiaomi Redmi Note 6 Pro",
+      "name": "Redmi Note 6 Pro",
       "maintainer": "PBRP Team",
       "latest_release": "20190729-1626"
     },
     "ugg": {
-      "name": "Xiaomi Redmi Note 5a Prime",
+      "name": "Redmi Note 5a Prime",
       "maintainer": "PBRP Team",
       "latest_release": "20181008-0225"
     },
     "ugglite": {
-      "name": "Xiaomi Redmi Note 5a",
+      "name": "Redmi Note 5a",
       "maintainer": "PBRP Team",
       "latest_release": "20181008-1038"
     },
     "vince": {
-      "name": "Xiaomi Redmi 5 Plus",
+      "name": "Redmi 5 Plus",
       "maintainer": "PBRP Team",
       "latest_release": "20181220-0719"
     },
     "violet": {
-      "name": "Xiaomi Redmi Note 7 Pro",
+      "name": "Redmi Note 7 Pro",
       "maintainer": "Yashpal Joshi & PBRP Team",
       "latest_release": "20200609-1007"
     },
     "wayne": {
-      "name": "Xiaomi Mi 6X",
+      "name": "Mi 6X",
       "maintainer": "PBRP Team",
       "latest_release": "20190205-0214"
     },
     "whyred": {
-      "name": "Xiaomi Redmi Note 5",
+      "name": "Redmi Note 5",
       "maintainer": "Reza Adi Pangestu",
       "latest_release": "20200409-0643"
     },
     "ysl": {
-      "name": "Xiaomi Redmi S2",
+      "name": "Redmi S2",
       "maintainer": "PBRP Team",
       "latest_release": "20200608-1826"
     },
     "riva": {
-      "name": "Xiaomi Redmi 5A",
+      "name": "Redmi 5A",
       "maintainer": "Erwin Abu Bakar Sidik",
       "latest_release": "20200606-1358"
     }
