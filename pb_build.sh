@@ -46,7 +46,7 @@ else
 fi
 
 if [ "$PBRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
-	python3 $PB_VENDOR/pb_devices.py all $PB_DEVICE
+	python3 $PB_VENDOR/pb_devices.py verify all $PB_DEVICE
 
 	if [[ "$?" == "0" ]]; then
 		PBRP_BUILD_TYPE=OFFICIAL
