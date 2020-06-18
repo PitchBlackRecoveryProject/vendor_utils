@@ -133,11 +133,11 @@ fi
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
     echo -e "\nSending the Test build info in Maintainer Group\n"
     TEST_LINK="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${VERSION}-test/$(echo $TEST_BUILDFILE | awk -F'[/]' '{print $NF}')"
-    MAINTAINER_MSG="PitchBlack Recovery for ${VENDOR} ${CODENAME} is available Only For Testing Purpose\n\n"
+    MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
     if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n"; fi
-    MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
-    cd vendor/pb; python3 telegram.py -c "-1001228903553" -m "HTML" -M "$MAINTAINER_MSG"; cd $DIR/work
+    MAINTAINER_MSG=${MAINTAINER_MSG}"Go to [LINK](${TEST_LINK}) to download it."
+    cd vendor/pb; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG"; cd $DIR/work
 fi
 
 echo -e "\n\nAll Done Gracefully\n\n"
