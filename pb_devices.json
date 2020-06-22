@@ -209,6 +209,11 @@
       "maintainer": "PBRP Team",
       "latest_release": "20190624-0606"
     },
+    "pine": {
+      "name": "Redmi 7A",
+      "maintainer": "AOiSPdev",
+      "latest_release": ""
+    },
     "platina": {
       "name": "MI 8 Lite",
       "maintainer": "Reza Adi Pangestu",
