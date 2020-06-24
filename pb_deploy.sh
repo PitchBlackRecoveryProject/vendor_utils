@@ -77,14 +77,14 @@ if [[ "$zipcounter" > "0" ]]; then
 		python3 pb_devices.py verify "$TARGET_VENDOR" "$codename"
 		if [[ "$?" == "0" ]]; then
 			echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
-			if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pitchblack-twrp/$codename/
+			if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pbrp/$codename/
 			then
 				echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 				python3 pb_devices.py release $TARGET_VENDOR $codename $build_with_time
 				git add pb_devices.json
 				git commit --author "PitchBlack-BOT <pitchblackrecovery@gmail.com>" -m "pb.releases: new release $codename-$build"
 				git push -q https://${github_token}@github.com/PitchBlackRecoveryProject/vendor_pb pb
-				link="https://sourceforge.net/projects/pitchblack-twrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
+				link="https://sourceforge.net/projects/pbrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
 				FORMAT="PitchBlack Recovery for \`$TARGET_VENDOR\` \`$TARGET_DEVICE\` (\`${NAME}\`)\n\nInfo\n\n"
 				FORMAT=${FORMAT}"PitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n"
 				FORMAT=${FORMAT}"*Build Date*: \`${build:0:4}/${build:4:2}/${build:6}\`\n\n"
