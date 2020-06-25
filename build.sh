@@ -137,7 +137,11 @@ if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ ! -z 
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
     if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n"; fi
     MAINTAINER_MSG=${MAINTAINER_MSG}"Go to [LINK](${TEST_LINK}) to download it."
+if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
+    cd vendor/pb; python3 telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG"; cd $DIR/work
+else
     cd vendor/pb; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG"; cd $DIR/work
+fi
 fi
 
 echo -e "\n\nAll Done Gracefully\n\n"
