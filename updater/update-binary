@@ -14,52 +14,68 @@
 # limitations under the License.
 
 
-AB_DEVICE=false;
-OUTFD=/proc/self/fd/$2;
-ZIP="$3";
-DIR=`dirname "$ZIP"`;
+AB_DEVICE=false
+
+OUTFD=/proc/self/fd/"$2"
+ZIP="$3"
+#DIR=$(dirname "$ZIP")
 
 ui_print() {
-  until [ ! "$1" ]; do
-    echo -e "ui_print $1\nui_print" > $OUTFD ;
-    shift;
-  done;
+	until [ ! "$1" ]; do
+		echo -e "ui_print $1\nui_print" > "$OUTFD"
+		shift
+	done
 }
 
-show_progress() { echo "progress $1 $2" > /proc/self/fd/$2; }
+show_progress() {
+	echo "progress $1 $2" > "$OUTFD"
+}
+
 set_perm_recursive() {
-  dirs=$(echo $* | awk '{ print substr($0, index($0,$5)) }');
-  for i in $dirs; do
-    chown -R $1.$2 $i; chown -R $1:$2 $i;
-    find "$i" -type d -exec chmod $3 {} +;
-    find "$i" -type f -exec chmod $4 {} +;
-  done;
+	dirs=$(echo "$*" | awk '{ print substr($0, index($0,$5)) }')
+	for i in $dirs; do
+		chown -R "$1"."$2" "$i"; chown -R "$1":"$2" "$i"
+		find "$i" -type d -exec chmod "$3" {} +
+		find "$i" -type f -exec chmod "$4" {} +
+	done
 }
-file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
-getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
-abort() { ui_print "$*"; exit 1; }
 
-if [ -f "/tmp/pb" ]; then
-rm -rf "/tmp/pb"
-fi
+file_getprop() {
+	grep "^$2" "$1" | cut -d= -f2
+}
+getprop() {
+	if [ -e /sbin/getprop ]; then
+		/sbin/getprop "$1"
+	else
+		file_getprop /default.prop "$1"
+	fi
+}
 
-mkdir -p /tmp/pb;
-cd /tmp/pb;
-unzip -o "$ZIP";
-show_progress 0.1000000, 0;
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------PitchBlack Recovery Project---------|";
-ui_print "|-------------------v2.9.1--------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|--------------Brought To You By--------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------PitchBlack Team---------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|            Based on TWRP v3.4.0-x           |";
-ui_print "|---------------------------------------------|";
+abort() {
+	ui_print "$*"
+	exit 1
+}
+
+[ -f "/tmp/pb" ] && rm -rf "/tmp/pb"
+mkdir -p /tmp/pb
+cd /tmp/pb || exit
+
+unzip -o "$ZIP"
+
+show_progress 0.1000000, 0
+ui_print "|---------------------------------------------|"
+ui_print "|~~~~~~~                               ~~~~~~~|"
+ui_print "|=>>--    PitchBlack Recovery Project    --<<=|"
+ui_print "|===>>>>-----        v2.9.1       -----<<<<===|"
+ui_print "|                                             |"
+ui_print "|---------------------------------------------|"
+ui_print "|===>>>>---    Brought To You By    ---<<<<===|"
+ui_print "|       -------------------------------       |"
+ui_print "|~~~~~~~~~~     PitchBlack Team     ~~~~~~~~~~|"
+ui_print "|         ---------------------------         |"
+ui_print "|            Based on TWRP v3.4.0-x           |"
+ui_print "|---------------------------------------------|"
+
 PB=/tmp/pb/PBRP
 IMG=/tmp/pb/TWRP/recovery.img
 E=/etc/install-recovery.sh
@@ -71,180 +87,163 @@ PB3_PATH=/sdcard/PBRP/themes
 UI=/sdcard/PBRP/theme/ui.zip
 RES=/sdcard/PBRP/.twrps
 OLD=/sdcard/TWRP/PBRP
-red='\033[0;31m'
+
 SYSTEM=
 mount_sys=
 RECOVERY=/dev/recovery
+
 tool="/tmp/pb/magiskboot"
-chmod 0755 $tool
+chmod 0755 "$tool"
+
 if [[ ! -f "/sbin/awk" ]]; then
-cp META-INF/awk /sbin/awk
-chmod 0755 /sbin/awk
+	cp META-INF/awk /sbin/awk
+	chmod 0755 /sbin/awk
 fi
 
-#AB Checking
+# AB Checking
 if [[ "$AB_DEVICE" = "false" ]]; then
-# Find Recovery Partition
- for PARTITION in system android_recovery ANDROID_RECOVERY RECOVERY recovery FOTAKernel ; do
-   if [[ "$PARTITION" = "system" ]]; then
-     SYSTEM=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || \
-               readlink /dev/block/platform/*/*/by-name/$PARTITION || readlink /dev/$PARTITION);
-   else
-     REC=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || \
-               readlink /dev/block/platform/*/*/by-name/$PARTITION || readlink /dev/$PARTITION);
-   fi
+	# Find Recovery Partition
+	for PARTITION in system android_recovery ANDROID_RECOVERY RECOVERY recovery FOTAKernel; do
+		if [[ "$PARTITION" = "system" ]]; then
+			SYSTEM=$(readlink /dev/block/by-name/$PARTITION || \
+				readlink /dev/block/bootdevice/by-name/$PARTITION || \
+				readlink /dev/block/platform/*/by-name/$PARTITION || \
+				readlink /dev/block/platform/*/*/by-name/$PARTITION || \
+				readlink /dev/block/$PARTITION || \
+				readlink /dev/$PARTITION)
+		else
+			REC=$(readlink /dev/block/by-name/$PARTITION || \
+				readlink /dev/block/bootdevice/by-name/$PARTITION || \
+				readlink /dev/block/platform/*/by-name/$PARTITION || \
+				readlink /dev/block/platform/*/*/by-name/$PARTITION || \
+				readlink /dev/block/$PARTITION || \
+				readlink /dev/$PARTITION)
+		fi
 
-   if [[ ! -z $REC ]]; then
-     RECOVERY=$REC
-     break;
-   fi
- done;
+		if [[ ! -z "$REC" ]]; then
+			RECOVERY=$REC
+			break
+		fi
+	done
 fi
 
-if [[ ! -z $SYSTEM ]]; then
-mkdir /s
-mount -t ext4 $SYSTEM /s
+if [[ ! -z "$SYSTEM" ]]; then
+	mkdir /s
+	mount -t ext4 "$SYSTEM" /s
 else
-/sbin/mount /system && mount_sys="system"
-/sbin/mount /system_root && mount_sys="root"
+	/sbin/mount /system && mount_sys="system"
+	/sbin/mount /system_root && mount_sys="root"
 fi
 
-if [[ "$RECOVERY" = "/dev/recovery" && "$AB_DEVICE" = "false" ]]; then
-	DD=true;
+if [[ "$RECOVERY" = "/dev/recovery" ]] && [[ "$AB_DEVICE" = "false" ]]; then
+	DD=true
 else
-	DD=false;
+	DD=false
 fi
 
-#Deletion
-if [[ -f $ETC ]]; then
-rm $ETC
-fi
-if [[ -f ${_ETC} ]]; then
-rm ${_ETC}
-fi
-if [[ -f $PB1_PATH ]]; then
-rm -rf $PB1_PATH
-fi
-if [[ -f $PB2_PATH ]]; then
-rm -rf $PB2_PATH
-fi
-if [[ -f $PB3_PATH ]]; then
-rm -rf $PB3_PATH
-fi
-if [[ -f $UI ]]; then
-rm $UI
-fi
-if [[ -f $RES ]]; then
-rm -rf $RES
-fi
-if [[ -f $OLD ]]; then
-rm -rf $OLD
-fi
-if [[ "$mount_sys" = "system" ]]; then
-rm -rf /system$E;
-fi
-if [[ "$mount_sys" = "root" ]]; then
-rm -rf /system_root/system$E;
-fi
+# Deletion
+[[ -f "$ETC" ]] && rm "$ETC"
+[[ -f "${_ETC}" ]] && rm "${_ETC}"
+[[ -f "$PB1_PATH" ]] && rm -rf "$PB1_PATH"
+[[ -f "$PB2_PATH" ]] && rm -rf "$PB2_PATH"
+[[ -f "$PB3_PATH" ]] && rm -rf "$PB3_PATH"
+[[ -f "$UI" ]] && rm "$UI"
+[[ -f "$RES" ]] && rm -rf "$RES"
+[[ -f "$OLD" ]] && rm -rf "$OLD"
+
+[[ "$mount_sys" = "system" ]] && rm -rf /system$E
+[[ "$mount_sys" = "root" ]] && rm -rf /system_root/system$E
 
 AB_D() {
- BOOT="/tmp/unpack-boot"
- REC="/tmp/unpack-rec"
- ui_print "Doing Work on slot $1"
- #Dump & unpack & Cp
- # dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/boot.img"
- mkdir $BOOT
- mkdir $REC
- dd if=/dev/block/bootdevice/by-name/$1 "of=/tmp/unpack-boot/boot.img"
- cd $BOOT
- "$tool" unpack -h boot.img
- # kernel string want_initramfs -> skip_initramfs (Magisk)
- $tool hexpatch kernel 77616E745F696E697472616D6673 736B69705F696E697472616D6673;
- # kernel string trip_initramfs -> skip_initramfs (SuperSU)
- $tool hexpatch kernel 747269705F696E697472616D6673 736B69705F696E697472616D6673;
- $tool cpio ramdisk.cpio test
- if [[ "$?" = "1" ]]; then
-   echo "$1=1" >> /tmp/pb/installed
- else
-   echo "$1=0" >> /tmp/pb/installed
- fi
- # boot.img header cmdline remove skip_override (flar2 patch)
- sed -i "s|$(grep '^cmdline=' header | cut -d= -f2-)|$(grep '^cmdline=' header | cut -d= -f2- | sed -e 's/skip_override//' -e 's/  */ /g' -e 's/[ \t]*$//')|" header;
- rm -rf ramdisk.cpio
- cd $REC
- "$tool" unpack $IMG
- cp ramdisk.cpio $BOOT/ramdisk.cpio
- cd $BOOT
- rm -rf $REC
- "$tool" repack boot.img
- dd if=new-boot.img of=/dev/block/bootdevice/by-name/$1
- [ $? = 0 ] && echo "installed=1" >> /tmp/pb/installed|| abort "Failed to flash $1 Image Please Restore the Boot.img"
- cd /tmp/pb
- rm -rf $BOOT
+	BOOT="/tmp/unpack-boot"
+	REC="/tmp/unpack-rec"
+	ui_print "Doing Work on slot $1"
+	# Dump & unpack & Cp
+	mkdir "$BOOT" "$REC"
+	dd if=/dev/block/bootdevice/by-name/"$1" of=/tmp/unpack-boot/boot.img
+	cd "$BOOT" || exit
+	"$tool" unpack -h boot.img
+	# kernel string want_initramfs -> skip_initramfs (Magisk)
+	"$tool" hexpatch kernel 77616E745F696E697472616D6673 736B69705F696E697472616D6673;
+	# kernel string trip_initramfs -> skip_initramfs (SuperSU)
+	"$tool" hexpatch kernel 747269705F696E697472616D6673 736B69705F696E697472616D6673;
+	if "$tool" cpio ramdisk.cpio test; then
+		echo "$1=0" >> /tmp/pb/installed
+	else
+		echo "$1=1" >> /tmp/pb/installed
+	fi
+	# boot.img header cmdline remove skip_override (flar2 patch)
+	sed -i "s|$(grep '^cmdline=' header | cut -d= -f2-)|$(grep '^cmdline=' header | cut -d= -f2- | sed -e 's/skip_override//' -e 's/  */ /g' -e 's/[ \t]*$//')|" header;
+	rm -rf ramdisk.cpio
+	cd "$REC" || exit
+	"$tool" unpack "$IMG"
+	cp ramdisk.cpio "$BOOT"/ramdisk.cpio
+	cd "$BOOT" || exit
+	rm -rf "$REC"
+	"$tool" repack boot.img
+	if dd if=new-boot.img of=/dev/block/bootdevice/by-name/"$1"; then
+		echo "installed=1" >> /tmp/pb/installed
+	else
+		abort "Failed to flash $1 Image, Please Restore the Boot.img"
+	fi
+	cd /tmp/pb || exit
+	rm -rf "$BOOT"
 }
 
-#Flashing
+# Flashing
 if [[ "$DD" = "true" ]]; then
-	dd if=$IMG of="$RECOVERY"
-	if [[ "$?" = "0" ]]; then
+	if dd if="$IMG" of="$RECOVERY"; then
 		echo "installed=1" >> /tmp/pb/installed
 	fi
 else
 	if [[ "$AB_DEVICE" = "false" ]]; then
-		flash_image $RECOVERY $IMG
-		if [[ "$?" = "0" ]]; then
+		if flash_image "$RECOVERY" "$IMG"; then
 			echo "installed=1" >> /tmp/pb/installed
 		fi
 	else
-		AB_D boot_a;
-		AB_D boot_b;
+		AB_D boot_a
+		AB_D boot_b
 	fi
 fi
 
 if [[ "$?" != "0" ]]; then
-	abort "Failed to write recovery image!" 43;
+	abort "Failed to write recovery image!" 43
 fi
 
-#Copy Specific Files
-if [ -f "/sdcard/PBRP" ]; then
-cp -r $PB/tools /sdcard/PBRP/
-else
-mkdir -p /sdcard/PBRP
-cp -r $PB/tools /sdcard/PBRP/
+# Copy Specific Files
+[[ ! -f "/sdcard/PBRP" ]] && mkdir -p "/sdcard/PBRP"
+cp -r "$PB"/tools /sdcard/PBRP/
+
+# Copy Backup from TWRP
+if [[ -f "/sdcard/TWRP/BACKUPS" ]]; then
+	ui_print "Previous TWRP Backup found"
+	if [[ -f "/sdcard/PBRP/BACKUPS" ]]; then
+		cp -r /sdcard/TWRP/BACKUPS/* /sdcard/PBRP/BACKUPS/
+	else
+		cp -r /sdcard/TWRP/BACKUPS /sdcard/PBRP/
+	fi
 fi
 
-#Copy Backup from TWRP
-if [ -f "/sdcard/TWRP/BACKUPS" ]; then
-ui_print "Previous TWRP Backup found";
-if [ -f "/sdcard/PBRP/BACKUPS" ]; then
-cp -r /sdcard/TWRP/BACKUPS/* /sdcard/PBRP/BACKUPS/
-else 
-cp -r /sdcard/TWRP/BACKUPS /sdcard/PBRP/
-fi
-fi
+[[ -f "/sdcard/TWRP" ]] && rm -rf /sdcard/TWRP
 
-if [[ -f "/sdcard/TWRP" ]]; then
- rm -rf /sdcard/TWRP
-fi
-
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|                  Thank You                  |";
-ui_print "|   Reboot to PitchBlack Recovery Manually    |";
-ui_print "|---------------------------------------------|";
-sleep 5s
-show_progress 0.1000000, 90 ;
-ui_print "|------------Installation finished!-----------|";
+ui_print "|                                             |"
+ui_print "|---------------------------------------------|"
+ui_print "|---------------------------------------------|"
+ui_print "|                                             |"
+ui_print "|==>>>----         Thank You         ----<<<==|"
+ui_print "|              -----------------              |"
+ui_print "|---------   Installation finished!   --------|"
+ui_print "|---------------------------------------------|"
+ui_print "|                                             |"
+sleep 2s
+show_progress 0.1000000, 90
+ui_print "|  Reboot into PitchBlack Recovery, Manually  |"
+ui_print "|                                             |"
+ui_print "|                                             |"
 if [[ -z "$SYSTEM" ]]; then
- if [[ "$mount_sys" = "system" ]]; then
-  /sbin/umount /system;
- fi
- if [[ "$mount_sys" = "root" ]]; then
-  /sbin/umount /system_root;
- fi
+	[[ "$mount_sys" = "system" ]] && /sbin/umount /system
+	[[ "$mount_sys" = "root" ]] && /sbin/umount /system_root
 else
-umount /s;
-rm -rf /s;
+	umount /s
+	rm -rf /s
 fi
