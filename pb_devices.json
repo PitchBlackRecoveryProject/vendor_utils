@@ -120,6 +120,11 @@
       "name": "X2",
       "maintainer": "[.shovon]",
       "latest_release": "20200619-1435"
+    },
+    "RMX1901": {
+    "name": "Realme X",
+    "maintainer": "Satham Hussain",
+    "latest_release": ""
     }
   },
   "Redmi": {
