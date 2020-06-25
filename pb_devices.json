@@ -122,9 +122,9 @@
       "latest_release": "20200619-1435"
     },
     "RMX1901": {
-    "name": "Realme X",
-    "maintainer": "Satham Hussain",
-    "latest_release": ""
+      "name": "Realme X",
+      "maintainer": "Satham Hussain",
+      "latest_release": "20200625-0822"
     }
   },
   "Redmi": {
