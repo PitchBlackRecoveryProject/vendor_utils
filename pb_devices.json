@@ -90,6 +90,12 @@
       "latest_release": "20190623-0846"
     }
   },
+  "Oppo": {
+    "CPH1861": {
+      "name": "Realme 1",
+      "maintainer": "@I_am_pronoob"
+    }
+  },
   "Realme": {
     "rmx1821": {
       "name": "3",
