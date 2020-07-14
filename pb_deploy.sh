@@ -93,8 +93,8 @@ if [[ "$zipcounter" > "0" ]]; then
 					FORMAT=${FORMAT}"\n*Changelog*:\n"${CHANGELOG}"\n"
 				fi
 				FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n"
-				python3 telegram.py -c @pbtwrp -M "$FORMAT" -D "Download|$link"
-				python3 telegram.py -c @pbtwrp -S "$pb_sticker"
+				python3 telegram.py -c @pitchblackrecovery -M "$FORMAT" -D "Download|$link"
+				python3 telegram.py -c @pitchblackrecovery -S "$pb_sticker"
 			else
 				echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
 			fi
