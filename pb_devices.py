@@ -19,18 +19,19 @@ def release_error(error_message):
 	raise Exception("PB_DEVICES.PY: ", error_message)
 
 
-def verify_device(vendor, codename):
+def verify_device(vendor, codename, maintainer = 0):
 	response = urllib.request.urlopen(url)
 
 	data = json.loads(response.read().decode('utf-8'))
 	ven = data.keys()
+	found = 1
 	if vendor != "all":
 		for i in ven:
 			if i.casefold() == vendor.casefold():
 				ven = i
 				break
 		if not ven:
-			return 1
+			found = 1
 
 		cod = data[ven]
 
@@ -39,10 +40,10 @@ def verify_device(vendor, codename):
 				cod = i
 				break
 		if not cod or isinstance(cod, str) is False:
-			return 1
+			found = 1
 
 		if codename.casefold() == cod.casefold():
-			return 0
+			found = 0
 	else:
 		cod = ""
 		for i in ven:
@@ -53,11 +54,14 @@ def verify_device(vendor, codename):
 					cod = j
 					break
 			if not cod:
-				return 1
+				found = 1
 
 			if codename.casefold() == j.casefold():
-				return 0
-	return 1
+				found = 0
+	if found == 0 and maintainer != 0:
+		print(data[ven][cod]["maintainer"]);
+
+	return found
 
 def release(vendor, codename, build_date_time):
 	shutil.copyfile(local_file, backup_file)
@@ -97,11 +101,15 @@ if len(arguments) < 4:
 	invalid_arguments()
 
 cmd = arguments[1]
-print("PB_DEVICES: Detected Codename: ", arguments[3])
-print("PB_DEVICES: Detected Vendor: ", arguments[2])
+if len(arguments) != 5 or cmd != 'verify':
+	print("PB_DEVICES: Detected Codename: ", arguments[3])
+	print("PB_DEVICES: Detected Vendor: ", arguments[2])
 
-if cmd == 'verify':
+if cmd == 'verify' and len(arguments) == 4:
 	exit(verify_device(arguments[2], arguments[3]))
+
+elif cmd == 'verify' and len(arguments) == 5:
+	exit(verify_device(arguments[2], arguments[3], arguments[4]))
 
 elif cmd == 'release':
 	if len(arguments) < 5:
