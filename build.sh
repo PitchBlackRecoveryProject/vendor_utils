@@ -22,10 +22,6 @@
 #
 ###
 
-###
-# USE 4-CHARACTER-SPACE IN PLACE OF TAB CHARACTER FOR EDITING
-###
-
 # SANITY CHECKS
 if [[ -z $GitHubMail ]]; then echo -e "You haven't configured GitHub E-Mail Address." && exit 1; fi
 if [[ -z $GitHubName ]]; then echo -e "You haven't configured GitHub Username." && exit 1; fi
@@ -40,6 +36,13 @@ git config --global user.email $GitHubMail
 git config --global user.name $GitHubName
 git config --global credential.helper store
 git config --global color.ui true
+
+if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
+# Use Google Git Cookies for Smooth repo-sync
+git clone -q "https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/google-git-cookies.git" &> /dev/null
+bash google-git-cookies/setup_cookies.sh
+rm -rf google-git-cookies
+fi
 
 echo -e "Starting the CI Build Process...\n"
 
@@ -135,13 +138,13 @@ if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ ! -z 
     TEST_LINK="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${VERSION}-test/$(echo $TEST_BUILDFILE | awk -F'[/]' '{print $NF}')"
     MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
-    if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n"; fi
-    MAINTAINER_MSG=${MAINTAINER_MSG}"Go to [LINK](${TEST_LINK}) to download it."
-if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-    cd vendor/pb; python3 telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG"; cd $DIR/work
-else
-    cd vendor/pb; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG"; cd $DIR/work
-fi
+    if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n\n"; fi
+    MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
+    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
+        cd vendor/pb; python3 telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
+    else
+        cd vendor/pb; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
+    fi
 fi
 
 echo -e "\n\nAll Done Gracefully\n\n"
