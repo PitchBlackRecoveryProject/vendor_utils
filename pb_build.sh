@@ -59,7 +59,8 @@ fi
 if [ "$PB_GO" != "true" ]; then
     ZIP_NAME=PBRP-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
 else
-    ZIP_NAME=PitchBlack-Go-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
+    echo -e "${red}PitchBlack Go Variant has been depreciated and has been removed. Remove PB_GO flag to build normally.{nocol}"
+    exit 1;
 fi
 
 echo -e "${red}**** Making Zip ****${nocol}"
