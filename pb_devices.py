@@ -56,7 +56,7 @@ def verify_device(vendor, codename, maintainer = 0):
 			if not cod:
 				found = 1
 
-			if codename.casefold() == j.casefold():
+			if codename.casefold() == cod.casefold():
 				found = 0
 	if found == 0 and maintainer != 0:
 		print(data[ven][cod]["maintainer"]);
