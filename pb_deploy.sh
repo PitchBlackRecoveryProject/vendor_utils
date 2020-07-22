@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright (C) 2018, Manjot Sidhu <manjot.gni@gmail.com>
-# Copyright (C) 2018, PitchBlack Recovery Project <pitchblacktwrp@gmail.com>
+# Copyright (C) 2018, PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 # Custom Deploy Script for PBRP
 #
@@ -53,8 +53,8 @@ echo
 
 export NAME=$codename
 
-sf_file=$(find $(pwd)/out/target/product/$codename/PitchBlack*-OFFICIAL.zip 2>/dev/null)
-zipcounter=$(find $(pwd)/out/target/product/$codename/PitchBlack*-OFFICIAL.zip 2>/dev/null | wc -l)
+sf_file=$(find $(pwd)/out/target/product/$codename/PBRP*-OFFICIAL.zip 2>/dev/null)
+zipcounter=$(find $(pwd)/out/target/product/$codename/PBRP*-OFFICIAL.zip 2>/dev/null | wc -l)
 
 if [[ "$zipcounter" > "0" ]]; then
 	if [[ "$zipcounter" > "1" ]]; then
@@ -66,8 +66,8 @@ if [[ "$zipcounter" > "0" ]]; then
 		echo
 		echo "Build detected for :" $codename
 		echo "PitchBlack version :" $pbv
-		echo "Build date :" $build
-		echo "Build location :" $sf_file
+		echo "Build date         :" $build
+		echo "Build location     :" $sf_file
 		echo
 		printf "${green}Build successfully detected!\n${nocol}"
 		echo

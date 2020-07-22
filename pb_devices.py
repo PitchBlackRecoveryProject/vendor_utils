@@ -2,7 +2,8 @@
 
 #
 # Python script for PBRP's Official Devices.
-# Copyright PitchBlackRecoveryProject <pitchblackrecovery@gmail.com>
+# 
+# Copyright (C) 2018, PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 
 import sys, json, urllib.request, shutil, os

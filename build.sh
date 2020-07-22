@@ -5,7 +5,7 @@
 #  Semi-AIO Script for Building PitchBlack Recovery in CircleCI
 #
 #  Copyright (C) 2019-2020, Rokib Hasan Sagar <rokibhasansagar2014@outlook.com>
-#                           PitchBlack Recovery Project <pitchblacktwrp@gmail.com>
+#                           PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -105,8 +105,8 @@ make -j$(nproc --all) recoveryimage
 echo -e "\nYummy Recovery is Served.\n"
 
 echo "Ready to Deploy"
-export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PitchBlack*-UNOFFICIAL.zip 2>/dev/null)
-export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PitchBlack*-OFFICIAL.zip 2>/dev/null)
+export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*-UNOFFICIAL.zip 2>/dev/null)
+export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*-OFFICIAL.zip 2>/dev/null)
 export BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
 export UPLOAD_PATH=$(pwd)/out/target/product/${CODENAME}/upload/
 

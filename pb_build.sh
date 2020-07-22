@@ -1,7 +1,6 @@
 #!/bin/bash
 # Copyright (C) 2018, Mohd Faraz <mohd.faraz.abc@gmail.com>
-# Copyright (C) 2018, PitchBlack-Recovery <pitchblackrecovery@gmail.com>
-# Copyright (C) 2018 ATG Droid  
+# Copyright (C) 2018, PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 # Custom build script
 #
@@ -58,7 +57,7 @@ if [ "$PBRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
 fi
 
 if [ "$PB_GO" != "true" ]; then
-    ZIP_NAME=PitchBlack-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
+    ZIP_NAME=PBRP-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
 else
     ZIP_NAME=PitchBlack-Go-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
 fi
