@@ -124,11 +124,15 @@ if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ -n $B
     ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Latest Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION} ${UPLOAD_PATH}
 elif [[ $TEST_BUILD == 'true' ]] && [[ -n $TEST_BUILDFILE ]]; then
     echo "Got the Unofficial Build: $TEST_BUILDFILE"
-    cp $TEST_BUILDFILE $UPLOAD_PATH
     export TEST_BUILDIMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
+    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
+    cp $TEST_BUILDIMG recovery.img
+    TEST_IT=$(curl -F'file=@recovery.img' https://0x0.st)
+    else
+    cp $TEST_BUILDFILE $UPLOAD_PATH
     cp $TEST_BUILDIMG $UPLOAD_PATH
-    SS=$(curl --upload-file ${TEST_BUILDIMG} https://transfer.sh/${CODENAME}_recovery.img)
-    #ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Test Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION}-test ${UPLOAD_PATH}
+    ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Test Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION}-test ${UPLOAD_PATH}
+    fi
 else
     echo -e "Something Wrong with your build system.\nPlease fix it." && exit 1
 fi
@@ -136,7 +140,11 @@ fi
 # SEND NOTIFICATION TO MAINTAINERS, AVAILABLE FOR TEAM DEVS ONLY
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ ! -z $TEST_BUILDFILE ]]; then
     echo -e "\nSending the Test build info in Maintainer Group\n"
-    TEST_LINK="${SS}"
+    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
+    TEST_LINK="${TEST_IT}"
+    else
+    TEST_LINK="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${VERSION}-test/$(echo $TEST_BUILDFILE | awk -F'[/]' '{print $NF}')"
+    fi
     MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
     if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n\n"; fi
