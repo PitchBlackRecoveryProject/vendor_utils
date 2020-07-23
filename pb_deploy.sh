@@ -73,7 +73,7 @@ if [[ "$zipcounter" > "0" ]]; then
 		echo
 		MD5=$(md5sum $sf_file | awk '{print $1}')
 		echo "Please Wait"
-		cd $(pwd)/vendor/pb;
+		cd $(pwd)/vendor/utils;
 		python3 pb_devices.py verify "$TARGET_VENDOR" "$codename"
 		if [[ "$?" == "0" ]]; then
 			echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create

@@ -55,6 +55,9 @@ time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
 # CLONE VENDOR REPO AGAIN FOR SAFEKEEPING
 rm -rf vendor/pb && git clone https://github.com/PitchBlackRecoveryProject/vendor_pb -b pb vendor/pb --depth=1
 
+# Hax for fixing building with less complexity
+cp vendor/utils/pb_build.sh vendor/pb/pb_build.sh && chmod +x vendor/pb/pb_build.sh
+
 echo -e "\nGetting the Device Tree on place"
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
     git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
@@ -116,23 +119,19 @@ fi
 
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ -n $BUILDFILE ]]; then
     echo "Got the Official Build: $BUILDFILE"
-    sudo chmod a+x vendor/pb/pb_deploy.sh
-    ./vendor/pb/pb_deploy.sh ${CODENAME} ${SFUserName} ${SFPassword} ${GITHUB_TOKEN} ${VERSION} ${MAINTAINER}
+    sudo chmod a+x vendor/utils/pb_deploy.sh
+    ./vendor/utils/pb_deploy.sh ${CODENAME} ${SFUserName} ${SFPassword} ${GITHUB_TOKEN} ${VERSION} ${MAINTAINER}
     cp $BUILDFILE $UPLOAD_PATH
     export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
     cp $BUILDFILE $UPLOAD_PATH
     ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Latest Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION} ${UPLOAD_PATH}
 elif [[ $TEST_BUILD == 'true' ]] && [[ -n $TEST_BUILDFILE ]]; then
     echo "Got the Unofficial Build: $TEST_BUILDFILE"
-    export TEST_BUILDIMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
-    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-    cp $TEST_BUILDIMG recovery.img
-    TEST_IT=$(curl -F'file=@recovery.img' https://0x0.st)
-    else
     cp $TEST_BUILDFILE $UPLOAD_PATH
+    export TEST_BUILDIMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
     cp $TEST_BUILDIMG $UPLOAD_PATH
-    ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Test Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION}-test ${UPLOAD_PATH}
-    fi
+    SS=$(curl --upload-file ${TEST_BUILDIMG} https://transfer.sh/${CODENAME}_recovery.img)
+    #ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Test Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION}-test ${UPLOAD_PATH}
 else
     echo -e "Something Wrong with your build system.\nPlease fix it." && exit 1
 fi
@@ -140,19 +139,15 @@ fi
 # SEND NOTIFICATION TO MAINTAINERS, AVAILABLE FOR TEAM DEVS ONLY
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ ! -z $TEST_BUILDFILE ]]; then
     echo -e "\nSending the Test build info in Maintainer Group\n"
-    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-    TEST_LINK="${TEST_IT}"
-    else
-    TEST_LINK="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${VERSION}-test/$(echo $TEST_BUILDFILE | awk -F'[/]' '{print $NF}')"
-    fi
+    TEST_LINK="${SS}"
     MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
     if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n\n"; fi
     MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
     if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-        cd vendor/pb; python3 telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
+        cd vendor/utils; python3 telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
     else
-        cd vendor/pb; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
+        cd vendor/utils; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
     fi
 fi
 

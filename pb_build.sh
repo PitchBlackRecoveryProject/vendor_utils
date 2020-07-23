@@ -27,7 +27,7 @@ purple='\e[0;35m'
 white='\e[0;37m'
 DATE=$(date +%Y%m%d-%H%M)
 VERSION=${VERSION:-2.9.1}
-PB_VENDOR=vendor/pb
+PB_VENDOR=vendor/utils
 PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
@@ -99,7 +99,7 @@ zip -r ${ZIP_NAME}.zip *
 BUILD_RESULT_STRING="BUILD SUCCESSFUL"
 BLINKBLUE="\033[0;5;34m";
 echo -e ${BLINKBLUE};
-cat ${OUT}/../../../../vendor/pb/.pb.1;
+cat ${OUT}/../../../../vendor/utils/.pb.1;
 echo -e "${nocol}";
 echo
 BUILD_END=$(date +"%s")

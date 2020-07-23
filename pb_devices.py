@@ -7,7 +7,7 @@
 
 import sys, json, urllib.request, shutil, os
 
-url = 'https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_pb/pb/pb_devices.json'
+url = 'https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/pb_devices.json'
 local_file = 'pb_devices.json'
 backup_file = 'pb_devices.json.bk'
 arguments = sys.argv
