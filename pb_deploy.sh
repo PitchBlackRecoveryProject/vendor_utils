@@ -33,6 +33,9 @@ purple='\e[0;35m'
 white='\e[0;37m'
 pb_sticker="CAACAgUAAx0CTgmBKwACAyde3OvBCdhSaw92OKfd-pl-LxNM3wACAQADRAdYGB8AAUtGlOKw8RoE"
 TWRP_V=$(cat $(pwd)/bootable/recovery/variables.h | grep TW_MAIN_VERSION_STR | awk '{print $3}' | head -1)
+
+gh="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest"
+
 # Install sshpass if not installed
 chksspb=$(which sshpass 2>/dev/null)
 if [[ "$chksspb" != "/usr/bin/sshpass" ]]; then
@@ -55,6 +58,7 @@ export NAME=$codename
 
 sf_file=$(find $(pwd)/out/target/product/$codename/PBRP*-OFFICIAL.zip 2>/dev/null)
 zipcounter=$(find $(pwd)/out/target/product/$codename/PBRP*-OFFICIAL.zip 2>/dev/null | wc -l)
+file_size=$( du -h $sf_file | awk '{print $1}' )
 
 if [[ "$zipcounter" > "0" ]]; then
 	if [[ "$zipcounter" > "1" ]]; then
@@ -80,7 +84,7 @@ if [[ "$zipcounter" > "0" ]]; then
 			if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pbrp/$codename/
 			then
 				echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
-				# TODO: Deploy to our PBRP Database.
+				curl -i -X POST 'https://us-central1-pbrp-prod.cloudfunctions.net/release' -H "Authorization: Bearer ${GCF_AUTH_KEY}" -H "Content-Type: application/json" --data "{\"codename\": \"$codename\", \"vendor\":\"$TARGET_VENDOR\", \"md5\": \"$MD5\", \"size\": \"$file_size\", \"sf_link\": \"$link\", \"gh_link\": \"$gh\",\"version\": \"$pbv\"}"
 				link="https://sourceforge.net/projects/pbrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
 				FORMAT="PitchBlack Recovery for \`$TARGET_VENDOR\` \`$TARGET_DEVICE\` (\`${NAME}\`)\n\nInfo\n\n"
 				FORMAT=${FORMAT}"PitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n"
