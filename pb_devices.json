@@ -31,25 +31,25 @@
       "maintainer": "PBRP Team"
     }
   },
-  "Coolpad": {
+  "coolpad": {
     "C106": {
       "name": "C1 Dual",
       "maintainer": "Mr.Anonymous"
     }
   },
-  "HTC": {
+  "htc": {
     "ime": {
       "name": "U12+",
       "maintainer": "Jean F. Rivera Ramos"
     }
   },
-  "Huawei": {
+  "huawei": {
     "kiwi": {
       "name": "Honor 5X",
       "maintainer": "PBRP Team"
     }
   },
-  "Lenovo": {
+  "lenovo": {
     "kuntao": {
       "name": "P2",
       "maintainer": "PBRP Team"
@@ -59,13 +59,13 @@
       "maintainer": "PBRP Team"
     }
   },
-  "LGE": {
+  "lge": {
     "lv517": {
       "name": "K20 Plus",
       "maintainer": "PBRP Team"
     }
   },
-  "Oneplus": {
+  "oneplus": {
     "enchilada": {
       "name": "6",
       "maintainer": "PBRP Team"
@@ -107,19 +107,19 @@
       "maintainer": "Satham Hussain"
     }
   },
-  "Redmi": {
+  "redmi": {
     "begonia": {
       "name": "Note 8 Pro",
       "maintainer": "Flamefusion"
     }
   },
-  "Tenor": {
+  "tenor": {
     "e": {
       "name": "E",
       "maintainer": "PBRP Team"
     }
   },
-  "Sony": {
+  "sony": {
     "dora": {
       "name": "F8131",
       "maintainer": "Erwin Abu Bakar Sidik"
@@ -129,7 +129,7 @@
       "maintainer": "Erwin Abu Bakar Sidik"
     }
   },
-  "Xiaomi": {
+  "xiaomi": {
     "beryllium": {
       "name": "Pocophone F1",
       "maintainer": "Mohd Faraz"
