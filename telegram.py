@@ -5,12 +5,13 @@ from os import environ
 import json
 
 def arg_parse():
-    global token, chat, message, mode, preview, caption, silent, photo, gif, video, note, audio, voice, file, send, out, sticker, button, a
+    global token, chat, message, mode, preview, caption, silent, photo, gif, video, note, audio, voice, file, send, out, sticker, button, a, animation
     switches = ArgumentParser()
     group = switches.add_mutually_exclusive_group(required=True)
     group.add_argument("-M", "--message", help="Text message")
     group.add_argument("-P", "--photo", help="Photo path")
     group.add_argument("-G", "--gif", help="GIF Photo path")
+    group.add_argument("-AN", "--animation", help="Animation Photo path")
     group.add_argument("-V", "--video", help="Video path")
     group.add_argument("-N", "--note", help="Video Note path")
     group.add_argument("-A", "--audio", help="Audio path")
@@ -43,6 +44,7 @@ def arg_parse():
     caption = args["caption"]
     sticker = args["sticker"]
     button = args["button"]
+    animation = args["animation"]
     if button is not None:
         button = button.split('|')
         a = {"inline_keyboard": [[{"text":button[0], "url": button[1]}],[{"text":"Chat", "url": "https://t.me/pbrpcom"},{"text":"Channel", "url": "https://t.me/pitchblackrecovery"}]]}
@@ -64,6 +66,8 @@ def arg_parse():
         send = "file"
     elif sticker is not None:
         send = "sticker"
+    elif animation is not None:
+        send = "animation"
 
 def send_message():
     global r, status, response
@@ -164,6 +168,17 @@ def send_message():
         )
         url = "https://api.telegram.org/bot" + token + "/sendSticker"
         r = post(url, params=params)
+    elif send == "animation":
+        files = {
+            'chat_id': (None, chat),
+            'caption': (None, caption),
+            'parse_mode': (None, mode),
+            'disable_notification': (None, silent),
+            'animation': (None, animation),
+            'reply_markup': (None, json.dumps(a)),
+        }
+        url = "https://api.telegram.org/bot" + token + "/sendAnimation"
+        r = post(url, files=files)
     else:
         print("Error!")
     status = r.status_code

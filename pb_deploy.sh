@@ -31,7 +31,7 @@ red='\033[0;31m'
 nocol='\033[0m'
 purple='\e[0;35m'
 white='\e[0;37m'
-pb_sticker="CAACAgUAAx0CTgmBKwACAyde3OvBCdhSaw92OKfd-pl-LxNM3wACAQADRAdYGB8AAUtGlOKw8RoE"
+pb_sticker="CgACAgUAAxkBAAEGz4JfH71DYT14IAaZ2LrTeShELhP2PgACzQADyrxgVybiOK2DvhIWGgQ"
 TWRP_V=$(cat $(pwd)/bootable/recovery/variables.h | grep TW_MAIN_VERSION_STR | awk '{print $3}' | head -1)
 
 gh="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest"
@@ -86,16 +86,27 @@ if [[ "$zipcounter" > "0" ]]; then
 				echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 				link="https://sourceforge.net/projects/pbrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
 				curl -i -X POST 'https://us-central1-pbrp-prod.cloudfunctions.net/release' -H "Authorization: Bearer ${GCF_AUTH_KEY}" -H "Content-Type: application/json" --data "{\"codename\": \"$codename\", \"vendor\":\"$VENDOR\", \"md5\": \"$MD5\", \"size\": \"$file_size\", \"sf_link\": \"$link\", \"gh_link\": \"$gh\",\"version\": \"$pbv\"}"
-				FORMAT="PitchBlack Recovery for \`$VENDOR\` \`$TARGET_DEVICE\` (\`${NAME}\`)\n\nInfo\n\n"
-				FORMAT=${FORMAT}"PitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n"
-				FORMAT=${FORMAT}"*Build Date*: \`${build:0:4}/${build:4:2}/${build:6}\`\n\n"
-				FORMAT=${FORMAT}"*Maintainer*: ${maintainer}\n\n"
+				FORMAT="PitchBlack Recovery for <b>$VENDOR $TARGET_DEVICE</b> (<code>${NAME}</code>)
+
+<b>Info</b>
+
+PitchBlack V${pbv} Official
+Based on TWRP ${TWRP_V}
+<b>Build Date</b>: <code>${build:0:4}/${build:4:2}/${build:6}</code>
+
+<b>Maintainer</b>: ${maintainer}
+
+"
 				if [[ ! -z $CHANGELOG ]]; then
-					FORMAT=${FORMAT}"\n*Changelog*:\n"${CHANGELOG}"\n"
+					FORMAT=${FORMAT}"
+<b>Changelog</b>:
+"${CHANGELOG}"
+"
 				fi
-				FORMAT=${FORMAT}"\n*MD5*: \`$MD5\`\n"
-				python3 telegram.py -c @pitchblackrecovery -M "$FORMAT" -D "Download|$link"
-				python3 telegram.py -c @pitchblackrecovery -S "$pb_sticker"
+				FORMAT=${FORMAT}"
+<b>MD5</b>: <code>$MD5</code>
+"
+				python3 telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "Download|$link" -m "HTML"
 			else
 				echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
 			fi
