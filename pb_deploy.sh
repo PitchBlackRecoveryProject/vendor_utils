@@ -86,6 +86,7 @@ if [[ "$zipcounter" > "0" ]]; then
 				echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
 				link="https://sourceforge.net/projects/pbrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
 				curl -i -X POST 'https://us-central1-pbrp-prod.cloudfunctions.net/release' -H "Authorization: Bearer ${GCF_AUTH_KEY}" -H "Content-Type: application/json" --data "{\"codename\": \"$codename\", \"vendor\":\"$VENDOR\", \"md5\": \"$MD5\", \"size\": \"$file_size\", \"sf_link\": \"$link\", \"gh_link\": \"$gh\",\"version\": \"$pbv\"}"
+				link="https://pitchblackrecovery.com/$(echo $codename | sed "s:_:-:g")"
 				FORMAT="PitchBlack Recovery for <b>$VENDOR $TARGET_DEVICE</b> (<code>${NAME}</code>)
 
 <b>Info</b>
