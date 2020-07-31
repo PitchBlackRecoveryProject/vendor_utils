@@ -237,6 +237,10 @@
     "riva": {
       "name": "Redmi 5A",
       "maintainer": "Erwin Abu Bakar Sidik"
+    },
+    "vince": {
+      "name": "Redmi 5 Plus",
+      "maintainer": "Kry9toN"
     }
   }
 }
