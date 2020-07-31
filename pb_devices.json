@@ -105,6 +105,10 @@
     "RMX1901": {
       "name": "Realme X",
       "maintainer": "Satham Hussain"
+    },
+    "RMX1941": {
+      "name": "Realme C2",
+      "maintainer": "Siddk"
     }
   },
   "redmi": {
