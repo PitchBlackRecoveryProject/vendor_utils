@@ -32,7 +32,6 @@ if [[ -z $CODENAME ]]; then echo -e "You haven't configured Device Codename." &&
 if [[ -z $BUILD_LUNCH && -z $FLAVOR ]]; then echo -e "Set at least one variable. BUILD_LUNCH or FLAVOR." && exit 1; fi
 
 [[ ! -d /home/builder/.ccache ]] && mkdir -p /home/builder/.ccache
-cd /home/builder/
 
 docker run --privileged -i --name worker --user builder \
   -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) \
