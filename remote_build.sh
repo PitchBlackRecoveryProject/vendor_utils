@@ -69,13 +69,7 @@ fi
 echo -e "Starting the CI Build Process...\n"
 [[ ! -d /tmp ]] && mkdir -p /tmp
 # Make a keepalive shell so that it can bypass CI Termination on output freeze
-cat << EOF > /tmp/keepalive.sh
-#!/bin/bash
-echo \$$ > /tmp/keepalive.pid # keep this so that it can be killed from other command
-while true; do
-  echo "." && sleep 300
-done
-EOF
+curl -sL https://gist.github.com/rokibhasansagar/cf8669411a1a57ba40c3090cd5146cd9/raw/keepalive.sh -o /tmp/keepalive.sh
 chmod a+x /tmp/keepalive.sh
 
 # sync
