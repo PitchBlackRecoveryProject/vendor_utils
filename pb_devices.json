@@ -216,7 +216,7 @@
     },
     "vince": {
       "name": "Redmi 5 Plus",
-      "maintainer": "PBRP Team"
+      "maintainer": "Kry9toN"
     },
     "violet": {
       "name": "Redmi Note 7 Pro",
@@ -237,10 +237,6 @@
     "riva": {
       "name": "Redmi 5A",
       "maintainer": "Erwin Abu Bakar Sidik"
-    },
-    "vince": {
-      "name": "Redmi 5 Plus",
-      "maintainer": "Kry9toN"
     }
   }
 }
