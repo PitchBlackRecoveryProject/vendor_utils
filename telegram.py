@@ -171,7 +171,7 @@ def send_message():
     elif send == "animation":
         files = {
             'chat_id': (None, chat),
-            'caption': (None, caption),
+            'caption': (None, caption.replace(r'\n', '\n')),
             'parse_mode': (None, mode),
             'disable_notification': (None, silent),
             'animation': (None, animation),
