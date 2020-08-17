@@ -112,7 +112,7 @@ mv ${PB_WORK_DIR}/${ZIP_NAME}.zip ${PB_WORK_DIR}/../${ZIP_NAME}.zip
 echo -e "$cyan****************************************************************************************$nocol"
 echo -e "$cyan*$nocol${green} ${BUILD_RESULT_STRING}$nocol"
 echo -e "$cyan*$nocol${green} RECOVERY LOCATION: ${OUT}/recovery.img$nocol"
-echo -e "$purple*$nocol${green} RECOVERY SIZE: $( du -h ${OUT}/recovery.img | awk '{print $1}' )$nocol"
+echo -e "$purple*$nocol${green} RECOVERY SIZE: $(ls -lh ${OUT}/recovery.img | awk '{print $5}')$nocol"
 echo -e "$cyan*$nocol${green} ZIP LOCATION: ${PB_WORK}/${ZIP_NAME}.zip$nocol"
 echo -e "$purple*$nocol${green} ZIP SIZE: $( du -h ${PB_WORK}/${ZIP_NAME}.zip | awk '{print $1}' )$nocol"
 echo -e "$cyan****************************************************************************************$nocol"
