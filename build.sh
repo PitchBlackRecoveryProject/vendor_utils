@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -eo pipefail
 ###
 #
 #  Semi-AIO Script for Building PitchBlack Recovery in CircleCI
@@ -45,15 +45,22 @@ rm -rf google-git-cookies
 fi
 
 echo -e "Starting the CI Build Process...\n"
+[[ ! -d /tmp ]] && mkdir -p /tmp
+# Make a keepalive shell so that it can bypass CI Termination on output freeze
+curl -sL https://gist.github.com/rokibhasansagar/cf8669411a1a57ba40c3090cd5146cd9/raw/keepalive.sh -o /tmp/keepalive.sh
+chmod a+x /tmp/keepalive.sh
 
 DIR=$(pwd)
-mkdir $(pwd)/work && cd work
+mkdir $(pwd)/android && cd android
 
+# sync
 echo -e "Initializing PBRP repo sync..."
-repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth=1
-time repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
-# CLONE VENDOR REPO AGAIN FOR SAFEKEEPING
-rm -rf vendor/pb && git clone https://github.com/PitchBlackRecoveryProject/vendor_pb -b pb vendor/pb --depth=1
+repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1
+/tmp/keepalive.sh & repo sync -c -q --force-sync --no-clone-bundle --no-tags -j6 #THREADCOUNT is only 2 in remote docker
+kill -s SIGTERM $(cat /tmp/keepalive.pid)
+
+# clean unneeded files
+rm -rf development/apps/ development/samples/ packages/apps/
 
 # Hax for fixing building with less complexity
 cp vendor/utils/pb_build.sh vendor/pb/pb_build.sh && chmod +x vendor/pb/pb_build.sh
@@ -62,7 +69,7 @@ echo -e "\nGetting the Device Tree on place"
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
     git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 else
-    git clone https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
+    git clone --quiet --progress https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 fi
 
 if [[ -n ${USE_SECRET_BOOTABLE} ]]; then
@@ -82,17 +89,17 @@ elif [[ -n ${PBRP_BRANCH} ]]; then
 fi
 
 if [[ -n $EXTRA_CMD ]]; then
-    eval "$EXTRA_CMD"
-    cd $DIR/work
+  eval "$EXTRA_CMD"
+  cd ${DIR}/android/
 fi
 
 echo -e "\nPreparing Delicious Lunch..."
 export ALLOW_MISSING_DEPENDENCIES=true
 source build/envsetup.sh
 if [[ -n $BUILD_LUNCH ]]; then
-    lunch ${BUILD_LUNCH}
+  lunch ${BUILD_LUNCH}
 elif [[ -n $FLAVOR ]]; then
-    lunch omni_${CODENAME}-${FLAVOR}
+  lunch omni_${CODENAME}-${FLAVOR}
 fi
 
 # Keep the whole .repo/manifests folder
@@ -101,7 +108,8 @@ echo "Cleaning up the .repo, no use of it now"
 rm -rf .repo
 mkdir -p .repo && mv manifests .repo/ && ln -s .repo/manifests/default.xml .repo/manifest.xml
 
-make -j$(nproc --all) recoveryimage
+/tmp/keepalive.sh & make -j6 recoveryimage
+kill -s SIGTERM $(cat /tmp/keepalive.pid)
 echo -e "\nYummy Recovery is Served.\n"
 
 echo "Ready to Deploy"
@@ -153,9 +161,9 @@ if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ ! -z 
     if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n\n"; fi
     MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
     if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-        cd vendor/utils; python3 telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
+        python3 vendor/utils/telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"
     else
-        cd vendor/utils; python3 telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"; cd $DIR/work
+        python3 vendor/utils/telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"
     fi
 fi
 
