@@ -18,6 +18,6 @@ docker run --privileged -i --name worker --user builder \
   --workdir /home/builder/ \
   fr3akyphantom/droid-builder:edge bash << EOF
 
-curl -sL https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/Tess/build.sh -o build.sh
+curl -sL https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/build.sh -o build.sh
 source build.sh
 EOF
