@@ -1,0 +1,8 @@
+[
+    {
+        "asset_name": "Magisk-{tag}.zip",
+        "gh_repo": "topjohnwu/Magisk",
+        "name": "Magisk",
+        "zip_name": "magisk.zip"
+    }
+]
