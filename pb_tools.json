@@ -3,7 +3,6 @@
         "asset_name": "Magisk-{tag}.zip",
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk",
-        "tag_name": "v20.4",
         "zip_name": "magisk.zip"
     }
 ]
