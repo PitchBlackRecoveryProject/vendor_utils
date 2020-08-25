@@ -6,7 +6,8 @@ name: Tools Updater
 # events but only for the master branch
 on:
   schedule:
-  - cron: "*/10 * * * *"
+  # Will run after end of the day
+  - cron: "0 0 * * *"
 
   push:
     branches:
@@ -35,8 +36,11 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Updation on Tools
       run: |
+        pip install requests
         python scripts/tools_updater.py update
         git add pb_tools.json
         git add PBRP/tools/*
+        git config --global user.email "pitchblackrecovery@gmail.com"
+        git config --global user.name "pbrp-bot"
         git commit -m "PBRP: Auto-Update Tools"
-        git push -q https://${{ secrets.GITHUB_TOKEN }}@github.com/PitchBlackRecoveryProject/PitchBlackRecoveryProject.github.io master
+        git push -q https://${{ secrets.GITHUB_TOKEN }}@github.com/PitchBlackRecoveryProject/vendor_utils pb
