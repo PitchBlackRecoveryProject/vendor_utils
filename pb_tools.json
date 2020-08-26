@@ -7,6 +7,12 @@
         "zip_name": "magisk.zip"
     },
     {
+        "asset_name": "Magisk-uninstaller-\\d+.zip",
+        "gh_repo": "topjohnwu/Magisk",
+        "name": "Magisk Uninstaller",
+        "zip_name": "unrootmagisk.zip"
+    },
+    {
         "asset_name": "MMRT-{tag}.zip",
         "gh_repo": "Pzqqt/Magisk_Manager_Recovery_Tool",
         "name": "Magisk Manager Recovery Tool",
