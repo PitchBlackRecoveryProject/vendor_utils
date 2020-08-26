@@ -5,5 +5,12 @@
         "name": "Magisk",
         "tag_name": "v20.4",
         "zip_name": "magisk.zip"
+    },
+    {
+        "asset_name": "MMRT-{tag}.zip",
+        "gh_repo": "Pzqqt/Magisk_Manager_Recovery_Tool",
+        "name": "Magisk Manager Recovery Tool",
+        "tag_name": "v2.3",
+        "zip_name": "magiskmanagerrecovery.zip"
     }
 ]
