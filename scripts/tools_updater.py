@@ -22,6 +22,7 @@
 import os
 import sys
 import json
+import re
 import requests
 
 tools_json = 'pb_tools.json'
@@ -37,13 +38,19 @@ def make_gh_link(repo):
 	return 'https://github.com/' + repo
 
 
-def make_gh_release_link(repo, asset_name, tag):
-	asset = asset_name.format(tag = tag)
+def make_gh_release_link(repo, asset_name, release_data):
+	asset = asset_name.format(tag = release_data['tag_name'])
+
+	for asset_obj in release_data['assets']:
+		if re.search(asset, asset_obj['browser_download_url']):
+			print(asset_obj['browser_download_url'])
+			return asset_obj['browser_download_url']
+
 	return f'https://github.com/{repo}/releases/latest/download/{asset}'
 
 
-def get_latest_tag(repo):
-	return json.loads(requests.get(f'https://api.github.com/repos/{repo}/releases/latest').text)['tag_name']
+def get_release_data(repo):
+	return json.loads(requests.get(f'https://api.github.com/repos/{repo}/releases/latest').text)
 
 
 def update_asset(zip_name, link):
@@ -86,11 +93,12 @@ def magic():
 		asset_name = obj['asset_name']
 		zip_name = obj['zip_name']
 		tag = obj['tag_name'] if 'tag_name' in obj else None
-		latest_tag = get_latest_tag(obj['gh_repo'])
+		release_data = get_release_data(obj['gh_repo'])
+		latest_tag = release_data['tag_name']
 
 		if latest_tag != tag:
 			print(f'Updating {name} from {tag} to {latest_tag}')
-			update_asset(zip_name, make_gh_release_link(gh_repo, asset_name, latest_tag))
+			update_asset(zip_name, make_gh_release_link(gh_repo, asset_name, release_data))
 			update_json(json, zip_name, latest_tag)
 			print(f'Updated {name} Successfully')
 
