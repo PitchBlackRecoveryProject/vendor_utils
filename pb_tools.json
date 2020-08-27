@@ -11,13 +11,14 @@
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk Uninstaller",
         "regex": "true",
-        "tag_name": "v20.3",
+        "tag_name": "v20.4",
         "zip_name": "unrootmagisk.zip"
     },
     {
         "asset_name": "MMRT-{tag}.zip",
         "gh_repo": "Pzqqt/Magisk_Manager_Recovery_Tool",
         "name": "Magisk Manager Recovery Tool",
+        "tag_name": "v2.3",
         "zip_name": "magiskmanagerrecovery.zip"
     }
 ]
