@@ -3,7 +3,7 @@
 name: Tools Updater
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for the pb branch
 on:
   schedule:
   # Will run after end of the day
@@ -11,9 +11,7 @@ on:
 
   push:
     branches:
-    - 'master'
-    ignore-paths:
-    - '_data/devices.json'
+    - 'pb'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -38,8 +36,7 @@ jobs:
       run: |
         pip install requests
         python scripts/tools_updater.py update
-        git add pb_tools.json
-        git add PBRP/tools/*
+        git add .
         git config --global user.email "pitchblackrecovery@gmail.com"
         git config --global user.name "pbrp-bot"
         git commit -m "PBRP: Auto-Update Tools"
