@@ -36,8 +36,4 @@ jobs:
       run: |
         pip install requests
         python scripts/tools_updater.py update
-        git add .
-        git config --global user.email "pitchblackrecovery@gmail.com"
-        git config --global user.name "pbrp-bot"
-        git commit -m "PBRP: Auto-Update Tools"
-        git push -q https://${{ secrets.GITHUB_TOKEN }}@github.com/PitchBlackRecoveryProject/vendor_utils pb
+        source update_tools.sh
