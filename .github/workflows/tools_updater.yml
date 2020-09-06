@@ -36,4 +36,4 @@ jobs:
       run: |
         pip install requests
         python scripts/tools_updater.py update
-        source update_tools.sh
+        source scripts/update_tools.sh
