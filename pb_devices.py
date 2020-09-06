@@ -14,6 +14,16 @@ arguments = sys.argv
 def invalid_arguments():
 	raise Exception("PB_DEVICES.PY: Use proper arguments.\n\n Available Commands:\n > pb_devices.py verify <vendor> <codename>.")
 
+def print_all_official():
+	response = urllib.request.urlopen(url)
+	data = json.loads(response.read().decode('utf-8'))
+	ven = data.keys()
+	cod = ""
+	for i in ven:
+		cod = json.loads(json.dumps(data[i])).keys()
+		for j in cod:
+			print(j)
+	return 0
 
 def verify_device(vendor, codename, maintainer = 0):
 	response = urllib.request.urlopen(url)
@@ -47,7 +57,6 @@ def verify_device(vendor, codename, maintainer = 0):
 			found = 0
 	else:
 		cod = ""
-		print (ven)
 		for i in ven:
 			cod = json.loads(json.dumps(data[i])).keys()
 			for j in cod:
@@ -64,7 +73,9 @@ def verify_device(vendor, codename, maintainer = 0):
 	return found
 
 
-if len(arguments) < 4:
+if len(arguments) == 2 and arguments[1] == 'print_all':
+	exit(print_all_official())
+elif len(arguments) < 4:
 	invalid_arguments()
 
 cmd = arguments[1]
