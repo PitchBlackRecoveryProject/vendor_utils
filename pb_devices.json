@@ -206,6 +206,10 @@
       "name": "Redmi 4X",
       "maintainer": "PBRP Team"
     },
+    "sirius": {
+      "name": "Mi 8 SE",
+      "maintainer": "Qisthi Iskandar Haqiki"
+    },
     "tulip": {
       "name": "Redmi Note 6 Pro",
       "maintainer": "PBRP Team"
