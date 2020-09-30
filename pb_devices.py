@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-
 #
 # Python script for PBRP's Official Devices.
-# 
+#
 # Copyright (C) 2018, PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 
@@ -10,6 +9,7 @@ import sys, json, urllib.request, shutil, os
 
 url = 'https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/pb_devices.json'
 arguments = sys.argv
+json_file = "/tmp/pb_devices.json"
 
 def invalid_arguments():
 	raise Exception("PB_DEVICES.PY: Use proper arguments.\n\n Available Commands:\n > pb_devices.py verify <vendor> <codename>.")
@@ -26,9 +26,9 @@ def print_all_official():
 	return 0
 
 def verify_device(vendor, codename, maintainer = 0):
-	response = urllib.request.urlopen(url)
+	with open(json_file, 'r') as f:
+		data = json.load(f)
 
-	data = json.loads(response.read().decode('utf-8'))
 	ven = data.keys()
 	found = 1
 	i = ''
