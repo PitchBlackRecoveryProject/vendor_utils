@@ -35,7 +35,7 @@ def verify_device(vendor, codename, maintainer = 0):
 	if vendor != "all":
 		for i in ven:
 			if i.casefold() == vendor.casefold():
-				found = 0;
+				found = 0
 				break
 		if found != 0:
 			return 1
@@ -61,11 +61,11 @@ def verify_device(vendor, codename, maintainer = 0):
 			cod = json.loads(json.dumps(data[i])).keys()
 			for j in cod:
 				if j.casefold() == codename.casefold():
-					found = 0;
+					found = 0
 					break
 			if found == 0:
 				cod = j
-				break;
+				break
 
 	if found == 0 and maintainer != 0:
 		print(data[ven][cod]["maintainer"]);

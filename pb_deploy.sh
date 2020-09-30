@@ -87,7 +87,7 @@ if [[ "$zipcounter" > "0" ]]; then
 				link="https://sourceforge.net/projects/pbrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
 				curl -i -X POST 'https://us-central1-pbrp-prod.cloudfunctions.net/release' -H "Authorization: Bearer ${GCF_AUTH_KEY}" -H "Content-Type: application/json" --data "{\"codename\": \"$codename\", \"vendor\":\"$VENDOR\", \"md5\": \"$MD5\", \"size\": \"$file_size\", \"sf_link\": \"$link\", \"gh_link\": \"$gh\",\"version\": \"$pbv\"}"
 				link="https://pitchblackrecovery.com/$(echo $codename | sed "s:_:-:g")"
-				FORMAT="PitchBlack Recovery for <b>$VENDOR $TARGET_DEVICE</b> (<code>${NAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${build:0:4}/${build:4:2}/${build:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
+				FORMAT="PitchBlack Recovery for <b>$TARGET_DEVICE</b> (<code>${NAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${build:0:4}/${build:4:2}/${build:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
 				if [[ ! -z $CHANGELOG ]]; then
 					FORMAT=${FORMAT}"\n<b>Changelog</b>:\n"${CHANGELOG}"\n"
 				fi
