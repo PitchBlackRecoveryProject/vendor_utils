@@ -138,10 +138,18 @@
       "name": "Xiaomi Pocophone F1",
       "maintainer": "Mohd Faraz"
     },
+	"curtana": {
+	  "name": "Xiaomi Redmi Note 9S",
+      "maintainer": "PBRP Team"
+	},
     "daisy": {
       "name": "Xiaomi Mi A2 Lite",
       "maintainer": "PBRP Team"
     },
+	"excalibur": {
+	  "name": "Xiaomi Redmi Note 9 Pro Max",
+      "maintainer": "PBRP Team"
+	},
     "dipper": {
       "name": "Xiaomi Mi 8",
       "maintainer": "PBRP Team"
@@ -150,6 +158,10 @@
       "name": "Xiaomi Redmi Note 8/8T",
       "maintainer": "PBRP Team"
     },
+	"gram": {
+	  "name": "Xiaomi Poco M2 Pro",
+      "maintainer": "PBRP Team"
+	},
     "ido": {
       "name": "Xiaomi Redmi 3",
       "maintainer": "Jubayer Ahmad Shvon"
@@ -158,7 +170,11 @@
       "name": "Xiaomi Mi A2",
       "maintainer": "PBRP Team"
     },
-    "kenzo": {
+	"joyeuse": {
+	  "name": "Xiaomi Redmi Note 9 Pro",
+      "maintainer": "PBRP Team"
+    },
+	"kenzo": {
       "name": "Xiaomi Redmi Note 3 Pro/SD",
       "maintainer": "PBRP Team"
     },
@@ -178,6 +194,11 @@
       "name": "Xiaomi Redmi Note 4/4X",
       "maintainer": "@shashank1436"
     },
+	"miatoll": {
+	  "name": "Xiaomi Redmi Note 9 Pro/9S/9 Pro Max/Poco M2 Pro",
+      "maintainer": "PBRP Team",
+	  "unified": ["joyeuse", "curtana", "gram", "excalibur"]
+	},
     "olive": {
       "name": "Xiaomi Redmi 8",
       "maintainer": "Afiqqo"
