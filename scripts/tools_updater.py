@@ -1,6 +1,6 @@
 #
 #  PBRP Tools Updater Script
-#  
+#
 #  Copyright (C) 2020-2021, Manjot Sidhu <manjot.techie@gmail.com>
 #                           PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
@@ -24,6 +24,7 @@ import sys
 import json
 import re
 import requests
+#import os.environ as env
 
 tools_json = 'pb_tools.json'
 tools_dir = 'PBRP/tools/'
@@ -83,11 +84,11 @@ def read_json():
 
 def magic():
 	print("PBRP Tools Updation Script v0.1\n---------------------------\n")
-	
+
 	if 'scripts' in os.getcwd():
 		os.chdir("../")
-
 	json = read_json()
+	msg_file = open("/tmp/up_details", "w", encoding="utf-8")
 	for obj in json:
 		name = obj['name']
 		gh_repo = obj['gh_repo']
@@ -100,9 +101,11 @@ def magic():
 
 		if latest_tag != tag:
 			print(f'Updating {name} from {tag} to {latest_tag}')
+			msg_file.write("\n\n * Updated " + name + " upto Version " + latest_tag)
 			update_asset(zip_name, make_gh_release_link(gh_repo, asset_name, release_data, regex))
 			update_json(json, zip_name, latest_tag)
 			print(f'Updated {name} Successfully')
+	msg_file.close()
 
 
 magic()
