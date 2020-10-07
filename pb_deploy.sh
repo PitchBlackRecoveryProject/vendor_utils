@@ -1,8 +1,11 @@
 #!/bin/bash
-# Copyright (C) 2018, Manjot Sidhu <manjot.gni@gmail.com>
-# Copyright (C) 2018, PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 # Custom Deploy Script for PBRP
+#
+# Copyright (C) 2019 - 2020, Manjot Sidhu <manjot.techie@gmail.com>
+#							 Rokib Hasan Sagar <rokibhasansagar2014@outlook.com>
+#							 Mohd Faraz <mohd.faraz.abc@gmail.com>
+# 					 		 PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 # This software is licensed under the terms of the GNU General Public
 # License version 2, as published by the Free Software Foundation, and
@@ -15,13 +18,8 @@
 #
 # Please maintain this if you use this script or any part of it
 #
-
-codename=$1
-sf_usr=$2
-sf_pwd=$3
-github_token=$4
-version=$5
-maintainer=$6
+# Required Arguments: BUILD_TYPE(OFFICIAL/BETA/TEST)
+DEPLOY_TYPE=$1
 
 blue='\033[0;34m'
 cyan='\033[0;36m'
@@ -31,75 +29,230 @@ red='\033[0;31m'
 nocol='\033[0m'
 purple='\e[0;35m'
 white='\e[0;37m'
-pb_sticker="https://thumbs.gfycat.com/NauticalMellowAlpineroadguidetigerbeetle-mobile.mp4"
+
+UPLOAD_PATH=$(pwd)/out/target/product/${CODENAME}/upload/
 TWRP_V=$(cat $(pwd)/bootable/recovery/variables.h | grep TW_MAIN_VERSION_STR | awk '{print $3}' | head -1)
 
-gh="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest"
+pb_sticker="https://thumbs.gfycat.com/NauticalMellowAlpineroadguidetigerbeetle-mobile.mp4"
 
-# Install sshpass if not installed
-chksspb=$(which sshpass 2>/dev/null)
-if [[ "$chksspb" != "/usr/bin/sshpass" ]]; then
-    echo
-    printf "Sshpass is required but not installed!\n\nInstalling sspass...\n"
-    echo
-    ID_LIKE="$(cut -d'=' -f2 <<<$(grep ID_LIKE= /etc/os-release))"
-    echo
-        if [ "$ID_LIKE" == "arch" ]; then
-            sudo pacman -S sshpass --noconfirm
-        elif [ "$ID_LIKE" = "debian" ]; then
-            sudo apt-get install sshpass -y
-        fi
-else true;
+
+# Validate and Prepare for deploy
+if [[ "$DEPLOY_TYPE" == "OFFICIAL" ]]; then
+	# Official Deploy = SF + GHR + WP + TG (Main Channel)
+
+	DEPLOY_TYPE_NAME="Official"
+	RELEASE_TAG={VERSION}
+	BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*-OFFICIAL.zip 2>/dev/null)
+
+elif [[ "$DEPLOY_TYPE" == "BETA" ]]; then
+	# Beta Deploy = SF + GHR + WP + TG (Beta Group)
+
+	DEPLOY_TYPE_NAME="Beta"
+	RELEASE_TAG={VERSION}-beta
+	BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*-UNOFFICIAL.zip 2>/dev/null)
+
+elif [[ "$DEPLOY_TYPE" == "TEST" ]]; then
+	# Test Deploy = GHR + TG (Device Maintainers Chat)
+
+	DEPLOY_TYPE_NAME="Test"
+	RELEASE_TAG={VERSION}-test
+	BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*-UNOFFICIAL.zip 2>/dev/null)
+
+else
+	echo -e "Wrong Arguments Given, Required Arguments: BUILD_TYPE(OFFICIAL/BETA/TEST)" && exit 1
 fi
 
-echo
+# Common Props
+BUILD_IMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
+MD5=$(md5sum $BUILDFILE | awk '{print $1}')
+FILE_SIZE=$( du -h $BUILDFILE | awk '{print $1}' )
+BUILD_DATE=$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')
+BUILD_DATETIME="$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')-$(echo "$BUILDFILE" | awk -F'[-]' '{print $5}')"
 
-export NAME=$codename
 
-sf_file=$(find $(pwd)/out/target/product/$codename/PBRP*-OFFICIAL.zip 2>/dev/null)
-zipcounter=$(find $(pwd)/out/target/product/$codename/PBRP*-OFFICIAL.zip 2>/dev/null | wc -l)
-file_size=$( du -h $sf_file | awk '{print $1}' )
+# Release Links
+gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest"
+sf_link="https://sourceforge.net/projects/pbrp/files/${CODENAME}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
+wp_link="https://pitchblackrecovery.com/$(echo $CODENAME | sed "s:_:-:g")"
+
+
+# Deploy on SourceForge
+function sf_deploy() {
+	echo -e "${green}Deploying on SourceForge!\n${nocol}"
+	
+	# Install sshpass if not installed
+	chksspb=$(which sshpass 2>/dev/null)
+	if [[ "$chksspb" != "/usr/bin/sshpass" ]]; then
+	    echo
+	    printf "Sshpass is required but not installed!\n\nInstalling sspass...\n"
+	    echo
+	    ID_LIKE="$(cut -d'=' -f2 <<<$(grep ID_LIKE= /etc/os-release))"
+	    echo
+	        if [ "$ID_LIKE" == "arch" ]; then
+	            sudo pacman -S sshpass --noconfirm
+	        elif [ "$ID_LIKE" = "debian" ]; then
+	            sudo apt-get install sshpass -y
+	        fi
+	else true;
+	fi
+
+	echo
+
+	# Don't know why :/
+	export NAME=$CODENAME
+
+	# SF Details
+	echo
+	echo "Build detected for :" $CODENAME
+	echo "PitchBlack version :" $pbv
+	echo "Build Date         :" $BUILD_DATE
+	echo "Build Location     :" $BUILDFILE
+	echo "MD5                :" $MD5
+	echo
+	
+	cd $(pwd)/vendor/utils;
+
+	# Check for Official
+	python3 pb_devices.py verify "$VENDOR" "$CODENAME"
+	if [[ "$?" == "0" ]]; then
+		echo "exit" | sshpass -p "${SFPassword}" ssh -tto StrictHostKeyChecking=no ${SFUserName}@shell.sourceforge.net create
+		if rsync -v --rsh="sshpass -p ${SFPassword} ssh -l ${SFUserName}" $BUILDFILE ${SFUserName}@shell.sourceforge.net:/home/frs/project/pbrp/$CODENAME/
+		then
+			echo -e "${green} Deployed On SOURCEFORGE SUCCESSFULLY\n${nocol}"
+			cd ../../
+			return 0
+		else
+			echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
+			cd ../../
+			return 1
+		fi
+	else
+		echo -e "${red} Device is not Official\n${nocol}"
+		cd ../../
+		return 2
+	fi
+}
+
+# Deploy on GitHub Releases
+function gh_deploy() {
+
+	# Prepare Upload directory for Github Releases
+	mkdir ${UPLOAD_PATH}
+
+	# Copy Required Files
+	cp $BUILDFILE $UPLOAD_PATH
+	cp $BUILD_IMG $UPLOAD_PATH
+
+	# If Samsung's Odin TAR available, copy it to our upload dir
+	BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
+	if [[ -n ${BUILD_FILE_TAR} ]]; then
+	    echo "Samsung's Odin Tar available: $BUILD_FILE_TAR"
+	    cp ${BUILD_FILE_TAR} ${UPLOAD_PATH}
+	fi
+
+	# Final Release
+	ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
+}
+
+
+# Deploy Official Build on Official Telegram Channel
+function tg_official_deploy() {
+	echo -e "${green}Deploying to Telegram!\n${nocol}"
+
+	FORMAT="PitchBlack Recovery for <b>$TARGET_DEVICE</b> (<code>${NAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${VERSION} ${DEPLOY_TYPE_NAME}\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${BUILD_DATE:0:4}/${BUILD_DATE:4:2}/${BUILD_DATE:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
+	if [[ ! -z $CHANGELOG ]]; then
+		FORMAT=${FORMAT}"\n<b>Changelog</b>:\n"${CHANGELOG}"\n"
+	fi
+	FORMAT=${FORMAT}"\n<b>MD5</b>: <code>$MD5</code>\n"
+	python3 vendor/utils/scripts/telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "Download|$link" -m "HTML"	
+
+	echo -e "${green}Deployed to Telegram SUCCESSFULLY!\n${nocol}"
+	return 0
+}
+
+
+# Deploy Beta Build on Official PBRP Testing Group
+function tg_beta_deploy() {
+	echo -e "${green}Deploying to Telegram!\n${nocol}"
+
+	FORMAT="PitchBlack Recovery for <b>$TARGET_DEVICE</b> (<code>${NAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${VERSION} ${DEPLOY_TYPE_NAME}\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${BUILD_DATE:0:4}/${BUILD_DATE:4:2}/${BUILD_DATE:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
+	if [[ ! -z $CHANGELOG ]]; then
+		FORMAT=${FORMAT}"\n<b>Changelog</b>:\n"${CHANGELOG}"\n"
+	fi
+	FORMAT=${FORMAT}"\n<b>MD5</b>: <code>$MD5</code>\n"
+	python3 vendor/utils/scripts/telegram.py -c @pbrp_testers -AN "$pb_sticker" -C "$FORMAT" -D "Download|$link" -m "HTML"	
+
+	echo -e "${green}Deployed to Telegram SUCCESSFULLY!\n${nocol}"
+	return 0
+}
+
+# Deploy Test Build on Official PBRP Device Maintainers Group
+function tg_test_deploy() {
+	echo -e "${green}Deploying to Telegram Device Maintainers Chat!\n${nocol}"
+
+    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
+    	cp $BUILD_IMG recovery.img
+        TEST_LINK=$(curl -F'file=@recovery.img' https://0x0.st)
+    else
+        TEST_LINK="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${RELEASE_TAG}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
+    fi
+    
+    MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
+    if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
+    if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n\n"; fi
+    
+    MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
+    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
+        python3 vendor/utils/telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"
+    else
+        python3 vendor/utils/telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"
+    fi
+
+    echo -e "${green}Deployed to Telegram SUCCESSFULLY!\n${nocol}"
+	return 0
+}
+
+# Deploy on PBRP Database for WP
+# NOTE: Must be called after sf_deploy
+function wp_deploy() {
+	echo -e "${green}Deploying to PBRP Database!\n${nocol}"
+
+	curl -i -X POST 'https://us-central1-pbrp-prod.cloudfunctions.net/release' -H "Authorization: Bearer ${GCF_AUTH_KEY}" -H "Content-Type: application/json" --data "{\"CODENAME\": \"$CODENAME\", \"vendor\":\"$VENDOR\", \"md5\": \"$MD5\", \"size\": \"$FILE_SIZE\", \"sf_link\": \"$sf_link\", \"gh_link\": \"$gh_link\",\"version\": \"$VERSION\", \"build_type\": \"$DEPLOY_TYPE\"}"
+
+	echo -e "${green}Deployed to PBRP Database SUCCESSFULLY!\n${nocol}"
+	return 0 
+}
+
+
+zipcounter=$(find $(pwd)/out/target/product/$CODENAME/PBRP*-OFFICIAL.zip 2>/dev/null | wc -l)
 
 if [[ "$zipcounter" > "0" ]]; then
 	if [[ "$zipcounter" > "1" ]]; then
 		printf "${red}More than one zips dected! Remove old build...\n${nocol}"
 	else
-		pbv=$(echo "$sf_file" | awk -F'[-]' '{print $3}')
-		build=$(echo "$sf_file" | awk -F'[-]' '{print $4}')
-		build_with_time="$(echo "$sf_file" | awk -F'[-]' '{print $4}')-$(echo "$sf_file" | awk -F'[-]' '{print $5}')"
-		echo
-		echo "Build detected for :" $codename
-		echo "PitchBlack version :" $pbv
-		echo "Build date         :" $build
-		echo "Build location     :" $sf_file
-		echo
-		printf "${green}Build successfully detected!\n${nocol}"
-		echo
-		MD5=$(md5sum $sf_file | awk '{print $1}')
-		echo "Please Wait"
-		cd $(pwd)/vendor/utils;
-		python3 pb_devices.py verify "$VENDOR" "$codename"
-		if [[ "$?" == "0" ]]; then
-			echo "exit" | sshpass -p "$sf_pwd" ssh -tto StrictHostKeyChecking=no $sf_usr@shell.sourceforge.net create
-			if rsync -v --rsh="sshpass -p $sf_pwd ssh -l $sf_usr" $sf_file $sf_usr@shell.sourceforge.net:/home/frs/project/pbrp/$codename/
-			then
-				echo -e "${green} UPLOADED TO SOURCEFORGE SUCCESSFULLY\n${nocol}"
-				link="https://sourceforge.net/projects/pbrp/files/${NAME}/$(echo $sf_file | awk -F'[/]' '{print $NF}')"
-				curl -i -X POST 'https://us-central1-pbrp-prod.cloudfunctions.net/release' -H "Authorization: Bearer ${GCF_AUTH_KEY}" -H "Content-Type: application/json" --data "{\"codename\": \"$codename\", \"vendor\":\"$VENDOR\", \"md5\": \"$MD5\", \"size\": \"$file_size\", \"sf_link\": \"$link\", \"gh_link\": \"$gh\",\"version\": \"$pbv\"}"
-				link="https://pitchblackrecovery.com/$(echo $codename | sed "s:_:-:g")"
-				FORMAT="PitchBlack Recovery for <b>$TARGET_DEVICE</b> (<code>${NAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${pbv} Official\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${build:0:4}/${build:4:2}/${build:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
-				if [[ ! -z $CHANGELOG ]]; then
-					FORMAT=${FORMAT}"\n<b>Changelog</b>:\n"${CHANGELOG}"\n"
-				fi
-				FORMAT=${FORMAT}"\n<b>MD5</b>: <code>$MD5</code>\n"
-				python3 telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "Download|$link" -m "HTML"
-			else
-				echo -e "${red} FAILED TO UPLOAD TO SOURCEFORGE\n${nocol}"
-			fi
+		# Time for Deployment!
+		if [[ "$DEPLOY_TYPE" == "OFFICIAL" ]]; then
+			# Official Deploy = SF + GHR + WP + TG (Main Channel)
+
+			if [[ sf_deploy != "0" ]]; then echo -e "Error in SourceForge Deployment." && exit 1; fi
+			if [[ gh_deploy != "0" ]]; then echo -e "Error in Github Releases Deployment." && exit 1; fi
+			if [[ wp_deploy != "0" ]]; then echo -e "Error in PBRP Website Deployment." && exit 1; fi
+			if [[ tg_official_deploy != "0" ]]; then echo -e "Error in Telegram Official Deployment." && exit 1; fi
+		elif [[ "$DEPLOY_TYPE" == "BETA" ]]; then
+			# Beta Deploy = SF + GHR + WP + TG (Beta Group)
+
+			if [[ sf_deploy != "0" ]]; then echo -e "Error in SourceForge Deployment." && exit 1; fi
+			if [[ gh_deploy != "0" ]]; then echo -e "Error in Github Releases Deployment." && exit 1; fi
+			if [[ wp_deploy != "0" ]]; then echo -e "Error in PBRP Website Deployment." && exit 1; fi
+			if [[ tg_beta_deploy != "0" ]]; then echo -e "Error in Telegram Beta Deployment." && exit 1; fi
+		elif [[ "$DEPLOY_TYPE" == "TEST" ]]; then
+			# Test Deploy = GHR + TG (Device Maintainers Chat)
+
+			if [[ gh_deploy != "0" ]]; then echo -e "Error in Github Releases Deployment." && exit 1; fi
+			if [[ tg_test_deploy != "0" ]]; then echo -e "Error in Telegram Test Deployment." && exit 1; fi
 		else
-			echo -e "${red} Device is not Official\n${nocol}"
+			echo -e "Wrong Arguments Given, Required Arguments: BUILD_TYPE(OFFICIAL/BETA/TEST)" && exit 1
 		fi
-		cd ../../
 	fi
 else
 	echo

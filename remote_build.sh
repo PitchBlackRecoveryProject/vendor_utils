@@ -12,6 +12,7 @@ docker run --privileged -i --name worker --user builder \
   -e BUILD_LUNCH="${BUILD_LUNCH}" -e FLAVOR="${FLAVOR}" \
   -e MAINTAINER="${MAINTAINER}" -e CHANGELOG="${CHANGELOG}" \
   -e TEST_BUILD="${TEST_BUILD}" -e PB_OFFICIAL="${PB_OFFICIAL}" \
+  -e BETA_BUILD="${BETA_BUILD}" \
   -e PB_ENGLISH="${PB_ENGLISH}" -e EXTRA_CMD="${EXTRA_CMD}" -e BOT_API="${BOT_API}" \
   -v "${pwd}:/home/builder/:rw,Z" \
   -v "/home/builder/.ccache:/srv/ccache:rw" \
