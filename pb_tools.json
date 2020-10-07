@@ -3,7 +3,7 @@
         "asset_name": "Magisk-{tag}.zip",
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk",
-        "tag_name": "manager-v8.0.1",
+        "tag_name": "v21.0",
         "zip_name": "magisk.zip"
     },
     {
@@ -11,7 +11,7 @@
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk Uninstaller",
         "regex": "true",
-        "tag_name": "manager-v8.0.1",
+        "tag_name": "v21.0",
         "zip_name": "unrootmagisk.zip"
     },
     {
