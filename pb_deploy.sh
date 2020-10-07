@@ -145,13 +145,14 @@ function gh_deploy() {
 
 	# If Samsung's Odin TAR available, copy it to our upload dir
 	BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
-	if [[ -n ${BUILD_FILE_TAR} ]]; then
+	if [[ ! -z ${BUILD_FILE_TAR} ]]; then
 	    echo "Samsung's Odin Tar available: $BUILD_FILE_TAR"
 	    cp ${BUILD_FILE_TAR} ${UPLOAD_PATH}
 	fi
 
 	# Final Release
 	ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
+	return $?
 }
 
 
@@ -203,9 +204,9 @@ function tg_test_deploy() {
     
     MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
     if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-        python3 vendor/utils/telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"
+        python3 vendor/utils/scripts/telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"
     else
-        python3 vendor/utils/telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"
+        python3 vendor/utils/scripts/telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"
     fi
 
     echo -e "${green}Deployed to Telegram SUCCESSFULLY!\n${nocol}"
@@ -223,8 +224,11 @@ function wp_deploy() {
 	return 0 
 }
 
-
-zipcounter=$(find $(pwd)/out/target/product/$CODENAME/PBRP*-OFFICIAL.zip 2>/dev/null | wc -l)
+if [[ "$DEPLOY_TYPE" == "OFFICIAL" ]]; then
+	zipcounter=$(find $(pwd)/out/target/product/$CODENAME/PBRP*-OFFICIAL.zip 2>/dev/null | wc -l)
+else
+	zipcounter=$(find $(pwd)/out/target/product/$CODENAME/PBRP*-UNOFFICIAL.zip 2>/dev/null | wc -l)
+fi
 
 if [[ "$zipcounter" > "0" ]]; then
 	if [[ "$zipcounter" > "1" ]]; then
@@ -234,22 +238,22 @@ if [[ "$zipcounter" > "0" ]]; then
 		if [[ "$DEPLOY_TYPE" == "OFFICIAL" ]]; then
 			# Official Deploy = SF + GHR + WP + TG (Main Channel)
 
-			if [[ sf_deploy != "0" ]]; then echo -e "Error in SourceForge Deployment." && exit 1; fi
-			if [[ gh_deploy != "0" ]]; then echo -e "Error in Github Releases Deployment." && exit 1; fi
-			if [[ wp_deploy != "0" ]]; then echo -e "Error in PBRP Website Deployment." && exit 1; fi
-			if [[ tg_official_deploy != "0" ]]; then echo -e "Error in Telegram Official Deployment." && exit 1; fi
+			[ sf_deploy != "0" ] && echo -e "Error in SourceForge Deployment." || exit 1
+			[ gh_deploy != "0" ] && echo -e "Error in GitHub Releases Deployment." || exit 1
+			[ wp_deploy != "0" ] && echo -e "Error in PBRP Website Deployment." || exit 1
+			[ tg_official_deploy != "0" ] && echo -e "Error in Telegram Official Deployment." || exit 1
 		elif [[ "$DEPLOY_TYPE" == "BETA" ]]; then
 			# Beta Deploy = SF + GHR + WP + TG (Beta Group)
 
-			if [[ sf_deploy != "0" ]]; then echo -e "Error in SourceForge Deployment." && exit 1; fi
-			if [[ gh_deploy != "0" ]]; then echo -e "Error in Github Releases Deployment." && exit 1; fi
-			if [[ wp_deploy != "0" ]]; then echo -e "Error in PBRP Website Deployment." && exit 1; fi
-			if [[ tg_beta_deploy != "0" ]]; then echo -e "Error in Telegram Beta Deployment." && exit 1; fi
+			[ sf_deploy != "0" ] && echo -e "Error in SourceForge Deployment." || exit 1
+			[ gh_deploy != "0" ] && echo -e "Error in GitHub Releases Deployment." || exit 1
+			[ wp_deploy != "0" ] && echo -e "Error in PBRP Website Deployment." || exit 1
+			[ tg_beta_deploy != "0" ] && echo -e "Error in Telegram Beta Deployment." || exit 1
 		elif [[ "$DEPLOY_TYPE" == "TEST" ]]; then
 			# Test Deploy = GHR + TG (Device Maintainers Chat)
 
-			if [[ gh_deploy != "0" ]]; then echo -e "Error in Github Releases Deployment." && exit 1; fi
-			if [[ tg_test_deploy != "0" ]]; then echo -e "Error in Telegram Test Deployment." && exit 1; fi
+			[ gh_deploy != "0" ] && echo -e "Error in GitHub Releases Deployment." || exit 1
+			[ tg_test_deploy != "0" ] && echo -e "Error in Telegram Test Deployment." || exit 1
 		else
 			echo -e "Wrong Arguments Given, Required Arguments: BUILD_TYPE(OFFICIAL/BETA/TEST)" && exit 1
 		fi
