@@ -58,9 +58,14 @@ def get_release_data(repo):
 def update_asset(zip_name, link):
 	print(f"Downloading {zip_name}")
 	r = requests.get(link, allow_redirects=True)
-	os.remove(tools_dir + zip_name)
-	open(tools_dir + zip_name, 'wb').write(r.content)
-	print(f"Downloaded {zip_name}")
+
+	if r.status_code == 200:
+		os.remove(tools_dir + zip_name)
+		open(tools_dir + zip_name, 'wb').write(r.content)
+		print(f"Downloaded {zip_name}")
+		return True
+	else:
+		return False
 
 
 def update_json(new_content, zip_name, new_tag):
@@ -101,10 +106,16 @@ def magic():
 
 		if latest_tag != tag:
 			print(f'Updating {name} from {tag} to {latest_tag}')
-			msg_file.write("\n\n * Updated " + name + " upto Version " + latest_tag)
-			update_asset(zip_name, make_gh_release_link(gh_repo, asset_name, release_data, regex))
-			update_json(json, zip_name, latest_tag)
-			print(f'Updated {name} Successfully')
+			result = update_asset(zip_name, make_gh_release_link(gh_repo, asset_name, release_data, regex))
+			
+			if result:
+				update_json(json, zip_name, latest_tag)
+				msg_file.write("\n\n * Updated " + name + " upto Version " + latest_tag)
+				print(f'Updated {name} Successfully')
+			else:
+				# TODO: FIX Issue when a single repo releases multiple tag variants.
+				print(f'Failed to update {name} due to some error')
+
 	msg_file.close()
 
 
