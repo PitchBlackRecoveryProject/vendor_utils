@@ -46,8 +46,11 @@ def arg_parse():
     button = args["button"]
     animation = args["animation"]
     if button is not None:
-        button = button.split('|')
-        a = {"inline_keyboard": [[{"text":button[0], "url": button[1]}],[{"text":"Chat", "url": "https://t.me/pbrpcom"},{"text":"Channel", "url": "https://t.me/pitchblackrecovery"}]]}
+        buttons = button.split('!')
+        b1 = buttons[0].split('|')
+        b2 = buttons[1].split('|')
+        b3 = buttons[2].split('|')
+        a = {"inline_keyboard": [[{"text":b1[0], "url": b1[1]}],[{"text":b2[0], "url": b2[1] },{"text":b3[0], "url": b3[1]}]]}
     if message is not None:
         send = "text"
     elif photo is not None:

@@ -117,11 +117,11 @@ sudo chmod a+x vendor/utils/pb_deploy.sh
 
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
     if [[ $TEST_BUILD == 'true' ]]; then
-        ./vendor/utils/pb_deploy.sh TEST
+        ./vendor/utils/pb_deploy.sh TEST $VENDOR $CODENAME
     elif [[ $BETA_BUILD == 'true' ]]; then
-        ./vendor/utils/pb_deploy.sh BETA
+        ./vendor/utils/pb_deploy.sh BETA $VENDOR $CODENAME
     elif [[ $PB_OFFICIAL == 'true' ]]; then
-        ./vendor/utils/pb_deploy.sh OFFICIAL
+        ./vendor/utils/pb_deploy.sh OFFICIAL $VENDOR $CODENAME
     fi
 fi
 

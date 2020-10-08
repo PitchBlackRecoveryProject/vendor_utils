@@ -1,6 +1,6 @@
 #!/bin/bash
-# Copyright (C) 2018, Mohd Faraz <mohd.faraz.abc@gmail.com>
-# Copyright (C) 2018, PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
+# Copyright (C) 2018-2020, Mohd Faraz <mohd.faraz.abc@gmail.com>
+# PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 # Custom build script
 #
@@ -31,30 +31,48 @@ PB_WORK=$OUT
 PB_WORK_DIR=$OUT/zip
 RECOVERY_IMG=$OUT/recovery.img
 RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
+CURR_W=$(pwd)
+cd ${OUT}/../../../../
 AB_OTA="false"
 AB_OTA=$AB_OTA_UPDATER
 unset AB_OTA_UPDATER
 export PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 
-PBRP_BUILD_TYPE=UNOFFICIAL
+function get_build_var()
+{
+  SOONG_BASH_UI=build/soong/soong_ui.bash
+  if [ -f $SOONG_BASH_UI ]; then
+    (build/soong/soong_ui.bash --dumpvar-mode $1)
+    return
+  fi
+  (CALLED_FROM_SETUP=true BUILD_SYSTEM=build/core \
+    command make --no-print-directory -f build/core/config.mk dumpvar-$1)
+}
 
-if [ "$PB_OFFICIAL_CH" != "true" ]; then
-	PBRP_BUILD_TYPE=UNOFFICIAL
+PBRP_BUILD_TYPE=UNOFFICIAL
+if [ -z $BETA_BUILD ]; then
+	PB_BETA=$(get_build_var BETA_BUILD)
 else
+	PB_BETA=${BETA_BUILD}
+fi
+if [ "$PB_OFFICIAL_CH" == "true" ]; then
 	PBRP_BUILD_TYPE=OFFICIAL
+elif [ "$PB_BETA" == "true" ]; then
+	PBRP_BUILD_TYPE=BETA
+else
+	PBRP_BUILD_TYPE=UNOFFICIAL
 fi
 
 if [ "$PBRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
 	python3 $PB_VENDOR/pb_devices.py verify all $PB_DEVICE
 
-	if [[ "$?" == "0" ]]; then
-		PBRP_BUILD_TYPE=OFFICIAL
-	else
+	if [[ "$?" != "0" ]]; then
 		PBRP_BUILD_TYPE=UNOFFICIAL
 		echo -e "${red}Error Device is not OFFICIAL${nocol}"
 		exit 1;
 	fi
 fi
+cd $CURR_W
 
 if [ "$PB_GO" != "true" ]; then
     ZIP_NAME=PBRP-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
