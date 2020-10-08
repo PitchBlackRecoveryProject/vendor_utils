@@ -120,7 +120,7 @@ if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
         ./vendor/utils/pb_deploy.sh TEST
     elif [[ $BETA_BUILD == 'true' ]]; then
         ./vendor/utils/pb_deploy.sh BETA
-    else
+    elif [[ $PB_OFFICIAL == 'true' ]]; then
         ./vendor/utils/pb_deploy.sh OFFICIAL
     fi
 fi
