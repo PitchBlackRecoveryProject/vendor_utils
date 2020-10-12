@@ -113,59 +113,16 @@ kill -s SIGTERM $(cat /tmp/keepalive.pid)
 echo -e "\nYummy Recovery is Served.\n"
 
 echo "Ready to Deploy"
-export TEST_BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*-UNOFFICIAL.zip 2>/dev/null)
-export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*-OFFICIAL.zip 2>/dev/null)
-export BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
-export UPLOAD_PATH=$(pwd)/out/target/product/${CODENAME}/upload/
+sudo chmod a+x vendor/utils/pb_deploy.sh
 
-mkdir ${UPLOAD_PATH}
-
-if [[ -n ${BUILD_FILE_TAR} ]]; then
-    echo "Samsung's Odin Tar available: $BUILD_FILE_TAR"
-    cp ${BUILD_FILE_TAR} ${UPLOAD_PATH}
-fi
-
-if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ -n $BUILDFILE ]]; then
-    echo "Got the Official Build: $BUILDFILE"
-    sudo chmod a+x vendor/utils/pb_deploy.sh
-    ./vendor/utils/pb_deploy.sh ${CODENAME} ${SFUserName} ${SFPassword} ${GITHUB_TOKEN} ${VERSION} ${MAINTAINER}
-    cp $BUILDFILE $UPLOAD_PATH
-    export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
-    cp $BUILDFILE $UPLOAD_PATH
-    ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Latest Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION} ${UPLOAD_PATH}
-elif [[ $TEST_BUILD == 'true' ]] && [[ -n $TEST_BUILDFILE ]]; then
-    echo "Got the Unofficial Build: $TEST_BUILDFILE"
-    export TEST_BUILDIMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
-    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-    cp $TEST_BUILDIMG recovery.img
-    TEST_IT=$(curl -F'file=@recovery.img' https://0x0.st)
-    else
-    cp $TEST_BUILDFILE $UPLOAD_PATH
-    cp $TEST_BUILDIMG $UPLOAD_PATH
-    ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "Test Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION}-test ${UPLOAD_PATH}
-    fi
-else
-    echo -e "Something Wrong with your build system.\nPlease fix it." && exit 1
-fi
-
-# SEND NOTIFICATION TO MAINTAINERS, AVAILABLE FOR TEAM DEVS ONLY
-if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]] && [[ ! -z $TEST_BUILDFILE ]]; then
-    echo -e "\nSending the Test build info in Maintainer Group\n"
-    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-    TEST_LINK="${TEST_IT}"
-    else
-    TEST_LINK="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${VERSION}-test/$(echo $TEST_BUILDFILE | awk -F'[/]' '{print $NF}')"
-    fi
-    MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
-    if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
-    if [[ ! -z $CHANGELOG ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Changelog:\n"${CHANGELOG}"\n\n"; fi
-    MAINTAINER_MSG=${MAINTAINER_MSG}"Go to ${TEST_LINK} to download it."
-    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-        python3 vendor/utils/telegram.py -c "-1001465331122" -M "$MAINTAINER_MSG" -m "HTML"
-    else
-        python3 vendor/utils/telegram.py -c "-1001228903553" -M "$MAINTAINER_MSG" -m "HTML"
+if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
+    if [[ $TEST_BUILD == 'true' ]]; then
+        ./vendor/utils/pb_deploy.sh TEST $VENDOR $CODENAME
+    elif [[ $BETA_BUILD == 'true' ]]; then
+        ./vendor/utils/pb_deploy.sh BETA $VENDOR $CODENAME
+    elif [[ $PB_OFFICIAL == 'true' ]]; then
+        ./vendor/utils/pb_deploy.sh OFFICIAL $VENDOR $CODENAME
     fi
 fi
 
 echo -e "\n\nAll Done Gracefully\n\n"
-
