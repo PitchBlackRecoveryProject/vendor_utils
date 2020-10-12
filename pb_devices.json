@@ -186,6 +186,10 @@
       "name": "Xiaomi Redmi 7/Y3",
       "maintainer": "TheSync"
     },
+    "phoenix": {
+      "name": "Xiaomi Redmi K30/Poco X2",
+      "maintainer": "PBRP Team"
+    },
     "pine": {
       "name": "Xiaomi Redmi 7A",
       "maintainer": "AOiSPdev"
