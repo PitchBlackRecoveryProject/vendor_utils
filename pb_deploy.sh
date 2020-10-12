@@ -38,7 +38,9 @@ if [ ! -d "$(pwd)/out/target/product/${CODENAME}/" ]; then
 fi
 curl https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/pb_devices.json > /tmp/pb_devices.json
 maintainer=$(python3 vendor/utils/pb_devices.py verify $VENDOR $CODENAME true)
-echo $maintainer
+
+[ -z ${CIRCLE_PROJECT_USERNAME} ] && CIRCLE_PROJECT_USERNAME=PitchBlackRecoveryProject
+[ -z ${CIRCLE_PROJECT_REPONAME} ] && CIRCLE_PROJECT_REPONAME=android_device_${VENDOR}_${CODENAME}-pbrp
 
 if [ -z ${GITHUB_TOKEN} ] || [ -z ${BOT_API} ]; then
 	echo "Make sure all ENV variables (GITHUB_TOKEN/BOT_API) are available"
@@ -79,6 +81,14 @@ else
 	echo -e "Wrong Build Type Given, Required Build Type: OFFICIAL/BETA/TEST" && exit 1
 fi
 
+function get_device_name () {
+	local DEVICE=$(cat /tmp/pb_devices.json | grep $1 -A 3 | grep name | awk -F[\"] '{print $4}')
+	echo "$DEVICE"
+}
+
+function get_vendor () {
+	echo "$(echo ${1} | cut -d' ' -f1)"
+}
 # Common Props
 BUILD_IMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
 MD5=$(md5sum $BUILDFILE | awk '{print $1}')
@@ -87,6 +97,7 @@ BUILD_DATE=$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')
 BUILD_DATETIME="$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')-$(echo "$BUILDFILE" | awk -F'[-]' '{print $5}')"
 TARGET_DEVICE=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep name | awk -F[\"] '{print $4}')
 BUILD_NAME=$(echo ${BUILDFILE} | awk -F['/'] '{print $NF}')
+DEVICES=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep unified | awk -F[\"] '{ for (i=4; i<NF; i=i+2) print $i }')
 
 # Release Links
 gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
@@ -99,8 +110,25 @@ if [[ ! -z $CHANGELOG ]]; then
 	FORMAT=${FORMAT}"\n<b>Changelog</b>:\n"${CHANGELOG}"\n"
 fi
 FORMAT=${FORMAT}"\n<b>MD5</b>: <code>$MD5</code>\n"
-
-
+BUTTONS=
+#Special format for unifieds
+if [ ! -z "$DEVICES" ]; then
+	UNIFORMAT="PitchBlack Recovery for <b>$(get_vendor $(get_device_name $(echo $DEVICES | cut -d' ' -f1)))</b>"
+	TAGS=
+	for i in $DEVICES; do
+		TARGET_DEVICE=$(cat /tmp/pb_devices.json | grep -i ${i}  -A 1 | grep name | awk -F[\"] '{print $4}' | cut -d' ' -f2-)
+		UNIFORMAT="${UNIFORMAT} <b>$TARGET_DEVICE</b> /"
+		TAGS="${TAGS}#${i}    "
+		wp_link="https://pitchblackrecovery.com/$(echo $i | sed "s:_:-:g")"
+		BUTTONS="${BUTTONS}$i|$wp_link!"
+	done
+	UNIFORMAT="${UNIFORMAT:0:-1} (<code>${CODENAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${VERSION} <b>${DEPLOY_TYPE_NAME}</b>\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${BUILD_DATE:0:4}/${BUILD_DATE:4:2}/${BUILD_DATE:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
+	if [[ ! -z $CHANGELOG ]]; then
+		UNIFORMAT=${UNIFORMAT}"\n<b>Changelog</b>:\n"${CHANGELOG}"\n"
+	fi
+	UNIFORMAT=${UNIFORMAT}"\n<b>MD5</b>: <code>$MD5</code>\n\n${TAGS}\n"
+	FORMAT=$UNIFORMAT
+fi
 
 # Deploy on SourceForge
 function sf_deploy() {
@@ -191,13 +219,7 @@ function gh_deploy() {
 	fi
 
 	# Final Release
-	if [ "$CIRCLECI" != "true" ]; then
-		gh_link="https://github.com/PitchBlackRecoveryProject/android_device_${VENDOR}_${CODENAME}-pbrp/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
-		ghr -t ${GITHUB_TOKEN} -u PitchBlackRecoveryProject -r android_device_${VENDOR}_${CODENAME}-pbrp -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -delete ${RELEASE_TAG} ${UPLOAD_PATH}
-	else
-		gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
-		ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
-	fi
+	ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
 
 	return "$?"
 }
@@ -207,7 +229,11 @@ function gh_deploy() {
 function tg_official_deploy() {
 	echo -e "${green}Deploying to Telegram!\n${nocol}"
 
-	python3 vendor/utils/scripts/telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "Download|${wp_link}!Chat|https://t.me/pbrpcom!Channel|https://t.me/pitchblackrecovery" -m "HTML"
+	if [ -z "$DEVICES" ]; then
+		python3 vendor/utils/scripts/telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "Download|${wp_link}!Chat|https://t.me/pbrpcom!Channel|https://t.me/pitchblackrecovery" -m "HTML"
+	else
+		python3 vendor/utils/scripts/telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "${BUTTONS}Chat|https://t.me/pbrpcom!Channel|https://t.me/pitchblackrecovery" -m "HTML"
+	fi
 
 	echo -e "${green}Deployed to Telegram SUCCESSFULLY!\n${nocol}"
 	return 0
@@ -218,7 +244,12 @@ function tg_official_deploy() {
 function tg_beta_deploy() {
 	echo -e "${green}Deploying to Telegram!\n${nocol}"
 
-	python3 vendor/utils/scripts/telegram.py -c "-1001270222037" -AN "$pb_sticker" -C "$FORMAT" -D "Download|$wp_link!Beta Chat|https://t.me/pbrp_testers!Channel|https://t.me/joinchat/AAAAAEu2DNXX-P7RgFWBcw" -m "HTML"	
+	if [ -z "$DEVICES" ]; then
+		python3 vendor/utils/scripts/telegram.py -c "-1001270222037" -AN "$pb_sticker" -C "$FORMAT" -D "Download|$wp_link!Beta Chat|https://t.me/pbrp_testers!Channel|https://t.me/joinchat/AAAAAEu2DNXX-P7RgFWBcw" -m "HTML"
+	else
+		python3 vendor/utils/scripts/telegram.py -c "-1001270222037" -AN "$pb_sticker" -C "$FORMAT" -D "${BUTTONS}Beta Chat|https://t.me/pbrp_testers!Channel|https://t.me/joinchat/AAAAAEu2DNXX-P7RgFWBcw" -m "HTML"
+	fi
+
 
 	echo -e "${green}Deployed to Telegram SUCCESSFULLY!\n${nocol}"
 	return 0

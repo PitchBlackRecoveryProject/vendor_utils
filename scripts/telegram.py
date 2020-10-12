@@ -45,12 +45,17 @@ def arg_parse():
     sticker = args["sticker"]
     button = args["button"]
     animation = args["animation"]
+    a = {"inline_keyboard": [[]]}
     if button is not None:
         buttons = button.split('!')
-        b1 = buttons[0].split('|')
-        b2 = buttons[1].split('|')
-        b3 = buttons[2].split('|')
-        a = {"inline_keyboard": [[{"text":b1[0], "url": b1[1]}],[{"text":b2[0], "url": b2[1] },{"text":b3[0], "url": b3[1]}]]}
+        btn_c = 0;
+        for index in range(0, len(buttons) - 2):
+            if index % 2 == 0 and index != 0:
+                btn_c = btn_c + 1
+                a["inline_keyboard"].append([])
+            button = buttons[index].split('|')
+            a["inline_keyboard"][btn_c].append({"text": button[0], "url": button[1]})
+        a["inline_keyboard"].append([{"text":buttons[-2].split('|')[0], "url": buttons[-2].split('|')[1]}, {"text": buttons[-1].split('|')[0], "url": buttons[-1].split('|')[1]}])
     if message is not None:
         send = "text"
     elif photo is not None:
