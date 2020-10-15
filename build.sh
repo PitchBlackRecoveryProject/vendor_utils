@@ -53,10 +53,17 @@ chmod a+x /tmp/keepalive.sh
 DIR=$(pwd)
 mkdir $(pwd)/android && cd android
 
+# randomize and fix sync thread number, according to available cpu thread count
+SYNCTHREAD=$(grep -c ^processor /proc/cpuinfo)          # Default CPU Thread Count
+if [[ $(echo ${SYNCTHREAD}) -le 2 ]]; then SYNCTHREAD=$(shuf -i 5-7 -n 1)        # If CPU Thread >= 2, Sync Thread 5~7
+elif [[ $(echo ${SYNCTHREAD}) -le 8 ]]; then SYNCTHREAD=$(shuf -i 12-16 -n 1)    # If CPU Thread >= 8, Sync Thread 12~16
+elif [[ $(echo ${SYNCTHREAD}) -le 36 ]]; then SYNCTHREAD=$(shuf -i 30-36 -n 1)   # If CPU Thread >= 36, Sync Thread 30~36
+fi
+
 # sync
 echo -e "Initializing PBRP repo sync..."
 repo init -q -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${MANIFEST_BRANCH} --depth 1
-/tmp/keepalive.sh & repo sync -c -q --force-sync --no-clone-bundle --no-tags -j6 #THREADCOUNT is only 2 in remote docker
+/tmp/keepalive.sh & repo sync -c -q --force-sync --no-clone-bundle --no-tags -j${SYNCTHREAD}
 kill -s SIGTERM $(cat /tmp/keepalive.pid)
 
 # clean unneeded files
