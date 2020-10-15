@@ -45,9 +45,18 @@ rm -rf google-git-cookies
 fi
 
 echo -e "Starting the CI Build Process...\n"
-[[ ! -d /tmp ]] && mkdir -p /tmp
+[[ ! -d /tmp ]] && mkdir -p /tmp 2>/dev/null
 # Make a keepalive shell so that it can bypass CI Termination on output freeze
-curl -sL https://gist.github.com/rokibhasansagar/cf8669411a1a57ba40c3090cd5146cd9/raw/keepalive.sh -o /tmp/keepalive.sh
+# Use `kill -s SIGTERM $(cat /tmp/keepalive.pid)` to terminate the keepalive script
+cat << EOK > /tmp/keepalive.sh
+#!/bin/bash
+# keep this so that it can be killed from other command
+echo \$$ > /tmp/keepalive.pid
+# keepalive loop
+while true; do
+  echo "." && sleep 300
+done
+EOK
 chmod a+x /tmp/keepalive.sh
 
 DIR=$(pwd)
