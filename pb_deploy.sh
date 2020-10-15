@@ -86,9 +86,10 @@ FILE_SIZE=$( du -h $BUILDFILE | awk '{print $1}' )
 BUILD_DATE=$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')
 BUILD_DATETIME="$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')-$(echo "$BUILDFILE" | awk -F'[-]' '{print $5}')"
 TARGET_DEVICE=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep name | awk -F[\"] '{print $4}')
+BUILD_NAME=$(echo ${BUILDFILE} | awk -F['/'] '{print $NF}')
 
 # Release Links
-gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/${RELEASE_TAG}"
+gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
 sf_link="https://sourceforge.net/projects/pbrp/files/${CODENAME}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')/download"
 wp_link="https://pitchblackrecovery.com/$(echo $CODENAME | sed "s:_:-:g")"
 
@@ -191,10 +192,10 @@ function gh_deploy() {
 
 	# Final Release
 	if [ "$CIRCLECI" != "true" ]; then
-		gh_link="https://github.com/PitchBlackRecoveryProject/android_device_${VENDOR}_${CODENAME}-pbrp/releases/${RELEASE_TAG}"
+		gh_link="https://github.com/PitchBlackRecoveryProject/android_device_${VENDOR}_${CODENAME}-pbrp/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
 		ghr -t ${GITHUB_TOKEN} -u PitchBlackRecoveryProject -r android_device_${VENDOR}_${CODENAME}-pbrp -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -delete ${RELEASE_TAG} ${UPLOAD_PATH}
 	else
-		gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/${RELEASE_TAG}"
+		gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
 		ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
 	fi
 
