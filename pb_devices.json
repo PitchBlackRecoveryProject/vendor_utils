@@ -70,6 +70,10 @@
       "name": "OnePlus 6",
       "maintainer": "PBRP Team"
     }
+     "guacamole": {
+       "name": "OnePlus 7 Pro",
+       "maintainer": "Alexandria Cortez"
+    }
   },
   "oppo": {
     "CPH1861": {
