@@ -281,6 +281,10 @@
     "riva": {
       "name": "Xiaomi Redmi 5A",
       "maintainer": "Erwin Abu Bakar Sidik"
+    },
+    "cereus": {
+      "name": "Xiaomi Redmi 6",
+      "maintainer": "Erwin Abu Bakar Sidik"
     }
   }
 }
