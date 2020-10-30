@@ -174,17 +174,16 @@ function sf_deploy() {
 	# Check for Official
 	python3 pb_devices.py verify "$VENDOR" "$CODENAME"
 	if [[ "$?" == "0" ]]; then
-		n=0
-		if sshpass -p "${SFPassword}" ssh -tto StrictHostKeyChecking=no ${SFUserName}@shell.sourceforge.net create | echo "exit"; then
-			until [ "$n" -ge 5 ]; do
-				if rsync -v --rsh="sshpass -p ${SFPassword} ssh -l ${SFUserName}" $BUILDFILE ${SFUserName}@shell.sourceforge.net:/home/frs/project/pbrp/$CODENAME/; then
-					break;
-				fi
-				n=$((n+1))
-				sleep 1s
-			done
+		sshpass -p "${SFPassword}" rsync -avP --progress -e ssh ${BUILDFILE} "${SFUserName}"@web.sourceforge.net:/home/frs/project/pbrp/${CODENAME}/${BUILD_NAME}
+		if [ "$?" != "0" ]; then
+			sshpass -p "${SFPassword}" sftp ${SFUserName}@web.sourceforge.net <<-EOF
+			cd /home/frs/project/pbrp/
+			mkdir ${CODENAME}
+			exit
+			EOF
+			sshpass -p "${SFPassword}" rsync -avP --progress -e ssh ${BUILDFILE} "${SFUserName}"@web.sourceforge.net:/home/frs/project/pbrp/${CODENAME}/${BUILD_NAME}
 		fi
-		if [ "$n" -le 5 ]
+		if [ "$?" == "0" ]
 		then
 			echo -e "${green} Deployed On SOURCEFORGE SUCCESSFULLY\n${nocol}"
 			cd ../../
