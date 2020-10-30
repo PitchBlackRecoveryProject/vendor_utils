@@ -139,6 +139,21 @@ if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
     elif [[ $PB_OFFICIAL == 'true' ]]; then
         ./vendor/utils/pb_deploy.sh OFFICIAL $VENDOR $CODENAME
     fi
+else
+export BUILDFILE=$(find $(pwd)/out/target/product/${CODENAME}/PBRP*.zip 2>/dev/null)
+export BUILDIMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
+export UPLOAD_PATH=$(pwd)/out/target/product/${CODENAME}/upload/
+mkdir ${UPLOAD_PATH}
+cp $BUILDFILE $UPLOAD_PATH
+cp $BUILDIMG $UPLOAD_PATH
+
+# If Samsung's Odin TAR available, copy it to our upload dir
+BUILD_FILE_TAR=$(find $(pwd)/out/target/product/${CODENAME}/*.tar 2>/dev/null)
+if [[ ! -z ${BUILD_FILE_TAR} ]]; then
+	echo "Samsung's Odin Tar available: $BUILD_FILE_TAR"
+	cp ${BUILD_FILE_TAR} ${UPLOAD_PATH}
+fi
+ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "PBRP Release for $(echo $CODENAME)" -b "PBRP $(echo $VERSION)" -c ${CIRCLE_SHA1} -delete ${VERSION} ${UPLOAD_PATH}
 fi
 
 echo -e "\n\nAll Done Gracefully\n\n"
