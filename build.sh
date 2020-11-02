@@ -124,7 +124,7 @@ echo "Cleaning up the .repo, no use of it now"
 rm -rf .repo
 mkdir -p .repo && mv manifests .repo/ && ln -s .repo/manifests/default.xml .repo/manifest.xml
 
-/tmp/keepalive.sh & make -j6 recoveryimage
+/tmp/keepalive.sh & make -j${SYNCTHREAD} recoveryimage
 kill -s SIGTERM $(cat /tmp/keepalive.pid)
 echo -e "\nYummy Recovery is Served.\n"
 
