@@ -285,6 +285,10 @@
     "cereus": {
       "name": "Xiaomi Redmi 6",
       "maintainer": "Erwin Abu Bakar Sidik"
+    },
+    "cactus": {
+      "name": "Xiaomi Redmi 6A",
+      "maintainer": "Erwin Abu Bakar Sidik"
     }
   }
 }
