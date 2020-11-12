@@ -10,6 +10,10 @@
     }
   },
   "ASUS": {
+    "I01WD": {
+      "name": "ASUS ZenFone 6",
+      "maintainer": "PBRP Team"
+    },
     "X00P": {
       "name": "ASUS ZenFone Max M1",
       "maintainer": "Raza"
