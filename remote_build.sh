@@ -1,6 +1,7 @@
 #!/bin/bash
 [ ! -d /home/builder/.ccache ] && mkdir -p /home/builder/.ccache
 cd /home/builder/
+echo "$DOCKERHUB_PASSWORD" | docker login -u $DOCKERHUB_USERNAME --password-stdin
 docker run --privileged -i --name worker --user builder \
   -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) \
   -e GitHubMail="${GitHubMail}" -e GitHubName="${GitHubName}" -e GITHUB_TOKEN="${GITHUB_TOKEN}" \
@@ -17,7 +18,7 @@ docker run --privileged -i --name worker --user builder \
   -v "${pwd}:/home/builder/:rw,Z" \
   -v "/home/builder/.ccache:/srv/ccache:rw" \
   --workdir /home/builder/ \
-  fr3akyphantom/droid-builder:edge bash << EOF
+  fr3akyphantom/droid-builder:latest bash << EOF
 
 curl -sL https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/build.sh -o build.sh
 source build.sh
