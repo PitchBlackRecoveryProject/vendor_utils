@@ -301,6 +301,10 @@
     "cactus": {
       "name": "Xiaomi Redmi 6A",
       "maintainer": "Erwin Abu Bakar Sidik"
+    },
+    "olivewood": {
+      "name": "Xiaomi Redmi 8A Pro/Dual",
+      "maintainer": "Aryan Sinha"
     }
   }
 }
