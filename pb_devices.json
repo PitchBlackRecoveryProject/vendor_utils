@@ -74,6 +74,10 @@
       "name": "OnePlus 6",
       "maintainer": "SIDDK"
     },
+     "fajita": {
+      "name": "OnePlus 6T",
+      "maintainer": "SIDDK"
+    },
      "guacamole": {
        "name": "OnePlus 7/7 Pro/7 Pro 5G",
        "maintainer": "Alexandria Cortez"
