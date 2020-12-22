@@ -239,6 +239,17 @@ function tg_official_deploy() {
 }
 
 
+# Deploy Official Build on Official Twitter Handle
+function twitter_official_deploy() {
+	echo -e "${green}Deploying to Twitter!\n${nocol}"
+	
+	TWITTER_FORMAT=$(printf "New Official Build for $TARGET_DEVICE ($CODENAME) is now available! Grab it right now!\n\n$wp_link\n#PBRP #$CODENAME $TARGET_DEVICE")
+	bash vendor/utils/scripts/tweet.sh "$TWITTER_FORMAT"
+	echo -e "${green}Deployed to Twitter SUCCESSFULLY!\n${nocol}"
+	return 0
+}
+
+
 # Deploy Beta Build on Official PBRP Testing Group
 function tg_beta_deploy() {
 	echo -e "${green}Deploying to Telegram!\n${nocol}"
@@ -311,6 +322,7 @@ if [[ "$zipcounter" > "0" ]]; then
 			if ! gh_deploy; then echo -e "Error in GitHub Releases Deployment." && exit 1; fi
 			if ! wp_deploy; then echo -e "Error in PBRP Website Deployment." && exit 1; fi
 			if ! tg_official_deploy; then  echo -e "Error in Telegram Official Deployment." && exit 1; fi
+			if ! twitter_official_deploy; then  echo -e "Error in Twitter Official Deployment." && exit 1; fi
 		elif [[ "$DEPLOY_TYPE" == "BETA" ]]; then
 			# Beta Deploy = SF + GHR + WP + TG (Beta Group)
 
@@ -322,7 +334,7 @@ if [[ "$zipcounter" > "0" ]]; then
 			# Test Deploy = GHR + TG (Device Maintainers Chat)
 
 			if ! gh_deploy; then  echo -e "Error in GitHub Releases Deployment." && exit 1; fi
-			if ! tg_test_deploy; then  echo -e "Error in Telegram Test Deployment." && exit 1; fi
+			if ! tg_test_deploy; then  echo -e "Error in Telegram Test Deployment." && exit 1; fi	
 		else
 			echo -e "Wrong Arguments Given, Required Arguments: BUILD_TYPE(OFFICIAL/BETA/TEST)" && exit 1
 		fi
