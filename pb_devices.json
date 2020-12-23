@@ -70,12 +70,11 @@
     }
   },
   "oneplus": {
-    "Oneplus": {
+    "oneplus3": {
       "name": "OnePlus 3/3 T",
       "maintainer": "dlasdl"
- },
-  "oneplus": {
-    "enchilada": {
+    },
+      "enchilada": {
       "name": "OnePlus 6",
       "maintainer": "SIDDK"
     },
