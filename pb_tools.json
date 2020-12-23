@@ -3,6 +3,7 @@
         "asset_name": "Magisk-{tag}.zip",
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk",
+        "only_tags": "True",
         "tag_name": "v21.0",
         "zip_name": "magisk.zip"
     },
@@ -10,6 +11,7 @@
         "asset_name": "Magisk-uninstaller-\\d+.zip",
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk Uninstaller",
+        "only_tags": "True",
         "regex": "true",
         "tag_name": "v21.0",
         "zip_name": "unrootmagisk.zip"
