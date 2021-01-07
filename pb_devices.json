@@ -69,6 +69,12 @@
       "maintainer": "PBRP Team"
     }
   },
+  "motorola": {
+    "sanders": {
+      "name": "Moto G (5S) Plus",
+      "maintainer": "Satham Hussain (PBRP Team)"
+    }
+  },
   "oneplus": {
     "oneplus3": {
       "name": "OnePlus 3/3 T",
