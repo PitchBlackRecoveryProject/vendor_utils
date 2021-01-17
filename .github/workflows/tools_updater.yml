@@ -1,5 +1,4 @@
 # This is a basic workflow to help you get started with Actions
-
 name: Tools Updater
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -8,10 +7,8 @@ on:
   schedule:
   # Will run after end of the day
   - cron: "0 0 * * *"
-
-  push:
-    branches:
-    - 'pb'
+    
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
