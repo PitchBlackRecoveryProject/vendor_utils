@@ -4,7 +4,7 @@
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk",
         "only_tags": "True",
-        "tag_name": "v21.2",
+        "tag_name": "v21.3",
         "zip_name": "magisk.zip"
     },
     {
@@ -13,7 +13,7 @@
         "name": "Magisk Uninstaller",
         "only_tags": "True",
         "regex": "true",
-        "tag_name": "v21.2",
+        "tag_name": "v21.3",
         "zip_name": "unrootmagisk.zip"
     },
     {
