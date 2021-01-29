@@ -48,12 +48,10 @@ if [ -z ${GH_BOT_TOKEN} ] || [ -z ${BOT_API} ]; then
 fi
 
 UPLOAD_PATH=$(pwd)/out/target/product/${CODENAME}/upload/
-TWRP_V=$(cat $(pwd)/bootable/recovery/variables.h | grep TW_MAIN_VERSION_STR | awk '{print $3}' | head -1)
+TWRP_V=$(cat $(pwd)/bootable/recovery/variables.h | egrep "define\s+TW_MAIN_VERSION_STR" | awk '{print $3}' | tr -d '"')
+VERSION=$(cat $(pwd)/bootable/recovery/variables.h | egrep "define\s+PB_MAIN_VERSION" | awk '{print $3}' | tr -d '"')
 
 pb_sticker="https://thumbs.gfycat.com/NauticalMellowAlpineroadguidetigerbeetle-mobile.mp4"
-
-# ToDo Need to be dynamic
-VERSION=3.0.0
 
 # Validate and Prepare for deploy
 if [[ "$DEPLOY_TYPE" == "OFFICIAL" ]]; then
