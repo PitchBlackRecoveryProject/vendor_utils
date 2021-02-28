@@ -1,6 +1,6 @@
 [
     {
-        "asset_name": "Magisk-{tag}.zip",
+        "asset_name": "Magisk-{tag}.apk",
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk",
         "only_tags": "True",
