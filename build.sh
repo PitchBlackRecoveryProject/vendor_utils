@@ -25,7 +25,7 @@ set -eo pipefail
 # SANITY CHECKS
 if [[ -z $GitHubMail ]]; then echo -e "You haven't configured GitHub E-Mail Address." && exit 1; fi
 if [[ -z $GitHubName ]]; then echo -e "You haven't configured GitHub Username." && exit 1; fi
-if [[ -z $GITHUB_TOKEN ]]; then echo -e "You haven't configured GitHub Token.\nWithout it, recovery can't be published." && exit 1; fi
+if [[ -z $GH_BOT_TOKEN ]]; then echo -e "You haven't configured GitHub Token.\nWithout it, recovery can't be published." && exit 1; fi
 if [[ -z $MANIFEST_BRANCH ]]; then echo -e "You haven't configured PitchBlack Recovery Project Manifest Branch." && exit 1; fi
 if [[ -z $VENDOR ]]; then echo -e "You haven't configured Vendor name." && exit 1; fi
 if [[ -z $CODENAME ]]; then echo -e "You haven't configured Device Codename." && exit 1; fi
@@ -39,7 +39,7 @@ git config --global color.ui true
 
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
 # Use Google Git Cookies for Smooth repo-sync
-git clone -q "https://$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/google-git-cookies.git" &> /dev/null
+git clone -q "https://$GH_BOT_TOKEN@github.com/PitchBlackRecoveryProject/google-git-cookies.git" &> /dev/null
 bash google-git-cookies/setup_cookies.sh
 rm -rf google-git-cookies
 fi
@@ -83,7 +83,7 @@ cp vendor/utils/pb_build.sh vendor/pb/pb_build.sh && chmod +x vendor/pb/pb_build
 
 echo -e "\nGetting the Device Tree on place"
 if [[ "${CIRCLE_PROJECT_USERNAME}" == "PitchBlackRecoveryProject" ]]; then
-    git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
+    git clone --quiet --progress https://$GitHubName:$GH_BOT_TOKEN@github.com/PitchBlackRecoveryProject/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 else
     git clone --quiet --progress https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} -b ${CIRCLE_BRANCH} device/${VENDOR}/${CODENAME}
 fi
@@ -97,7 +97,7 @@ if [[ -n ${USE_SECRET_BOOTABLE} ]]; then
         SECRET_BR="android-9.0"
     fi
     rm -rf bootable/recovery
-    git clone --quiet --progress https://$GitHubName:$GITHUB_TOKEN@github.com/PitchBlackRecoveryProject/pbrp_recovery_secrets -b ${SECRET_BR} --single-branch bootable/recovery
+    git clone --quiet --progress https://$GitHubName:$GH_BOT_TOKEN@github.com/PitchBlackRecoveryProject/pbrp_recovery_secrets -b ${SECRET_BR} --single-branch bootable/recovery
 elif [[ -n ${PBRP_BRANCH} ]]; then
     # FOR EVERYBODY
     rm -rf bootable/recovery

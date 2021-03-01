@@ -42,8 +42,8 @@ maintainer=$(python3 vendor/utils/pb_devices.py verify $VENDOR $CODENAME true)
 [ -z ${CIRCLE_PROJECT_USERNAME} ] && CIRCLE_PROJECT_USERNAME=PitchBlackRecoveryProject
 [ -z ${CIRCLE_PROJECT_REPONAME} ] && CIRCLE_PROJECT_REPONAME=android_device_${VENDOR}_${CODENAME}-pbrp
 
-if [ -z ${GITHUB_TOKEN} ] || [ -z ${BOT_API} ]; then
-	echo "Make sure all ENV variables (GITHUB_TOKEN/BOT_API) are available"
+if [ -z ${GH_BOT_TOKEN} ] || [ -z ${BOT_API} ]; then
+	echo "Make sure all ENV variables (GH_BOT_TOKEN/BOT_API) are available"
 	exit -1;
 fi
 
@@ -218,7 +218,7 @@ function gh_deploy() {
 	fi
 
 	# Final Release
-	ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
+	ghr -t ${GH_BOT_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
 
 	return "$?"
 }
