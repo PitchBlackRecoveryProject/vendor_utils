@@ -138,6 +138,10 @@
       "name": "Realme X",
       "maintainer": "Satham Hussain"
     },
+    "RMX2193": {
+      "name": "Realme Narzo 20/Realme 7i (EU)",
+      "maintainer": "Satham Hussain (PBRP Team)"
+    },
     "RMX1941": {
       "name": "Realme C2",
       "maintainer": "Siddk"
