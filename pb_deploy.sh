@@ -39,8 +39,19 @@ fi
 curl https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/pb_devices.json > /tmp/pb_devices.json
 maintainer=$(python3 vendor/utils/pb_devices.py verify $VENDOR $CODENAME true)
 
-[ -z ${CIRCLE_PROJECT_USERNAME} ] && CIRCLE_PROJECT_USERNAME=PitchBlackRecoveryProject
-[ -z ${CIRCLE_PROJECT_REPONAME} ] && CIRCLE_PROJECT_REPONAME=android_device_${VENDOR}_${CODENAME}-pbrp
+# GitHub Username & Repository Name
+if [[ "$GITHUB_ACTIONS" == "true" ]]; then
+GH_USER=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f1)
+GH_REPO=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)
+GH_SHA=$(echo ${GITHUB_SHA})
+elif [[ "$CIRCLECI" == "true" ]]; then
+GH_USER=$(echo ${CIRCLE_PROJECT_USERNAME})
+GH_REPO=$(echo ${CIRCLE_PROJECT_REPONAME})
+GH_SHA=$(echo ${CIRCLE_SHA1})
+else
+GH_USER=PitchBlackRecoveryProject
+GH_REPO=android_device_${VENDOR}_${CODENAME}-pbrp
+fi
 
 if [ -z ${GH_BOT_TOKEN} ] || [ -z ${BOT_API} ]; then
 	echo "Make sure all ENV variables (GH_BOT_TOKEN/BOT_API) are available"
@@ -48,6 +59,8 @@ if [ -z ${GH_BOT_TOKEN} ] || [ -z ${BOT_API} ]; then
 fi
 
 UPLOAD_PATH=$(pwd)/out/target/product/${CODENAME}/upload/
+
+# Version
 TWRP_V=$(cat $(pwd)/bootable/recovery/variables.h | egrep "define\s+TW_MAIN_VERSION_STR" | awk '{print $3}' | tr -d '"')
 VERSION=$(cat $(pwd)/bootable/recovery/variables.h | egrep "define\s+PB_MAIN_VERSION" | awk '{print $3}' | tr -d '"')
 
@@ -98,7 +111,7 @@ BUILD_NAME=$(echo ${BUILDFILE} | awk -F['/'] '{print $NF}')
 DEVICES=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep unified | awk -F[\"] '{ for (i=4; i<NF; i=i+2) print $i }')
 
 # Release Links
-gh_link="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
+gh_link="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
 sf_link="https://sourceforge.net/projects/pbrp/files/${CODENAME}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')/download"
 wp_link="https://pitchblackrecovery.com/$(echo $CODENAME | sed "s:_:-:g")"
 
@@ -216,7 +229,7 @@ function gh_deploy() {
 	fi
 
 	# Final Release
-	ghr -t ${GH_BOT_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${CIRCLE_SHA1} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
+	ghr -t ${GH_BOT_TOKEN} -u ${GH_USER} -r ${GH_REPO} -n "$(echo $DEPLOY_TYPE_NAME) Release for $(echo $CODENAME)" -b "PBRP $(echo $RELEASE_TAG)" -c ${GH_SHA} -delete ${RELEASE_TAG} ${UPLOAD_PATH}
 
 	return "$?"
 }
@@ -260,7 +273,7 @@ function tg_test_deploy() {
     	cp $BUILD_IMG recovery.img
         TEST_LINK=$(curl -F'file=@recovery.img' https://0x0.st)
     else
-        TEST_LINK="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/download/${RELEASE_TAG}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
+        TEST_LINK="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
     fi
 
     MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
