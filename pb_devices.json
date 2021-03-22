@@ -72,7 +72,7 @@
   "motorola": {
     "sanders": {
       "name": "Moto G (5S) Plus",
-      "maintainer": "Satham Hussain (PBRP Team)"
+      "maintainer": "PBRP Team"
     }
   },
   "micromax": {
@@ -124,7 +124,7 @@
     },
     "trinket": {
       "name": "Realme 5/5s/5i",
-      "maintainer": "@Sathamspot (PBRP Team)"
+      "maintainer": "PBRP Team"
     },
     "RMX1921": {
       "name": "Realme XT",
@@ -140,7 +140,7 @@
     },
     "RMX2193": {
       "name": "Realme Narzo 20/Realme 7i (EU)",
-      "maintainer": "Satham Hussain (PBRP Team)"
+      "maintainer": "PBRP Team"
     },
     "RMX1941": {
       "name": "Realme C2",
@@ -284,7 +284,7 @@
     },
     "ugg": {
       "name": "Xiaomi Redmi Note 5a Prime",
-      "maintainer": "Satham Hussain (PBRP Team)"
+      "maintainer": "PBRP Team"
     },
     "ugglite": {
       "name": "Xiaomi Redmi Note 5a",
