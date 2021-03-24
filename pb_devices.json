@@ -146,6 +146,10 @@
       "name": "Realme C2",
       "maintainer": "Siddk"
     },
+    "RMX2050": {
+      "name": "Realme Narzo 20A",
+      "maintainer": "Siddk"
+    },
     "RMX1831":{
       "name":"Realme U1",
       "maintainer":"Aryan Sinha"
