@@ -282,6 +282,10 @@
       "name": "Xiaomi Redmi 4X",
       "maintainer": "PBRP Team"
     },
+     "tiare": {
+      "name": "Redmi Go",
+      "maintainer": "Aryan Sinha"
+    },
     "sirius": {
       "name": "Xiaomi Mi 8 SE",
       "maintainer": "Qisthi Iskandar Haqiki"
