@@ -178,6 +178,10 @@
     }
   },
   "xiaomi": {
+    "apollo": {
+      "name": "Xiaomi Mi 10T/Pro",
+      "maintainer": "Akshat Sinha"
+    },
     "beryllium": {
       "name": "Xiaomi Pocophone F1",
       "maintainer": "Mohd Faraz"
