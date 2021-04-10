@@ -4,7 +4,7 @@
         "gh_repo": "topjohnwu/Magisk",
         "name": "Magisk",
         "only_tags": "True",
-        "tag_name": "v22.0",
+        "tag_name": "v22.1",
         "zip_name": "magisk.zip"
     },
     {
