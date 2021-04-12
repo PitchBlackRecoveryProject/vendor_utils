@@ -74,7 +74,7 @@ def verify_device(vendor, codename, maintainer = 0):
 
 
 if len(arguments) == 2 and arguments[1] == 'print_all':
-	exit(print_all_official())
+	sys.exit(print_all_official())
 elif len(arguments) < 4:
 	invalid_arguments()
 
@@ -84,8 +84,8 @@ if len(arguments) != 5 or cmd != 'verify':
 	print("PB_DEVICES: Detected Codename: ", arguments[3])
 	print("PB_DEVICES: Detected Vendor: ", arguments[2])
 if cmd == 'verify' and len(arguments) == 4:
-	exit(verify_device(arguments[2], arguments[3]))
+	sys.exit(verify_device(arguments[2], arguments[3]))
 elif cmd == 'verify' and len(arguments) == 5:
-	exit(verify_device(arguments[2], arguments[3], arguments[4]))
+	sys.exit(verify_device(arguments[2], arguments[3], arguments[4]))
 else:
 	invalid_arguments()
