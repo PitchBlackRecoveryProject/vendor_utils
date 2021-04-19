@@ -153,7 +153,11 @@
     "RMX1831":{
       "name":"Realme U1",
       "maintainer":"Aryan Sinha"
-    } 
+    },
+    "RMX2001":{
+      "name":"Realme 6/7, Narzo 20 Pro",
+      "maintainer":"Yusuf Sözdutmaz"
+    }
   },
   "redmi": {
     "begonia": {
