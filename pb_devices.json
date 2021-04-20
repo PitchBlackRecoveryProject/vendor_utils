@@ -159,6 +159,12 @@
       "maintainer":"Yusuf Sözdutmaz"
     }
   },
+  "poco": {
+    "citrus": {
+      "name": "Xiaomi Pocophone M3",
+      "maintainer": "Joemar Taroy"
+    }
+  },
   "redmi": {
     "begonia": {
       "name": "Redmi Note 8 Pro",
