@@ -53,6 +53,12 @@
       "maintainer": "PBRP Team"
     }
   },
+  "intex": {
+    "Cloud_Q11": {
+      "name": "Intex Cloud Q11",
+      "maintainer": "Aryan Karan"
+    }
+  },
   "lenovo": {
     "kuntao": {
       "name": "Lenovo P2",
