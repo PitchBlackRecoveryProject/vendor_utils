@@ -120,6 +120,10 @@
       "name": "Realme 3",
       "maintainer": "PBRP Team"
     },
+    "RMX1801": {
+      "name": "Realme 2 Pro",
+      "maintainer": "Sree Govind S A"
+    },
     "RMX1851": {
       "name": "Realme 3 Pro",
       "maintainer": "Ahmed Moselhi"
