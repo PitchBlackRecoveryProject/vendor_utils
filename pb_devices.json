@@ -78,7 +78,7 @@
   "motorola": {
     "sanders": {
       "name": "Moto G (5S) Plus",
-      "maintainer": "PBRP Team"
+      "maintainer": "Satham Hussain"
     }
   },
   "micromax": {
@@ -152,9 +152,17 @@
       "name": "Realme X/XT",
       "maintainer": "Satham Hussain"
     },
+    "RMX2076": {
+      "name": "Realme X50 Pro",
+      "maintainer": "Satham Hussain"
+    },
+    "RMX2121": {
+      "name": "Realme X7 Pro",
+      "maintainer": "Satham Hussain"
+    },
     "RMX2193": {
       "name": "Realme Narzo 20/Realme 7i (EU)",
-      "maintainer": "PBRP Team"
+      "maintainer": "Satham Hussain"
     },
     "RMX1941": {
       "name": "Realme C2",
