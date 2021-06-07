@@ -24,7 +24,7 @@
     },
     "X01AD": {
       "name": "ASUS ZenFone Max M2",
-      "maintainer": "AP_XD"
+      "maintainer": "Arka"
     },
     "X01BD": {
       "name": "ASUS ZenFone Max Pro M2",
@@ -53,6 +53,12 @@
       "maintainer": "PBRP Team"
     }
   },
+  "intex": {
+    "Cloud_Q11": {
+      "name": "Intex Cloud Q11",
+      "maintainer": "Aryan Karan"
+    }
+  },
   "lenovo": {
     "kuntao": {
       "name": "Lenovo P2",
@@ -72,7 +78,7 @@
   "motorola": {
     "sanders": {
       "name": "Moto G (5S) Plus",
-      "maintainer": "PBRP Team"
+      "maintainer": "Satham Hussain"
     }
   },
   "micromax": {
@@ -114,6 +120,10 @@
       "name": "Realme 3",
       "maintainer": "PBRP Team"
     },
+    "RMX1801": {
+      "name": "Realme 2 Pro",
+      "maintainer": "Sree Govind S A"
+    },
     "RMX1851": {
       "name": "Realme 3 Pro",
       "maintainer": "Ahmed Moselhi"
@@ -122,9 +132,9 @@
       "name": "Realme C1",
       "maintainer": "Nova Customizer"
     },
-    "RMX1911": {
-      "name": "Realme 5/5s",
-      "maintainer": "PBRP Team"
+    "r5x": {
+      "name": "Realme 5/5s/5i/5NFC",
+      "maintainer": "Satham Hussain"
     },
     "RMX1921": {
       "name": "Realme XT",
@@ -138,9 +148,21 @@
       "name": "Realme X",
       "maintainer": "Satham Hussain"
     },
+    "xandxt": {
+      "name": "Realme X/XT",
+      "maintainer": "Satham Hussain"
+    },
+    "RMX2076": {
+      "name": "Realme X50 Pro",
+      "maintainer": "Satham Hussain"
+    },
+    "RMX2121": {
+      "name": "Realme X7 Pro",
+      "maintainer": "Satham Hussain"
+    },
     "RMX2193": {
       "name": "Realme Narzo 20/Realme 7i (EU)",
-      "maintainer": "PBRP Team"
+      "maintainer": "Satham Hussain"
     },
     "RMX1941": {
       "name": "Realme C2",
@@ -149,6 +171,10 @@
     "RMX2050": {
       "name": "Realme Narzo 20A",
       "maintainer": "Siddk"
+    },
+    "RMX3171": {
+      "name": "Realme Narzo 30A",
+      "maintainer": "Sarthak Roy"
     },
     "RMX1831":{
       "name":"Realme U1",
@@ -266,7 +292,7 @@
     },
     "onc": {
       "name": "Xiaomi Redmi 7/Y3",
-      "maintainer": "TheSync"
+      "maintainer": "Aryan Karan"
     },
     "phoenix": {
       "name": "Xiaomi Redmi K30/Poco X2",
