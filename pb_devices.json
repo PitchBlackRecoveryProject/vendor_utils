@@ -186,8 +186,8 @@
     }
   },
   "poco": {
-    "citrus": {
-      "name": "Xiaomi Pocophone M3",
+    "juice": {
+      "name": "Xiaomi Pocophone M3/Redmi 9T/Redmi 9 Power/Redmi note 9 4G",
       "maintainer": "Joemar Taroy"
     }
   },
