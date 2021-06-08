@@ -270,12 +270,7 @@ function tg_beta_deploy() {
 function tg_test_deploy() {
 	echo -e "${green}Deploying to Telegram Device Maintainers Chat!\n${nocol}"
 
-    if [[ $USE_SECRET_BOOTABLE == 'true' ]]; then
-    	cp $BUILD_IMG recovery.img
-        TEST_LINK=$(curl -F'file=@recovery.img' https://0x0.st)
-    else
         TEST_LINK="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
-    fi
 
     MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
