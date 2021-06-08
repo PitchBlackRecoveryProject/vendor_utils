@@ -219,7 +219,9 @@ function gh_deploy() {
 	mkdir ${UPLOAD_PATH}
 
 	# Copy Required Files
-	cp $BUILDFILE $UPLOAD_PATH
+	if [[ ! -z ${BUILDFILE} ]]; then
+	    cp $BUILDFILE $UPLOAD_PATH
+	fi
 	cp $BUILD_IMG $UPLOAD_PATH
 
 	# If Samsung's Odin TAR available, copy it to our upload dir
@@ -270,7 +272,11 @@ function tg_beta_deploy() {
 function tg_test_deploy() {
 	echo -e "${green}Deploying to Telegram Device Maintainers Chat!\n${nocol}"
 
+    if [ -z ${BUILDFILE} ]; then
+        TEST_LINK="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/recovery.img"
+    else
         TEST_LINK="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
+    fi
 
     MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
@@ -306,7 +312,9 @@ else
 	zipcounter=$(find $(pwd)/out/target/product/$CODENAME/PBRP*-UNOFFICIAL.zip 2>/dev/null | wc -l)
 fi
 
-if [[ "$zipcounter" > "0" ]]; then
+	recoveryimgcheck=$(find $(pwd)/out/target/product/$CODENAME/recovery.img 2>/dev/null | wc -l)
+
+if [[ "$recoveryimgcheck" > "0" ]]; then
 	if [[ "$zipcounter" > "1" ]]; then
 		printf "${red}More than one zips dected! Remove old build...\n${nocol}"
 	else
