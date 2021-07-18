@@ -59,6 +59,12 @@
       "maintainer": "PBRP Team"
     }
   },
+  "infinix": {
+    "X687": {
+      "name": "Infinix Zero 8",
+      "maintainer": "HemanthJabalpuri"
+    }
+  },
   "intex": {
     "Cloud_Q11": {
       "name": "Intex Cloud Q11",
