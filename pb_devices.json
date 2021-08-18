@@ -93,6 +93,12 @@
       "maintainer": "Satham Hussain"
     }
   },
+  "samsung": {
+    "a70q": {
+      "name": "SM-A705",
+      "maintainer": "dotA"
+    }
+  },
   "micromax": {
     "E7746": {
       "name": "Micromax IN Note 1",
