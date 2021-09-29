@@ -15,6 +15,7 @@
 
 
 AB_DEVICE=false;
+USES_RECOVERY_AS_BOOT=false;
 OUTFD=/proc/self/fd/$2;
 ZIP="$3";
 DIR=`dirname "$ZIP"`;
@@ -177,6 +178,11 @@ AB_D() {
 	fi
 }
 
+AB_REC(){
+	dd if=$IMG of=/dev/block/bootdevice/by-name/"$1"
+	echo "installed_$(echo $1 | cut -d'_' -f2)=1" >> /tmp/pb/installed
+}
+
 #Flashing
 if [[ "$DD" = "true" ]]; then
 	dd if=$IMG of="$RECOVERY"
@@ -189,9 +195,9 @@ else
 		if [[ "$?" = "0" ]]; then
 			echo "installed=1" >> /tmp/pb/installed
 		fi
-	elif [ "$SUPER" == "0" ]; then
-		AB_D recovery_a
-		AB_D recovery_b
+	elif [ "$AB_DEVICE" = "true" ] && [ "$USES_RECOVERY_AS_BOOT" = "false" ]; then
+		AB_REC recovery_a
+		AB_REC recovery_b
 	else
 		AB_D boot_a;
 		AB_D boot_b;

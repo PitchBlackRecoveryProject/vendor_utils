@@ -33,8 +33,11 @@ RECOVERY_IMG=$OUT/recovery.img
 RECOVERY_RAM=$OUT/ramdisk-recovery.cpio
 CURR_W=$(pwd)
 cd ${OUT}/../../../../
+RECOVERY_AS_BOOT="false"
+RECOVERY_AS_BOOT=$BOARD_USES_RECOVERY_AS_BOOT
 AB_OTA="false"
 AB_OTA=$AB_OTA_UPDATER
+unset BOARD_USES_RECOVERY_AS_BOOT
 unset AB_OTA_UPDATER
 export PB_DEVICE=$(cut -d'_' -f2-3 <<<$TARGET_PRODUCT)
 
@@ -106,7 +109,9 @@ fi
 if [[ "$AB_OTA" = "true" ]]; then
 	sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
 fi
-
+if [[ "$RECOVERY_AS_BOOT" = "true" ]]; then
+	sed -i "s|USES_RECOVERY_AS_BOOT=false|USES_RECOVERY_AS_BOOT=true|g" "$PB_WORK_DIR/META-INF/com/google/android/update-binary"
+fi
 
 echo -e "${cyan}**** Copying Recovery Image ****${nocol}"
 mkdir -p "$PB_WORK_DIR/TWRP"
