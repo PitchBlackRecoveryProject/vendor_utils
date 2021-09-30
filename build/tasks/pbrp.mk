@@ -22,8 +22,15 @@ AB := false
 ifeq ($(AB_OTA_UPDATER), true)
     AB := true
 endif
+ifeq ($(BOARD_USES_RECOVERY_AS_BOOT), true)
+    RECOVERY_AS_BOOT := true
+    pbrpimage=$(INSTALLED_BOOTIMAGE_TARGET) $(RECOVERY_RESOURCE_ZIP)
+else
+    pbrpimage=$(INSTALLED_RECOVERYIMAGE_TARGET) $(RECOVERY_RESOURCE_ZIP)
+endif
+
 .PHONY: pbrp
-pbrp: $(INSTALLED_RECOVERYIMAGE_TARGET) $(RECOVERY_RESOURCE_ZIP)
+pbrp: $(pbrpimage)
 	$(hide) rm -f $(WORK_PATH)/../*.zip
 	$(hide) if [ -d $(WORK_PATH) ]; then rm -rf $(WORK_PATH); fi
 	$(hide) mkdir $(WORK_PATH)
@@ -31,9 +38,12 @@ pbrp: $(INSTALLED_RECOVERYIMAGE_TARGET) $(RECOVERY_RESOURCE_ZIP)
 	$(hide) mkdir -p $(WORK_PATH)/META-INF/com/google/android
 	$(hide) rsync -avp $(PB_VENDOR)/updater/update-* $(WORK_PATH)/META-INF/com/google/android/
 	$(hide) rsync -avp $(PB_VENDOR)/updater/awk $(WORK_PATH)/META-INF/
+	$(hide) rsync -avp $(PB_VENDOR)/updater/magiskboot $(WORK_PATH)/
 	$(hide) if [ -f $(KEYCHECK) ]; then cp $(KEYCHECK) $(WORK_PATH)/META-INF/; fi
 	$(hide) if [ "$(AB)" == "true" ]; then sed -i "s|AB_DEVICE=false|AB_DEVICE=true|g" $(WORK_PATH)/META-INF/com/google/android/update-binary; fi
+	$(hide) if [ "$(RECOVERY_AS_BOOT)" == "true" ]; then sed -i "s|USES_RECOVERY_AS_BOOT=false|USES_RECOVERY_AS_BOOT=true|g" $(WORK_PATH)/META-INF/com/google/android/update-binary; fi
 	$(hide) mkdir $(WORK_PATH)/TWRP
+	$(hide) if [ -e $(WORK_PATH)/../boot.img ]; then cp $(WORK_PATH)/../boot.img $(WORK_PATH)/../recovery.img; fi
 	$(hide) cp $(WORK_PATH)/../recovery.img $(WORK_PATH)/TWRP/
 	$(hide) cd $(WORK_PATH) && zip -r $(ZIP_NAME) *
 	$(hide) cd $(BUILD_TOP) && mv $(WORK_PATH)/$(ZIP_NAME) $(WORK_PATH)/../
