@@ -97,6 +97,10 @@
     "a70q": {
       "name": "Samsung Galaxy A70",
       "maintainer": "dotA"
+    },
+    "m20lte": {
+      "name": "Samsung Galaxy M20",
+      "maintainer": "eun0115"
     }
   },
   "TECNO": {
