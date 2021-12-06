@@ -101,6 +101,10 @@
     "m20lte": {
       "name": "Samsung Galaxy M20",
       "maintainer": "eun0115"
+    },
+    "m21": {
+      "name": "Samsung Galaxy M21",
+      "maintainer": "Nazim"
     }
   },
   "TECNO": {
