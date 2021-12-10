@@ -139,6 +139,10 @@
      "guacamole": {
        "name": "OnePlus 7/7 Pro/7 Pro 5G",
        "maintainer": "Alexandria Cortez"
+    },
+    "OP6xT": {
+      "maintainer": "SIDDK",
+      "unified": ["enchilada", "fajita"]
     }
   },
   "oppo": {
