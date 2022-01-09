@@ -1,20 +1,21 @@
 WORK_PATH := $(OUT_DIR)/target/product/$(TARGET_DEVICE)/zip
 BUILD_TOP := $(OUT_DIR)/../
-PB_BUILD_TYPE := UNOFFICIAL
 VERSION := $(shell cat $(BUILD_TOP)/bootable/recovery/variables.h | egrep "define\s+PB_MAIN_VERSION" | tr -d '"' | tr -s ' ' | awk '{ print $$3 }')
 PB_VENDOR := vendor/utils
-ifeq ($(shell echo $${BETA_BUILD}), BETA)
-    PB_BUILD_TYPE := BETA
-else
-    ifeq ($(shell echo $${PB_OFFICIAL}), true)
-        PB_BUILD_TYPE := OFFICIAL
-    endif
-endif
-ifneq ($(PB_BUILD_TYPE), UNOFFICIAL)
+ifeq ($(PB_OFFICIAL),true)
+    PB_BUILD_TYPE := OFFICIAL
     ifneq ($(shell python3 $(BUILD_TOP)/vendor/utils/pb_devices.py verify all $(TARGET_DEVICE); echo $$?),0)
         $(call error Device is not official)
     endif
+else ifeq ($(BETA_BUILD),true)
+    PB_BUILD_TYPE := BETA
+    ifneq ($(shell python3 $(BUILD_TOP)/vendor/utils/pb_devices.py verify all $(TARGET_DEVICE); echo $$?),0)
+        $(call error Device is not official)
+    endif
+else
+    PB_BUILD_TYPE := UNOFFICIAL
 endif
+
 ZIP_NAME := PBRP-$(TARGET_DEVICE)-$(VERSION)-$(shell date +%Y%m%d-%H%M)-$(PB_BUILD_TYPE).zip
 RECOVERYPATH := $(OUT_DIR)/target/product/$(TARGET_DEVICE)/recovery.img
 KEYCHECK := $(OUT_DIR)/recovery/root/sbin/keycheck
