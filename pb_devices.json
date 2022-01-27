@@ -96,7 +96,7 @@
   "samsung": {
     "a70q": {
       "name": "Samsung Galaxy A70",
-      "maintainer": "dotA"
+      "maintainer": "Aswin"
     },
     "m20lte": {
       "name": "Samsung Galaxy M20",
@@ -105,6 +105,14 @@
     "m21": {
       "name": "Samsung Galaxy M21",
       "maintainer": "Nazim"
+    },
+    "m31": {
+      "name": "Samsung Galaxy M31",
+      "maintainer": "Aswin"
+    },
+    "f41": {
+      "name": "Samsung Galaxy F41",
+      "maintainer": "Aswin"
     }
   },
   "TECNO": {
