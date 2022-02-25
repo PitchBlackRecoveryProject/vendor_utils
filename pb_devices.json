@@ -334,6 +334,10 @@
       "name": "Xiaomi Redmi Note 4/4X",
       "maintainer": "@shashank1436"
     },
+    "sweet": {
+      "name": "Xiaomi Redmi Note 10 Pro / Pro Max",
+      "maintainer": "@shashank1436"
+    },
     "miatoll": {
       "maintainer": "SIDDK",
       "unified": ["joyeuse", "curtana", "gram", "excalibur"]
