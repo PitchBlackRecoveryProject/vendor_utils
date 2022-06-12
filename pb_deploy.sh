@@ -186,17 +186,14 @@ function sf_deploy() {
 	# Check for Official
 	python3 pb_devices.py verify "$VENDOR" "$CODENAME"
 	if [[ "$?" == "0" ]]; then
-		sshpass -p "${SFPassword}" rsync -avP --progress -e 'ssh -o StrictHostKeyChecking=no' ${BUILDFILE} "${SFUserName}"@frs.sourceforge.net:/home/frs/project/pbrp/${CODENAME}/${BUILD_NAME}
-		if [ "$?" != "0" ]; then
-			sshpass -p "${SFPassword}" sftp ${SFUserName}@frs.sourceforge.net <<-EOF
+		sshpass -p "${SFPassword}" sftp -o StrictHostKeyChecking=no ${SFUserName}@frs.sourceforge.net <<-EOF
 			cd /home/frs/project/pbrp/
 			mkdir ${CODENAME}
+			cd ${CODENAME}
+			put ${BUILDFILE}
 			exit
-			EOF
-			sshpass -p "${SFPassword}" rsync -avP --progress -e 'ssh -o StrictHostKeyChecking=no' ${BUILDFILE} "${SFUserName}"@frs.sourceforge.net:/home/frs/project/pbrp/${CODENAME}/${BUILD_NAME}
-		fi
-		if [ "$?" == "0" ]
-		then
+		EOF
+		if [ "$?" == "0" ]; then
 			echo -e "${green} Deployed On SOURCEFORGE SUCCESSFULLY\n${nocol}"
 			cd ../../
 			return 0
