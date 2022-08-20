@@ -247,6 +247,10 @@
     "RMX2001":{
       "name":"Realme 6/6i(Indian)/6s",
       "maintainer":"Firdaus Hakimi"
+    },
+    "RM6785":{
+      "name":"Realme 7/Narzo 20 Pro/Narzo 30 (4G)",
+      "maintainer":"Firdaus Hakimi"
     }
   },
   "poco": {
