@@ -450,6 +450,14 @@
       "name": "Xiaomi Redmi 6A",
       "maintainer": "Erwin Abu Bakar Sidik"
     },
+    "taoyao": {
+      "name": "Xiaomi Mi 12 Lite",
+      "maintainer": "Erwin Abu Bakar Sidik"
+    },
+    "vayu": {
+      "name": "Xiaomi Poco F3",
+      "maintainer": "Erwin Abu Bakar Sidik"
+    },
     "olivewood": {
       "name": "Xiaomi Redmi 8A Pro/Dual",
       "maintainer": "Aryan Sinha"
