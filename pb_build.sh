@@ -77,8 +77,11 @@ if [ "$PBRP_BUILD_TYPE" != "UNOFFICIAL" ]; then
 fi
 cd $CURR_W
 
+if [ "$PB_GO" != "true" ] && [ "$PB_VARIANT" = "default" ]; then
+     ZIP_NAME=PBRP-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
+else 
 if [ "$PB_GO" != "true" ]; then
-    ZIP_NAME=PBRP-$PB_DEVICE-$VERSION-$DATE-$PBRP_BUILD_TYPE
+    ZIP_NAME=PBRP-$PB_DEVICE-$VERSION-$PB_VARIANT-$DATE-$PBRP_BUILD_TYPE
 else
     echo -e "${red}PitchBlack Go Variant has been depreciated and has been removed. Remove PB_GO flag to build normally.{nocol}"
     exit 1;
