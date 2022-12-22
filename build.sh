@@ -111,6 +111,7 @@ fi
 
 echo -e "\nPreparing Delicious Lunch..."
 export ALLOW_MISSING_DEPENDENCIES=true
+export PB_VARIANT=default
 source build/envsetup.sh
 if [[ -n $BUILD_LUNCH ]]; then
   lunch ${BUILD_LUNCH}

@@ -15,8 +15,11 @@ else ifeq ($(BETA_BUILD),true)
 else
     PB_BUILD_TYPE := UNOFFICIAL
 endif
-
+ifeq ($(PB_VARIANT), default)
 ZIP_NAME := PBRP-$(TARGET_DEVICE)-$(VERSION)-$(shell date +%Y%m%d-%H%M)-$(PB_BUILD_TYPE).zip
+else
+ZIP_NAME := PBRP-$(TARGET_DEVICE)-$(VERSION)-$(PB_VARIANT)-$(shell date +%Y%m%d-%H%M)-$(PB_BUILD_TYPE).zip
+endif
 RECOVERYPATH := $(OUT_DIR)/target/product/$(TARGET_DEVICE)/recovery.img
 KEYCHECK := $(OUT_DIR)/recovery/root/sbin/keycheck
 AB := false
