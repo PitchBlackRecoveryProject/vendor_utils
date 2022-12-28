@@ -153,8 +153,8 @@
        "maintainer": "Alexandria Cortez"
     },
     "OP6xT": {
-      "maintainer": "SIDDK",
-      "unified": ["enchilada", "fajita"]
+      "name": "OnePlus 6/6T",
+      "maintainer": "SIDDK"
     }
   },
   "oppo": {
