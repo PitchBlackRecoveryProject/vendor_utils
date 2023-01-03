@@ -152,6 +152,10 @@
        "name": "OnePlus 7/7 Pro/7 Pro 5G",
        "maintainer": "Alexandria Cortez"
     },
+     "avicii": {
+      "name": "OnePlus Nord",
+      "maintainer": "Sreeshankar K"
+    },
     "OP6xT": {
       "name": "OnePlus 6/6T",
       "maintainer": "SIDDK"
