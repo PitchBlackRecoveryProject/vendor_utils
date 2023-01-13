@@ -314,6 +314,14 @@
       "name": "Xiaomi Redmi Note 8/8T",
       "maintainer": "Erwin Abu Bakar Sidik"
     },
+    "spes": {
+      "name": "Xiaomi Redmi Note 11",
+      "maintainer": "Agatha"
+    },
+    "fog": {
+      "name": "Xiaomi Redmi 10C",
+      "maintainer": "Agatha"
+    },
     "gram": {
       "name": "Xiaomi Poco M2 Pro",
       "maintainer": "PBRP Team"
