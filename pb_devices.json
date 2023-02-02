@@ -255,6 +255,10 @@
     "RM6785":{
       "name":"Realme 7/Narzo 20 Pro/Narzo 30 (4G)",
       "maintainer":"Firdaus Hakimi"
+    },
+    "RMX3081":{
+      "name":"Realme 8 Pro",
+      "maintainer":"Shibu Shaji"
     }
   },
   "poco": {
