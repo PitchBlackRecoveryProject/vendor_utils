@@ -113,6 +113,10 @@
     "f41": {
       "name": "Samsung Galaxy F41",
       "maintainer": "Aswin"
+    },
+    "z3s": {
+      "name": "Samsung Galaxy S20 Ultra",
+      "maintainer": "Nico1704"
     }
   },
   "TECNO": {
