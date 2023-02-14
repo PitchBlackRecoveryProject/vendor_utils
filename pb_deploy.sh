@@ -20,10 +20,9 @@
 #
 # Required Arguments: BUILD_TYPE(OFFICIAL/BETA/TEST) VENDOE/OEM(such as xiaomi) CODENAME(such as rolex)
 
-test $# -lt 3 && echo -e "Give Proper arguments\nRequired Arguments: BUILD_TYPE(OFFICIAL/BETA/TEST) VENDOE/OEM(such as xiaomi) CODENAME(such as rolex)" && exit 1;
-DEPLOY_TYPE=$1
-VENDOR=$2
-CODENAME=$3
+DEPLOY_TYPE=$BUILD_TYPE
+VENDOR=$VENDOR
+CODENAME=$CODENAME
 blue='\033[0;34m'
 cyan='\033[0;36m'
 green='\e[0;32m'
@@ -40,19 +39,9 @@ curl https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb
 maintainer=$(python3 vendor/utils/pb_devices.py verify $VENDOR $CODENAME true)
 
 # GitHub Username & Repository Name
-if [[ "$GITHUB_ACTIONS" == "true" ]]; then
-GH_USER=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f1)
-GH_REPO=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)
-GH_SHA=$(echo ${GITHUB_SHA})
-elif [[ "$CIRCLECI" == "true" ]]; then
-GH_USER=$(echo ${CIRCLE_PROJECT_USERNAME})
-GH_REPO=$(echo ${CIRCLE_PROJECT_REPONAME})
-GH_SHA=$(echo ${CIRCLE_SHA1})
-else
 GH_USER=PitchBlackRecoveryProject
 GH_REPO=android_device_${VENDOR}_${CODENAME}-pbrp
 GH_SHA=$(cd $(pwd)/device/${VENDOR}/${CODENAME} && git rev-list --branches | head -1)
-fi
 
 if [ -z ${GH_BOT_TOKEN} ] || [ -z ${BOT_API} ]; then
 	echo "Make sure all ENV variables (GH_BOT_TOKEN/BOT_API) are available"
