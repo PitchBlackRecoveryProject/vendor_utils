@@ -20,7 +20,7 @@
     },
     "X00T": {
       "name": "ASUS ZenFone Max Pro M1",
-      "maintainer": "Akshat"
+      "maintainer": "Himanshu Raj"
     },
     "X01AD": {
       "name": "ASUS ZenFone Max M2",
@@ -374,6 +374,10 @@
       "maintainer": "SIDDK",
       "unified": ["joyeuse", "curtana", "gram", "excalibur"]
     },
+    "munch": {
+      "name": "Xiaomi Redmi K40S/Poco F4",
+      "maintainer": "Himanshu Raj"
+    },
     "olive": {
       "name": "Xiaomi Redmi 8",
       "maintainer": "deadlylxrd"
@@ -384,7 +388,7 @@
     },
     "phoenix": {
       "name": "Xiaomi Redmi K30/Poco X2",
-      "maintainer": "PBRP Team"
+      "maintainer": "Himanshu Raj"
     },
     "pine": {
       "name": "Xiaomi Redmi 7A",
