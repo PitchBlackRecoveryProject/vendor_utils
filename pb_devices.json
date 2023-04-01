@@ -90,7 +90,7 @@
   "motorola": {
     "sanders": {
       "name": "Moto G (5S) Plus",
-      "maintainer": "Satham Hussain"
+      "maintainer": "SathamHussainM"
     }
   },
   "samsung": {
@@ -206,19 +206,23 @@
     },
     "RMX1901": {
       "name": "Realme X",
-      "maintainer": "Satham Hussain"
+      "maintainer": "SathamHussainM"
     },
     "xandxt": {
       "name": "Realme X/XT",
-      "maintainer": "Satham Hussain"
+      "maintainer": "SathamHussainM"
     },
     "bitra": {
       "name": "Realme GT Neo 2",
       "maintainer": "SathamHussainM"
     },
+    "bladerunner": {
+      "name": "Realme X50 Pro",
+      "maintainer": "SathamHussainM"
+    },
     "RMX3031": {
       "name": "Realme X7 Max",
-      "maintainer": "PBRP Team"
+      "maintainer": "SathamHussainM"
     },
     "RMX2121": {
       "name": "Realme X7 Pro",
