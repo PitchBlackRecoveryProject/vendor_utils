@@ -490,6 +490,10 @@
       "name": "Xiaomi Poco X3 Pro",
       "maintainer": "Erwin Abu Bakar Sidik"
     },
+    "fleur": {
+      "name": "Xiaomi POCO M4 Pro 4g/Redmi Note 11s",
+      "maintainer": "Shazu Khan"
+    },
     "olivewood": {
       "name": "Xiaomi Redmi 8A Pro/Dual",
       "maintainer": "Aryan Sinha"
