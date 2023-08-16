@@ -490,6 +490,10 @@
       "name": "Xiaomi Poco X3 Pro",
       "maintainer": "Erwin Abu Bakar Sidik"
     },
+    "nabu": {
+      "name": "Xiaomi Pad 5",
+      "maintainer": "SIDDK"
+    },
     "fleur": {
       "name": "Xiaomi POCO M4 Pro 4g/Redmi Note 11s",
       "maintainer": "Shazu Khan"
