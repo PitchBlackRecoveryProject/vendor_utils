@@ -498,6 +498,10 @@
       "name": "Xiaomi POCO M4 Pro 4g/Redmi Note 11s",
       "maintainer": "Shazu Khan"
     },
+      "topaz": {
+      "name": "Xiaomi Redmi Note 12 4G",
+      "maintainer": "Agatha"
+    },
     "olivewood": {
       "name": "Xiaomi Redmi 8A Pro/Dual",
       "maintainer": "Aryan Sinha"
