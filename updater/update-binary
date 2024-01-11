@@ -72,7 +72,7 @@ else
 fi;
 name=$(basename $target);
 
-ui_print "Unpacking the installer...";
+ui_print "|-----------Unpacking the installer-----------|";
 rm -rf $tmp;
 mkdir -p $tmp;
 unzip -o "$ZIPFILE" -d $tmp || abort "Failed to extract zip!";
@@ -85,8 +85,8 @@ recoveryimg=`(ls recovery.img) 2>/dev/null`;
 tool=$tmp/magiskboot;
 chmod 755 $tool;
 
-ui_print " ";
-ui_print " Target: $target";
+ui_print "|---------------------------------------------|";
+ui_print "|- Target:$target -|";
 if [ "$IS_AB" == "false" ]; then
   cp -f $recoveryimg new-boot.img;
   blockdev --setrw $target;
@@ -94,7 +94,7 @@ if [ "$IS_AB" == "false" ]; then
   rm -f new-boot.img;
 else
   for slot in _a _b; do
-    ui_print "Doing Work on slot $slot";
+    ui_print "|------------Doing Work on slot $slot------------|";
     if [ "$recoverycpio" ]; then
       dd bs=1048576 if=$target$slot of=boot.img || abort "Failed to dump image!";
       $tool unpack -h boot.img || abort "Failed to unpack image!";
@@ -120,6 +120,17 @@ else
   done;
 fi
 
+#Copy Specific Files
+ui_print "|---------------------------------------------|";
+ui_print "|------------Unpacking The Tools--------------|";
+if [ -f "/sdcard/PBRP" ]; then
+cp -r $tmp/PBRP/tools /sdcard/PBRP/
+else
+mkdir -p /sdcard/PBRP
+cp -r $tmp/PBRP/tools /sdcard/PBRP/
+fi
+ui_print "|--------Finished Unpacking The Tools---------|";
+
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
@@ -136,15 +147,3 @@ ui_print "|------------Installation finished!-----------|";
 cd /;
 rm -rf /dev/tmp;
 
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|                  Thank You                  |";
-if [[ ! -f "/sbin/keycheck" ]]; then
-  ui_print "|   Reboot to PitchBlack Recovery Manually    |";
-fi
-ui_print "|---------------------------------------------|";
-sleep 0.2s
-show_progress 0.1000000, 90 ;
-ui_print "|------------Installation finished!-----------|";
