@@ -310,8 +310,9 @@ else
 fi
 
 	recoveryimgcheck=$(find $(pwd)/out/target/product/$CODENAME/recovery.img 2>/dev/null | wc -l)
+	bootimgcheck=$(find $(pwd)/out/target/product/$CODENAME/boot.img 2>/dev/null | wc -l)
 
-if [[ "$recoveryimgcheck" > "0" ]]; then
+if [[ "$recoveryimgcheck" > "0" || "$bootimgcheck" > "0" ]]; then
 	if [[ "$zipcounter" > "1" ]]; then
 		printf "${red}More than one zips dected! Remove old build...\n${nocol}"
 	else
