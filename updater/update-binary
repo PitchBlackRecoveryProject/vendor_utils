@@ -59,7 +59,7 @@ ui_print "|---------------------------------------------|";
 ui_print "|---------------PitchBlack Team---------------|";
 ui_print "|---------------------------------------------|";
 ui_print "|---------------------------------------------|";
-ui_print "|            Based on TWRP v3.7.0_x           |";
+ui_print "|            Based on TWRP v3.7.1_x           |";
 ui_print "|---------------------------------------------|";
 
 # /dev/tmp is safe for both booted and recovery installs
