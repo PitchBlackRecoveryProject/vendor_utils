@@ -167,6 +167,10 @@
     "OP6xT": {
       "name": "OnePlus 6/6T",
       "maintainer": "SIDDK"
+    },
+    "cheeseburger_dumpling": {
+      "name": "OnePlus 5/5T",
+      "maintainer": "faoliveira78"
     }
   },
   "oppo": {
