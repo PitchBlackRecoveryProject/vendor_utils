@@ -171,6 +171,10 @@
      "avicii": {
       "name": "OnePlus Nord",
       "maintainer": "Sreeshankar K"
+       },
+    "ivan": {
+      "name": "OnePlus Nord CE 2 (5G)",
+      "maintainer": "@NotGanesh"
     },
     "OP6xT": {
       "name": "OnePlus 6/6T",
