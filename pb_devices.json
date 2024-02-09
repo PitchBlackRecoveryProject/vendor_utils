@@ -67,6 +67,10 @@
     "X6739": {
       "name": "Infinix GT 10 Pro",
       "maintainer": "@xoo2001"
+    },
+    "lion": {
+      "name": "Infinix HOT 12 Play",
+      "maintainer": "IMYdev"
     }
   },
   "intex": {
@@ -171,7 +175,7 @@
      "avicii": {
       "name": "OnePlus Nord",
       "maintainer": "Sreeshankar K"
-       },
+    },
     "ivan": {
       "name": "OnePlus Nord CE 2 (5G)",
       "maintainer": "@NotGanesh"
