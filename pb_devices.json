@@ -114,6 +114,10 @@
       "name": "Samsung Galaxy A23 (5G)",
       "maintainer": "@edward0181"
     },
+    "a52sxq": {
+      "name": "Samsung Galaxy A52s (5G)",
+      "maintainer": "saadelasfur14"
+    },
     "m20lte": {
       "name": "Samsung Galaxy M20",
       "maintainer": "eun0115"
@@ -128,7 +132,7 @@
     },
     "m52xq": {
       "name": "Samsung Galaxy M52 (5G)",
-      "maintainer": "Gabriel"
+      "maintainer": "@GabrielARK"
     },
     "f41": {
       "name": "Samsung Galaxy F41",
