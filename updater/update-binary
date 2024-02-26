@@ -64,11 +64,21 @@ ui_print "|---------------------------------------------|";
 
 # /dev/tmp is safe for both booted and recovery installs
 tmp=/dev/tmp/twrp-install;
+partdir=/dev/block/bootdevice/by-name
+
+if [ ! -d $partdir ]; then
+  partdir=/dev/block/by-name
+fi
+
+if [ ! -d $partdir ]; then
+  abort "Failed unable to find the partition!";
+fi
+
 # target partition without the slot suffix
-if [ -e /dev/block/bootdevice/by-name/recovery_b ] || [ "$IS_AB" == "false" ]; then
-  target=/dev/block/bootdevice/by-name/recovery;
+if [ -e ${partdir}/recovery_b ] || [ "$IS_AB" == "false" ]; then
+  target=${partdir}/recovery;
 else
-  target=/dev/block/bootdevice/by-name/boot;
+  target=${partdir}/boot;
 fi;
 name=$(basename $target);
 
