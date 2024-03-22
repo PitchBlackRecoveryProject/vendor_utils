@@ -362,6 +362,10 @@
       "name": "Xiaomi Redmi Note 11",
       "maintainer": "Agatha"
     },
+    "selene": {
+      "name": "Xiaomi Redmi 10",
+      "maintainer": "@Hasan6034"
+    },
     "fog": {
       "name": "Xiaomi Redmi 10C",
       "maintainer": "Agatha"
