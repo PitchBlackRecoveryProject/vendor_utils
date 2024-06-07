@@ -1,6 +1,6 @@
 WORK_PATH := $(OUT_DIR)/target/product/$(TARGET_DEVICE)/zip
-TARGET_DIR := $(WORK_PATH)/../
-BUILD_TOP := $(OUT_DIR)/../
+TARGET_DIR := $(WORK_PATH)/..
+BUILD_TOP := $(TOP)
 VERSION := $(shell cat $(BUILD_TOP)/bootable/recovery/variables.h | egrep "define\s+PB_MAIN_VERSION" | tr -d '"' | tr -s ' ' | awk '{ print $$3 }')
 PB_VENDOR := vendor/utils
 ifeq ($(PB_OFFICIAL),true)
