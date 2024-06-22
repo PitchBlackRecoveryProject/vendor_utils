@@ -105,6 +105,12 @@
       "maintainer": "SathamHussainM"
     }
   },
+  "nothing": {
+    "Pong": {
+      "name": "Nothing Phone (2)",
+      "maintainer": "PhatWalrus"
+    }
+  },
   "samsung": {
     "a70q": {
       "name": "Samsung Galaxy A70",
