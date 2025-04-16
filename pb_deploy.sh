@@ -102,11 +102,23 @@ function get_vendor () {
 	echo "$(echo ${1} | cut -d' ' -f1)"
 }
 # Common Props
-BUILD_IMG=$(find $(pwd)/out/target/product/${CODENAME}/recovery.img 2>/dev/null)
+BUILD_IMG=""
+for img in recovery.img ramdisk-recovery.cpio boot.img vendor_boot.img; do
+    BUILD_IMG=$(find "$(pwd)/out/target/product/${CODENAME}" -type f -name "$img" 2>/dev/null | head -n 1)
+    [ -n "$BUILD_IMG" ] && break
+done
+
+if [ -z "$BUILDFILE" ]; then
+    BUILDFILE="$BUILD_IMG"
+    export TZ="Asia/Kolkata"
+    BUILD_DATE=$(date +%Y%m%d)
+    BUILD_DATETIME=$(date +%Y%m%d-%H%M)
+else
+    BUILD_DATE=$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')
+    BUILD_DATETIME="$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')-$(echo "$BUILDFILE" | awk -F'[-]' '{print $5}')"
+fi
 MD5=$(md5sum $BUILDFILE | awk '{print $1}')
 FILE_SIZE=$( du -h $BUILDFILE | awk '{print $1}' )
-BUILD_DATE=$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')
-BUILD_DATETIME="$(echo "$BUILDFILE" | awk -F'[-]' '{print $4}')-$(echo "$BUILDFILE" | awk -F'[-]' '{print $5}')"
 TARGET_DEVICE=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep name | awk -F[\"] '{print $4}')
 BUILD_NAME=$(echo ${BUILDFILE} | awk -F['/'] '{print $NF}')
 DEVICES=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep unified | awk -F[\"] '{ for (i=4; i<NF; i=i+2) print $i }')
@@ -187,14 +199,17 @@ function sf_deploy() {
 	# Check for Official
 	python3 pb_devices.py verify "$VENDOR" "$CODENAME"
 	if [[ "$?" == "0" ]]; then
-		sshpass -p "${SFPassword}" sftp -o StrictHostKeyChecking=no ${SFUserName}@frs.sourceforge.net <<-EOF
+		sshpass -p "${SFPassword}" rsync -avP --progress -e 'ssh -o StrictHostKeyChecking=no' ${BUILDFILE} "${SFUserName}"@web.sourceforge.net:/home/frs/project/pbrp/${CODENAME}/${BUILD_NAME}
+		if [ "$?" != "0" ]; then
+			sshpass -p "${SFPassword}" sftp ${SFUserName}@web.sourceforge.net <<-EOF
 			cd /home/frs/project/pbrp/
 			mkdir ${CODENAME}
-			cd ${CODENAME}
-			put ${BUILDFILE}
 			exit
-		EOF
-		if [ "$?" == "0" ]; then
+			EOF
+			sshpass -p "${SFPassword}" rsync -avP --progress -e 'ssh -o StrictHostKeyChecking=no' ${BUILDFILE} "${SFUserName}"@web.sourceforge.net:/home/frs/project/pbrp/${CODENAME}/${BUILD_NAME}
+		fi
+		if [ "$?" == "0" ]
+		then
 			echo -e "${green} Deployed On SOURCEFORGE SUCCESSFULLY\n${nocol}"
 			cd ../../
 			return 0
@@ -270,11 +285,7 @@ function tg_beta_deploy() {
 function tg_test_deploy() {
 	echo -e "${green}Deploying to Telegram Device Maintainers Chat!\n${nocol}"
 
-    if [ -z ${BUILDFILE} ]; then
-        TEST_LINK="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/recovery.img"
-    else
-        TEST_LINK="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
-    fi
+    TEST_LINK="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')"
 
     MAINTAINER_MSG="PitchBlack Recovery for \`${VENDOR}\` \`${CODENAME}\` is available Only For Testing Purpose\n\n"
     if [[ ! -z $MAINTAINER ]]; then MAINTAINER_MSG=${MAINTAINER_MSG}"Maintainer: ${MAINTAINER}\n\n"; fi
@@ -310,10 +321,9 @@ else
 	zipcounter=$(find $(pwd)/out/target/product/$CODENAME/PBRP*-UNOFFICIAL.zip 2>/dev/null | wc -l)
 fi
 
-	recoveryimgcheck=$(find $(pwd)/out/target/product/$CODENAME/recovery.img 2>/dev/null | wc -l)
-	bootimgcheck=$(find $(pwd)/out/target/product/$CODENAME/boot.img 2>/dev/null | wc -l)
-
-if [[ "$recoveryimgcheck" > "0" || "$bootimgcheck" > "0" ]]; then
+	recoveryimgcheck=$(find "$(pwd)/out/target/product/$CODENAME" -type f -name "recovery.img" -o -name "ramdisk-recovery.cpio" -o -name "boot.img" -o -name "vendor_boot.img" 2>/dev/null | wc -l)
+ 
+if [[ "$recoveryimgcheck" > "0" ]]; then
 	if [[ "$zipcounter" > "1" ]]; then
 		printf "${red}More than one zips dected! Remove old build...\n${nocol}"
 	else
