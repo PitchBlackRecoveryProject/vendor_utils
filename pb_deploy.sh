@@ -115,6 +115,7 @@ DEVICES=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep unified | awk 
 gh_link="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
 sf_link="https://sourceforge.net/projects/pbrp/files/${CODENAME}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')/download"
 wp_link="https://pitchblackrecovery.com/$(echo $CODENAME | sed "s:_:-:g")"
+gp_link=https://pitchblackrecoveryproject.github.io/devices/${VENDOR}/${CODENAME}/
 
 # Format for TG
 FORMAT="PitchBlack Recovery for <b>$TARGET_DEVICE</b> (<code>${CODENAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${VERSION} <b>${DEPLOY_TYPE_NAME}</b>\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${BUILD_DATE:0:4}/${BUILD_DATE:4:2}/${BUILD_DATE:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
@@ -240,7 +241,7 @@ function tg_official_deploy() {
 	echo -e "${green}Deploying to Telegram!\n${nocol}"
 
 	if [ -z "$DEVICES" ]; then
-		python3 vendor/utils/scripts/telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "Download|${wp_link}!Download - SF|${sf_link}!Download - GHR|${gh_link}!Chat|https://t.me/pbrpcom!Channel|https://t.me/pitchblackrecovery" -m "HTML"
+		python3 vendor/utils/scripts/telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "Download|${wp_link}!Download - Mirror |${gp_link}!Chat|https://t.me/pbrpcom!Channel|https://t.me/pitchblackrecovery" -m "HTML"
 	else
 		python3 vendor/utils/scripts/telegram.py -c @pitchblackrecovery -AN "$pb_sticker" -C "$FORMAT" -D "${BUTTONS}Chat|https://t.me/pbrpcom!Channel|https://t.me/pitchblackrecovery" -m "HTML"
 	fi
@@ -255,7 +256,7 @@ function tg_beta_deploy() {
 	echo -e "${green}Deploying to Telegram!\n${nocol}"
 
 	if [ -z "$DEVICES" ]; then
-		python3 vendor/utils/scripts/telegram.py -c "-1001270222037" -AN "$pb_sticker" -C "$FORMAT" -D "Download|$wp_link!Download - SF|${sf_link}!Download - GHR|${gh_link}!Beta Chat|https://t.me/pbrp_testers!Channel|https://t.me/joinchat/AAAAAEu2DNXX-P7RgFWBcw" -m "HTML"
+		python3 vendor/utils/scripts/telegram.py -c "-1001270222037" -AN "$pb_sticker" -C "$FORMAT" -D "Download|$wp_link!Download - Mirror |${gp_link}!Beta Chat|https://t.me/pbrp_testers!Channel|https://t.me/joinchat/AAAAAEu2DNXX-P7RgFWBcw" -m "HTML"
 	else
 		python3 vendor/utils/scripts/telegram.py -c "-1001270222037" -AN "$pb_sticker" -C "$FORMAT" -D "${BUTTONS}Beta Chat|https://t.me/pbrp_testers!Channel|https://t.me/joinchat/AAAAAEu2DNXX-P7RgFWBcw" -m "HTML"
 	fi
