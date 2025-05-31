@@ -324,6 +324,8 @@ if [[ "$recoveryimgcheck" > "0" || "$bootimgcheck" > "0" ]]; then
 			if ! gh_deploy; then echo -e "Error in GitHub Releases Deployment." && exit 1; fi
 			if ! wp_deploy; then echo -e "Error in PBRP Website Deployment." && exit 1; fi
 			if ! tg_official_deploy; then  echo -e "Error in Telegram Official Deployment." && exit 1; fi
+			wget https://raw.githubusercontent.com/PitchBlackRecoveryProject/PitchBlackRecoveryProject.github.io/refs/heads/pb/assets/scripts/update_builds_json.sh
+			bash update_builds_json.sh "$CODENAME" "$VERSION" "$DEPLOY_TYPE" "${sf_link}" "${gh_link}" "$CHANGELOG"
 		elif [[ "$DEPLOY_TYPE" == "BETA" ]]; then
 			# Beta Deploy = SF + GHR + WP + TG (Beta Group)
 
@@ -331,6 +333,8 @@ if [[ "$recoveryimgcheck" > "0" || "$bootimgcheck" > "0" ]]; then
 			if ! gh_deploy; then echo -e "Error in GitHub Releases Deployment." && exit 1; fi
 			if ! wp_deploy; then echo -e "Error in PBRP Website Deployment." && exit 1; fi
 			if ! tg_beta_deploy; then  echo -e "Error in Telegram Beta Deployment." && exit 1; fi
+			wget https://raw.githubusercontent.com/PitchBlackRecoveryProject/PitchBlackRecoveryProject.github.io/refs/heads/pb/assets/scripts/update_builds_json.sh
+   			bash update_builds_json.sh "$CODENAME" "$VERSION" "$DEPLOY_TYPE" "${sf_link}" "${gh_link}" "$CHANGELOG"
 		elif [[ "$DEPLOY_TYPE" == "TEST" ]]; then
 			# Test Deploy = GHR + TG (Device Maintainers Chat)
 
