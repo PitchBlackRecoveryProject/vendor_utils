@@ -120,6 +120,10 @@
       "name": "Samsung Galaxy A70",
       "maintainer": "Aswin"
     },
+    "a15": {
+      "name": "Samsung Galaxy A15 4G",
+      "maintainer": "@kanged99"
+    },
     "a23xq": {
       "name": "Samsung Galaxy A23 (5G)",
       "maintainer": "@edward0181"
