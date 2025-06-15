@@ -544,6 +544,10 @@
       "name": "Xiaomi Poco X3 Pro",
       "maintainer": "Erwin Abu Bakar Sidik"
     },
+    "surya": {
+      "name": "Xiaomi Poco X3 NFC",
+      "maintainer": "Erwin Abu Bakar Sidik"
+    },
     "nabu": {
       "name": "Xiaomi Pad 5",
       "maintainer": "SIDDK"
