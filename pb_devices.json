@@ -567,6 +567,10 @@
     "fire": {
       "name": "Xiaomi Redmi 12",
       "maintainer": "@YudhoPatrianto"
+    },
+    "garnet": {
+      "name": "Xiaomi Redmi Note 13 Pro 5G/Poco X6 5G",
+      "maintainer": "kibria5"
     }
   }
 }
