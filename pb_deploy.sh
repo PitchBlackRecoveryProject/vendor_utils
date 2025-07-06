@@ -126,8 +126,8 @@ DEVICES=$(cat /tmp/pb_devices.json | grep ${CODENAME} -A 3 | grep unified | awk 
 # Release Links
 gh_link="https://github.com/${GH_USER}/${GH_REPO}/releases/download/${RELEASE_TAG}/${BUILD_NAME}"
 sf_link="https://sourceforge.net/projects/pbrp/files/${CODENAME}/$(echo $BUILDFILE | awk -F'[/]' '{print $NF}')/download"
-wp_link="https://pitchblackrecovery.com/$(echo $CODENAME | sed "s:_:-:g")"
-gp_link=https://pitchblackrecoveryproject.github.io/devices/${VENDOR}/${CODENAME}/
+wp_link="https://pitchblackrecovery.com/${CODENAME}"
+gp_link="https://pitchblackrecoverydevices.github.io/${CODENAME}/"
 
 # Format for TG
 FORMAT="PitchBlack Recovery for <b>$TARGET_DEVICE</b> (<code>${CODENAME}</code>)\n\n<b>Info</b>\n\nPitchBlack V${VERSION} <b>${DEPLOY_TYPE_NAME}</b>\nBased on TWRP ${TWRP_V}\n<b>Build Date</b>: <code>${BUILD_DATE:0:4}/${BUILD_DATE:4:2}/${BUILD_DATE:6}</code>\n\n<b>Maintainer</b>: ${maintainer}\n"
