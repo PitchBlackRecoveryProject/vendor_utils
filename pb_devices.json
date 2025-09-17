@@ -571,6 +571,10 @@
     "garnet": {
       "name": "Xiaomi Redmi Note 13 Pro 5G/Poco X6 5G",
       "maintainer": "kibria5"
-    }
+    },
+    "xun": {
+      "name": "Xiaomi Redmi Pad SE",
+      "maintainer": "Romeo13card"
+	}
   }
 }
