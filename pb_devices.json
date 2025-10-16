@@ -575,6 +575,18 @@
     "xun": {
       "name": "Xiaomi Redmi Pad SE",
       "maintainer": "Romeo13card"
+	},
+    "X6531": {
+      "name": "Infinix Hot 50i",
+      "maintainer": "Nazephyrus"
+	},
+    "X6532": {
+      "name": "Infinix Smart 9",
+      "maintainer": "Nazephyrus"
+	},
+    "KL5": {
+      "name": "Tecno Spark 30C",
+      "maintainer": "Nazephyrus"
 	}
   }
 }
