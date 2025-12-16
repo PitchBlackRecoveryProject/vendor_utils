@@ -575,6 +575,10 @@
     "xun": {
       "name": "Xiaomi Redmi Pad SE",
       "maintainer": "Romeo13card"
+		},
+    "X663": {
+      "name": "Infinix Note 11",
+      "maintainer": "ALBINsRAJ2025"
 	}
   }
 }
