@@ -394,6 +394,15 @@
     },
     "fog": {
       "name": "Xiaomi Redmi 10C",
+      "maintainer": "Romeo13card",
+      "unified": ["fog", "wind", "rain"]
+    },
+	"wind": {
+      "name": "Xiaomi Redmi 10C",
+      "maintainer": "Romeo13card"
+    },
+	"rain": {
+      "name": "Xiaomi Redmi 10C",
       "maintainer": "Romeo13card"
     },
     "gram": {
