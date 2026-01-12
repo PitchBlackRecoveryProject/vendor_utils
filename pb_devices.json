@@ -588,6 +588,10 @@
     "xun": {
       "name": "Xiaomi Redmi Pad SE",
       "maintainer": "Romeo13card"
+	},
+    "CL6": {
+      "name": "TECNO CAMON 30",
+      "maintainer": "Andreii0514"
 	}
   }
 }
