@@ -1,5 +1,5 @@
 #!/sbin/sh
-# Copyright (C) 2018-2020 PitchBlack Recovery <pitchblackrecovery@gmail.com>
+# Copyright (C) 2018-2026 PitchBlack Recovery <pitchblackrecovery@gmail.com>
 # Copyright (C) 2020 osm0sis, Dees_Troy and topjohnwu
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,146 +14,236 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+OUTFD=/proc/self/fd/$2
+ZIPFILE="$3"
 
-OUTFD=/proc/self/fd/$2;
-ZIPFILE="$3";
-
-show_progress() { echo "progress $1 $2" > /proc/self/fd/$2; }
-set_perm_recursive() {
-  dirs=$(echo $* | awk '{ print substr($0, index($0,$5)) }');
-  for i in $dirs; do
-    chown -R $1.$2 $i; chown -R $1:$2 $i;
-    find "$i" -type d -exec chmod $3 {} +;
-    find "$i" -type f -exec chmod $4 {} +;
-  done;
-}
-file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
-getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
+show_progress() { echo "progress $1 $2" > $OUTFD; }
 
 ui_print() {
   if $BOOTMODE; then
-    echo "$1";
+    echo "$1"
   else
-    echo -e "ui_print $1\nui_print" >> $OUTFD;
-  fi;
+    echo -e "ui_print $1\nui_print" >> $OUTFD
+  fi
 }
-abort() { ui_print " "; ui_print "$1"; exit 1; }
 
-# detect Magisk app/booted flashing
-BOOTMODE=false;
-ps | grep zygote | grep -v grep >/dev/null && BOOTMODE=true;
-$BOOTMODE || ps -A 2>/dev/null | grep zygote | grep -v grep >/dev/null && BOOTMODE=true;
+abort() { 
+  ui_print " " 
+  ui_print "|------------Error Occurred!------------|"
+  ui_print "Error: $1" 
+  exit 1 
+}
 
-# Const
+# --- Environment Setup ---
+BOOTMODE=false
+ps | grep zygote | grep -v grep >/dev/null && BOOTMODE=true
+$BOOTMODE || ps -A 2>/dev/null | grep zygote | grep -v grep >/dev/null && BOOTMODE=true
+
+# --- Configuration (Injected by Makefile) ---
 IS_AB=false
+IS_VENDOR_BOOT=false
+IS_RECOVERY_AS_BOOT=false
 
-show_progress 0.1000000, 0;
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------PitchBlack Recovery Project---------|";
-ui_print "|-------------------{version}----------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|--------------Brought To You By--------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------PitchBlack Team---------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|            Based on TWRP v3.7.1_x           |";
-ui_print "|---------------------------------------------|";
+show_progress 0.1000000, 0
+ui_print "|---------------------------------------------|"
+ui_print "|---------PitchBlack Recovery Project---------|"
+ui_print "|-------------------{version}----------------------|"
+ui_print "|---------------------------------------------|"
+ui_print "|---------------------------------------------|"
+ui_print "|--------------Brought To You By--------------|"
+ui_print "|---------------------------------------------|"
+ui_print "|---------------PitchBlack Team---------------|"
+ui_print "|---------------------------------------------|"
+ui_print "|---------------------------------------------|"
+ui_print "|            Based on TWRP v3.7.1_x           |"
+ui_print "|---------------------------------------------|"
 
-# /dev/tmp is safe for both booted and recovery installs
-tmp=/dev/tmp/twrp-install;
-partdir=/dev/block/bootdevice/by-name
+# --- Temp Directory Setup ---
+tmp=/dev/tmp/pbrp-install
+rm -rf $tmp
+mkdir -p $tmp
 
-if [ ! -d $partdir ]; then
-  partdir=/dev/block/by-name
+# --- Partition Detection ---
+partdir="/dev/block/by-name"
+[ -d "/dev/block/bootdevice/by-name" ] && partdir="/dev/block/bootdevice/by-name"
+[ ! -d "$partdir" ] && abort "Partition block directory not found!"
+
+ui_print "|-----------Unpacking the installer-----------|"
+unzip -o "$ZIPFILE" -d $tmp > /dev/null || abort "Failed to extract zip!"
+
+cd $tmp
+
+# --- Dynamic Payload Detection (Largest File Priority) ---
+# 1. Largest CPIO (Ramdisk)
+recoverycpio=$(ls -1S *.cpio 2>/dev/null | head -n 1)
+# 2. Largest Recovery Image
+recoveryimg=$(ls -1S *recovery*.img 2>/dev/null | head -n 1)
+# 3. Largest Vendor Boot Image
+vendorbootimg=$(ls -1S *vendor*boot*.img 2>/dev/null | head -n 1)
+
+if [ -z "$recoverycpio" ] && [ -z "$recoveryimg" ] && [ -z "$vendorbootimg" ]; then
+  abort "No PBRP payload (cpio or img) found in zip!"
 fi
 
-if [ ! -d $partdir ]; then
-  abort "Failed unable to find the partition!";
+tool=$tmp/magiskboot
+chmod 755 $tool
+
+# --- Define Slots ---
+if [ "$IS_AB" == "true" ]; then
+  SLOTS="_a _b"
+else
+  SLOTS=""
 fi
 
-# target partition without the slot suffix
-if [ -e ${partdir}/recovery_b ] || [ "$IS_AB" == "false" ]; then
-  target=${partdir}/recovery;
-else
-  target=${partdir}/boot;
-fi;
-name=$(basename $target);
+# =========================================================
+# LOGIC 1: VENDOR_BOOT (Smart Detection)
+# =========================================================
+if [ "$IS_VENDOR_BOOT" == "true" ]; then
+  
+  target_slots="$SLOTS"
+  [ -z "$target_slots" ] && target_slots="non_ab"
 
-ui_print "|-----------Unpacking the installer-----------|";
-rm -rf $tmp;
-mkdir -p $tmp;
-unzip -o "$ZIPFILE" -d $tmp || abort "Failed to extract zip!";
-
-cd $tmp;
-recoverycpio=`(ls ramdisk-twrp.cpio || ls ramdisk-recovery.cpio) 2>/dev/null`;
-recoveryimg=`(ls recovery.img) 2>/dev/null`;
-[ "$recoverycpio" ] || [ "$recoveryimg" ] || abort "No TWRP ramdisk/image found in zip!";
-
-tool=$tmp/magiskboot;
-chmod 755 $tool;
-
-ui_print "|---------------------------------------------|";
-ui_print "|- Target:$target -|";
-if [ "$IS_AB" == "false" ]; then
-  cp -f $recoveryimg new-boot.img;
-  blockdev --setrw $target;
-  cat new-boot.img /dev/zero > $target 2>/dev/null || true;
-  rm -f new-boot.img;
-else
-  for slot in _a _b; do
-    ui_print "|------------Doing Work on slot $slot------------|";
-    if [ "$recoverycpio" ]; then
-      dd bs=1048576 if=$target$slot of=boot.img || abort "Failed to dump image!";
-      $tool unpack -h boot.img || abort "Failed to unpack image!";
-
-      # kernel string want_initramfs -> skip_initramfs (Magisk)
-      $tool hexpatch kernel 77616E745F696E697472616D6673 736B69705F696E697472616D6673;
-      # kernel string trip_initramfs -> skip_initramfs (SuperSU)
-      $tool hexpatch kernel 747269705F696E697472616D6673 736B69705F696E697472616D6673;
-
-      # boot.img header cmdline remove skip_override (flar2 patch)
-      sed -i "s|$(grep '^cmdline=' header | cut -d= -f2-)|$(grep '^cmdline=' header | cut -d= -f2- | sed -e 's/skip_override//' -e 's/  */ /g' -e 's/[ \t]*$//')|" header;
-
-      cp -f $recoverycpio ramdisk.cpio;
-      $tool repack boot.img || abort "Failed to repack image!";
-      $tool cleanup;
+  for slot in $target_slots; do
+    [ "$slot" == "non_ab" ] && slot=""
+    target="${partdir}/vendor_boot${slot}"
+    
+    ui_print "|------------Doing Work on slot $slot------------|"
+    
+    # 1. Dump Stock
+    dd bs=1048576 if=$target of=current-vb.img 2>/dev/null || abort "Failed to dump vendor_boot!"
+    
+    # 2. Unpack Stock
+    $tool unpack -h current-vb.img >/dev/null || abort "Failed to unpack current vendor_boot!"
+    
+    # 3. Detect Target Ramdisk Name
+    # We look for what file magiskboot actually created from the stock image.
+    # We prioritize specific recovery names, then fall back to generic.
+    if [ -f "vendor_ramdisk_recovery.cpio" ]; then
+        TARGET_RAMDISK_NAME="vendor_ramdisk_recovery.cpio"
+    elif [ -f "ramdisk_recovery.cpio" ]; then
+        TARGET_RAMDISK_NAME="ramdisk_recovery.cpio"
+    elif [ -f "ramdisk.cpio" ]; then
+        TARGET_RAMDISK_NAME="ramdisk.cpio"
     else
-      cp -f $recoveryimg new-boot.img;
-    fi;
+        # Extremely rare case: maybe just 'ramdisk' without extension?
+        TARGET_RAMDISK_NAME=$(ls -1S *.cpio 2>/dev/null | head -n 1)
+        if [ -z "$TARGET_RAMDISK_NAME" ]; then
+             abort "Stock vendor_boot unpacked but no ramdisk found!"
+        fi
+    fi
+    
+    ui_print "|- Detected Stock Ramdisk: $TARGET_RAMDISK_NAME"
 
-    blockdev --setrw $target$slot;
-    cat new-boot.img /dev/zero > $target$slot 2>/dev/null || true;
-    rm -f new-boot.img;
-  done;
-fi
+    # 4. Unpack New (PBRP) Image to get Source
+    mkdir -p new_extract
+    cd new_extract
+    $tool unpack -h ../$vendorbootimg >/dev/null 2>&1
+    
+    # Find Source Ramdisk (Largest CPIO in PBRP image)
+    SOURCE_RAMDISK=$(ls -1S *.cpio 2>/dev/null | head -n 1)
+    
+    if [ -z "$SOURCE_RAMDISK" ]; then 
+        abort "Could not find any ramdisk inside the new PBRP image!" 
+    fi
+    
+    # 5. Overwrite the DETECTED stock name
+    cp -f "$SOURCE_RAMDISK" ../$TARGET_RAMDISK_NAME 2>/dev/null
+    
+    cd ..
+    rm -rf new_extract
+    
+    # 6. Repack
+    $tool repack current-vb.img >/dev/null || abort "Failed to repack vendor_boot!"
+    
+    ui_print "|------------Installing to vendor_boot slot $slot------------|"
+    cat new-boot.img > $target || abort "Failed to write to $target"
+    
+    # Cleanup
+    $tool cleanup
+    rm -f new-boot.img current-vb.img
+  done
 
-#Copy Specific Files
-ui_print "|---------------------------------------------|";
-ui_print "|------------Unpacking The Tools--------------|";
-if [ -f "/sdcard/PBRP" ]; then
-cp -r $tmp/PBRP/tools /sdcard/PBRP/
+# =========================================================
+# LOGIC 2: RECOVERY AS BOOT (Smart Detection)
+# =========================================================
+elif [ "$IS_AB" == "true" ] && [ "$IS_RECOVERY_AS_BOOT" == "true" ]; then
+  
+  if [ -z "$recoverycpio" ]; then abort "Ramdisk CPIO not found in zip!"; fi
+
+  for slot in $SLOTS; do
+    target="${partdir}/boot${slot}"
+    
+    ui_print "|------------Doing Work on slot $slot------------|"
+    
+    dd bs=1048576 if=$target of=boot.img 2>/dev/null || abort "Failed to dump boot!"
+    $tool unpack -h boot.img >/dev/null || abort "Failed to unpack boot!"
+    
+    # Detect what boot.img named the ramdisk (usually ramdisk.cpio)
+    if [ -f "ramdisk.cpio" ]; then
+        TARGET_RAMDISK_NAME="ramdisk.cpio"
+    else
+        TARGET_RAMDISK_NAME=$(ls -1S *.cpio 2>/dev/null | head -n 1)
+    fi
+    
+    if [ -z "$TARGET_RAMDISK_NAME" ]; then abort "No ramdisk found in stock boot.img!"; fi
+    
+    # Magisk Patch (Skip Initramfs)
+    $tool hexpatch kernel 77616E745F696E697472616D6673 736B69705F696E697472616D6673
+    
+    # Overwrite the DETECTED name
+    cp -f "$recoverycpio" "$TARGET_RAMDISK_NAME"
+    
+    $tool repack boot.img >/dev/null || abort "Failed to repack boot!"
+    
+    ui_print "|------------Installing to boot slot $slot------------|"
+    cat new-boot.img > $target || abort "Failed to write to $target"
+    
+    $tool cleanup
+    rm -f new-boot.img boot.img
+  done
+
+# =========================================================
+# LOGIC 3: DEDICATED RECOVERY (Simple Flash)
+# =========================================================
 else
-mkdir -p /sdcard/PBRP
-cp -r $tmp/PBRP/tools /sdcard/PBRP/
+  target_slots="$SLOTS"
+  [ -z "$target_slots" ] && target_slots="non_ab"
+  
+  for slot in $target_slots; do
+    [ "$slot" == "non_ab" ] && slot=""
+    target="${partdir}/recovery${slot}"
+    
+    ui_print "|------------Installing to recovery slot $slot------------|"
+    
+    if [ -f "$recoveryimg" ]; then
+        cat "$recoveryimg" > "$target" || abort "Failed to flash recovery!"
+    else
+        abort "recovery.img not found in zip!"
+    fi
+  done
 fi
-ui_print "|--------Finished Unpacking The Tools---------|";
 
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|---------------------------------------------|";
-ui_print "|                  Thank You                  |";
+show_progress 0.8000000, 0
+
+# --- Copy Tools ---
+ui_print "|------------Unpacking The Tools--------------|"
+if [ -d "$tmp/PBRP/tools" ]; then
+  mkdir -p /sdcard/PBRP
+  cp -r $tmp/PBRP/tools /sdcard/PBRP/ 2>/dev/null
+  ui_print "|--------Finished Unpacking The Tools---------|"
+else
+  ui_print "|-----------Tools not found in zip------------|"
+fi
+
+ui_print "|---------------------------------------------|"
+ui_print "|---------------------------------------------|"
+ui_print "|                  Thank You                  |"
 if [[ ! -f "/sbin/keycheck" ]]; then
-  ui_print "|   Reboot to PitchBlack Recovery Manually    |";
+  ui_print "|   Reboot to PitchBlack Recovery Manually    |"
 fi
-ui_print "|---------------------------------------------|";
-sleep 0.2s
-show_progress 0.1000000, 90 ;
-ui_print "|------------Installation finished!-----------|";
+ui_print "|---------------------------------------------|"
+ui_print "|------------Installation finished!-----------|"
 
-cd /;
-rm -rf /dev/tmp;
-
+cd /
+rm -rf $tmp
+exit 0

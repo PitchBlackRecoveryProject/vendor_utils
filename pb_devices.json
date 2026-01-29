@@ -68,6 +68,14 @@
       "name": "Infinix GT 10 Pro",
       "maintainer": "@xoo2001"
     },
+	"X6531": {
+      "name": "Infinix Hot 50I",
+      "maintainer": "@nazephyrus"
+    },
+    "X6532": {
+      "name": "Infinix Smart 9",
+      "maintainer": "@nazephyrus"
+    },
     "lion": {
       "name": "Infinix HOT 12 Play",
       "maintainer": "IMYdev"
@@ -177,6 +185,10 @@
     "CG8": {
       "name": "TECNO Camon 17 Pro",
       "maintainer": "Punkzappa007"
+    },
+    "CL6": {
+      "name": "TECNO Camon 30",
+      "maintainer": "Andreii0514"
     },
     "LI6": {
       "name": "TECNO POVA 6 NEO",
