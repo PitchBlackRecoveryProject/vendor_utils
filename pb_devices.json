@@ -75,7 +75,19 @@
     "X6532": {
       "name": "Infinix Smart 9",
       "maintainer": "@nazephyrus"
-    },
+	},
+    "X6880": {
+      "name": "Infinix HOT 50 PRO PLUS",
+      "maintainer": "Andreii_0514"
+	},
+    "X6881": {
+      "name": "Infinix HOT 50 PRO",
+      "maintainer": "Andreii_0514"
+	},
+    "X6882": {
+      "name": "Infinix HOT 50",
+      "maintainer": "Andreii_0514"		
+    },  
     "lion": {
       "name": "Infinix HOT 12 Play",
       "maintainer": "IMYdev"
